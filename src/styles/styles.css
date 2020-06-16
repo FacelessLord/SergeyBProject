@@ -1,0 +1,38 @@
+* {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    background-color: #333333;
+    text-decoration: none;
+
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+#page {
+    min-height: 100%;
+    position: relative;
+}
+
+#content_wrapper {
+    width: 100%;
+    display: inline-block;
+    z-index: 4;
+    padding-bottom: 50px;
+    background-color: #F2F2F2;
+    position: relative;
+    padding-left: 160px;
+}

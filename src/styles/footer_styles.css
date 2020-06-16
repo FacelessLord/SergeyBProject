@@ -1,0 +1,17 @@
+#footer_wrapper {
+    z-index: 1;
+    background-color: #333333;
+
+    height: 128px; /* Высота блока footer */
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+footer {
+    background-color: #333333;
+    position: relative;
+    bottom: 0;
+    height: 128px; /* Высота блока footer */
+    width: 100%;
+}
