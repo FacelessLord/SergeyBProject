@@ -7,6 +7,10 @@
     background-color: #F2F2F2;
 }
 
+.main.panel {
+    height: 50vw;
+}
+
 .main.text {
     position: relative;
     width: initial;
@@ -93,6 +97,12 @@
     margin-bottom: 8px;
     user-select: none;
 }
+
+.item.text.price.cart {
+    position: relative;
+    right: 8px;
+}
+
 .main.pad.list .item.info {
     display: inline-block;
     background-color: rgba(0,0,0,0);
@@ -114,18 +124,27 @@
     font-size: 16px;
 }
 
-.main.button.more {
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a.main.button.more {
     position: relative;
     width: 160px;
     height: 32px;
     left: 400px;
     top: 0;
     padding: 0;
-    line-height: 24px;
+    line-height: 30px;
 
+    color: black;
+    font-size: 14px;
     background-color: #6FCF97;
     border-color: #6FCF97;
     border-radius: 4px;
+
+    text-align: center;
 }
 
 .main.button.more:hover {

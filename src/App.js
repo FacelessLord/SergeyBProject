@@ -5,10 +5,22 @@ import './styles/main_styles.css';
 import './styles/header_styles.css';
 import './styles/catalogs_styles.css';
 import './styles/footer_styles.css';
-import {MainPage} from "./MainPage/MainPage";
+import Main from "./Main";
 
-function App() {
-    return (<MainPage/>);
+function App(props) {
+    return (<div>
+      <header>
+        This is website!
+      </header>
+
+      <main>
+        <Main/>
+      </main>
+
+      <footer>
+        Your copyright message
+      </footer>
+    </div>);
 }
 
 export default App;

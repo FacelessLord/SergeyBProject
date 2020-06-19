@@ -22,16 +22,22 @@
 }
 
 .category.button {
+    display: block;
     padding: 0;
+    width: calc(100% + 2px);
     height: 44px;
     background: #E0E0E0;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
     font-size: 18px;
-    line-height: 24px;
+    line-height: 44px;
 
     align-self: center;
     align-content: center;
+}
+
+.category.button.nested {
+    margin: 0 1px 1px 0;
 }
 
 .category.button:hover {
@@ -58,7 +64,6 @@
     position: relative;
     z-index: 7;
     width: 208px;
-    height: 92px;
     left: 200px;
     top: -84px
 }

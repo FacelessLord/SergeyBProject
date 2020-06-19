@@ -1,37 +1,37 @@
 import React from "react";
 
-import '../styles/header_styles.css';
-import {Abutton} from "./AButton";
+import '../../styles/header_styles.css';
+import {Link} from "react-router-dom";
 
-export function GuestPanelButtons({hidden=true}) {
+export function GuestPanelButtons({hidden = true}) {
     return (<div id="guest_panel" style={{visibility: (hidden ? "hidden" : "visible")}}>
         <div className="guest panel">
-            <button className="guest button login" id="button_login">
+            <Link to={"/login"} className="guest button login" id="button_login">
                 <div className="guest button text">Войти</div>
-            </button>
-            <button className="guest button register" id="button_register">
+            </Link>
+            <Link to={"/register"} className="guest button register" id="button_register">
                 <div className="guest button text">Регистрация</div>
-            </button>
+            </Link>
         </div>
         <div className="user panel pointer"/>
     </div>)
 }
 
 export function UserPanelButtons({hidden, user}) {
-    return (<div id="user_panel" style={{visibility:  hidden ? "hidden" : "visible"}}>
+    return (<div id="user_panel" style={{visibility: hidden ? "hidden" : "visible"}}>
         <div className="user panel">
-            <Abutton className="user button account" id="button_account" href={"/account?clientId=" + user.clientId}>
+            <Link to={"/account?clientId=" + user.clientId} className="user button account" id="button_account">
                 <div className="user button text">Личный кабинет</div>
-            </Abutton>
-            <Abutton className="user button cart" id="button_cart" href={"/cart?clientId=" + user.clientId}>
+            </Link>
+            <Link to={"/cart?clientId=" + user.clientId} className="user button cart" id="button_cart">
                 <div className="user button text">Корзина</div>
-            </Abutton>
+            </Link>
             <button className="user button skip" style={{visibility: "hidden"}}>
                 <div className="user button text">skip</div>
             </button>
-            <Abutton className="user button logout" id="button_logout" href={"/logout"}>
+            <Link to={"/logout"} className="user button logout" id="button_logout">
                 <div className="user button text">Выйти</div>
-            </Abutton>
+            </Link>
         </div>
         <div className="user panel pointer"/>
     </div>)

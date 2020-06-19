@@ -37,3 +37,17 @@ export function ItemCardList({cardId, img, header, provider, price, inStock}) {
         </div>
     </a>)
 }
+
+export function ItemCartCard({cardId, img, header, price}) {
+    return (<a className="item card" href={"item?itemId=" + cardId} id={cardId}>
+        <img className="item img" src={img}/>
+        <div className="item info">
+            <span className="item text main">{header}</span>
+            <div className="item text attributes cart">
+                <span className="item text price cart">
+                Цена: {price}
+              </span>
+            </div>
+        </div>
+    </a>)
+}

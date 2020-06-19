@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
+import {BrowserRouter, Router} from 'react-router-dom';
 
 import './styles/styles.css';
 import './styles/main_styles.css';
 import './styles/header_styles.css';
 import './styles/catalogs_styles.css';
 import './styles/footer_styles.css';
+import Main from "./Main";
+import { createBrowserHistory } from 'history'
 
 function importRemote(url) {
     const resource = document.createElement("script");
@@ -21,9 +23,13 @@ function importRemote(url) {
 const fa = importRemote('https://use.fontawesome.com/4b2a7d7bba.js');
 const gf = importRemote('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
+const history = createBrowserHistory({});
+
 ReactDOM.render(
     <React.StrictMode>
-        <App/>
+        <BrowserRouter history={history}>
+            <Main/>
+        </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')
 );

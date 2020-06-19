@@ -1,11 +1,13 @@
 import React from "react";
-import {Abutton} from "./AButton";
+import {Link} from "react-router-dom";
 
 export function Category({categoryId, categoryName}) {
     return (<div className="category">
-        <Abutton className="category button" href={"catalog?category=" + categoryId}>
-            {categoryName}
-        </Abutton>
+        <Link to={"catalog?category=" + categoryId}>
+            <button className="category button">
+                {categoryName}
+            </button>
+        </Link>
     </div>)
 }
 
@@ -30,10 +32,11 @@ function onCatalogButtonDeselect(id) {
 
 function createSubcatalogs(categoryId, subcategories) {
     let l = [];
-    for (let i = 0; i < subcategories.length; i++) {
-        const subcategoryId = subcategories[i].categoryId;
-        const categoryName = subcategories[i].categoryName;
-        l.push(<Category key={i} categoryId={categoryId + ":" + subcategoryId} categoryName={categoryName}/>)
+    for (let value of subcategories) {
+        const subcategoryId = value.id;
+        const categoryName = value.name;
+        l.push(<Category key={categoryId + ":" + subcategoryId} categoryId={categoryId + ":" + subcategoryId}
+                         categoryName={categoryName}/>)
     }
     return l
 }
@@ -41,9 +44,9 @@ function createSubcatalogs(categoryId, subcategories) {
 export function NestedCategory({categoryId, categoryName, subcategories}) {
     return (<div className="category nested" id={categoryId} onMouseEnter={() => onCatalogButtonSelect(categoryId)}
                  onMouseLeave={() => onCatalogButtonDeselect(categoryId)}>
-        <Abutton className="category button" href={"catalog?category=" + categoryId}>
+        <Link to={"catalog?category=" + categoryId} className="category button nested">
             {categoryName}
-        </Abutton>
+        </Link>
         <div className="fa fa-angle-right"/>
         <div className="subcatalog">
             {createSubcatalogs(categoryId, subcategories)}
