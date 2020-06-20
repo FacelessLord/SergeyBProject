@@ -12,6 +12,6 @@ footer {
     background-color: #333333;
     position: relative;
     bottom: 0;
-    height: 128px; /* Высота блока footer */
+    min-height: 128px; /* Высота блока footer */
     width: 100%;
 }

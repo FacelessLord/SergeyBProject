@@ -7,10 +7,8 @@ import {Link} from 'react-router-dom';
 
 function onSuperCatalogButtonSelect() {
     let subcatalogs = document.getElementsByClassName('catalogs');
-    console.log(subcatalogs);
     if (subcatalogs.length > 0) {
         subcatalogs[0].style.visibility = 'visible'
-        console.log(subcatalogs[0].style.visibility);
     }
 }
 

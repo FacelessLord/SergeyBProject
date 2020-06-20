@@ -1,12 +1,10 @@
 import {Category, NestedCategory} from "./Category";
 import React, {useEffect, useState} from "react";
-import {Async} from "react-async-await";
 
 function createList(json) {
     const l = [];
     for (let value of json.categories) {
         if (value.nested) {
-            console.log(value.subcategories);
             l.push(<NestedCategory key={value.id} categoryId={value.id} categoryName={value.name}
                                    subcategories={value.subcategories}/>)
         } else {
@@ -43,7 +41,7 @@ export function Categories() {
             setCategories(cats)
         }
 
-        if (categories.length == 0)
+        if (categories.length === 0)
             getCategories()
     });
 

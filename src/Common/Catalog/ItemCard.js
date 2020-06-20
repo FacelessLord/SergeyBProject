@@ -20,7 +20,7 @@ export function ItemCard({cardId, img, header, provider, price, inStock}) {
 
 export function ItemCardList({cardId, img, header, provider, price, inStock}) {
     return (<a className="item card" href={"item?itemId=" + cardId} id={cardId}>
-        <img className="item img" src={img}/>
+        <img className="item img" src={img} alt={"Product main icon"}/>
         <div className="item info">
             <span className="item text main">{header}</span>
             <div className="item text attributes">

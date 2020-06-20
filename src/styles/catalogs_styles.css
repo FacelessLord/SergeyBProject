@@ -75,3 +75,126 @@
 .subcatalog:hover {
     display: block;
 }
+.catalog.header {
+    display: flex;
+    flex-direction: row;
+}
+
+.catalog.filter {
+    background-color: #27AE60;
+    min-width: 30vw;
+    height: 40px;
+    padding: 0;
+    border-radius: 16px;
+    border-top-color: #6FCF97;
+    border-left-color: #6FCF97;
+    border-right-color: #27AE60;
+    border-bottom-color: #27AE60;
+}
+
+.catalog.selector {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 4px;
+    padding: 4px;
+
+    margin: 0 8px;
+    position: relative;
+    right: 0;
+
+    background-color: #BDBDBD;
+    border-radius: 8px;
+
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+}
+
+.catalog.selector.option {
+    margin: 0;
+    position: static;
+    flex: none;
+    padding: 0;
+    background-color: #E0E0E0;
+    border-radius: 8px;
+}
+
+.catalog.selector.option.panels {
+    align-self: normal;
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto auto;
+    grid-gap: 2px;
+    padding: 2px;
+}
+
+.catalog.selector.option.panels.active {
+    background-color: #27AE60;
+    border-top-color: #6FCF97;
+    border-left-color: #6FCF97;
+    border-right-color: #27AE60;
+    border-bottom-color: #27AE60;
+}
+
+.catalog.selector.option.panels.active .catalog.selector.option.panels.sub {
+    background-color: #6FCF97;
+}
+
+
+.catalog.selector.option.panels.sub {
+    display: block;
+    background-color: #BDBDBD;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    padding: 0px;
+}
+
+.catalog.selector.option.list {
+    align-self: normal;
+    box-sizing: border-box;
+    padding: 2px;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr;
+    grid-gap: 2px;
+}
+
+.catalog.selector.option.list.active {
+    background-color: #27AE60;
+    border-top-color: #6FCF97;
+    border-left-color: #6FCF97;
+    border-right-color: #27AE60;
+    border-bottom-color: #27AE60;
+}
+
+.catalog.selector.option.list.active .catalog.selector.option.list.sub1 {
+    background-color: #6FCF97;
+}
+
+.catalog.selector.option.list.active .catalog.selector.option.list.sub2 {
+    background-color: #6FCF97;
+}
+
+.catalog.selector.option.list.sub1 {
+    display: block;
+    background-color: #BDBDBD;
+    width: 5px;
+    height: 5px;
+    border-radius: 1px;
+    padding: 0px;
+}
+
+.catalog.selector.option.list.sub2 {
+    position: relative;
+    top: 2px;
+    left: 0px;
+    display: block;
+    background-color: #BDBDBD;
+    width: 13px;
+    height: 2px;
+    border-radius: 1px;
+    padding: 0px;
+}
+

@@ -1,5 +1,5 @@
 import {ItemCard, ItemCardList, ItemCartCard} from "./ItemCard";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Async} from "react-async-await";
 
 import cat1 from "./img/cat1.jpg";
@@ -25,8 +25,10 @@ export function Catalog({type = "panels"}) {
 
 function createItemsPanels(json) {
     const l = [];
-    for (let value in json) {
-        l.push(<ItemCard cardId={value.cardId} img={"/api/images/main?id=" + value.cardId} header={value.header}
+    console.log(json.items);
+    for (let value of json.items) {
+        l.push(<ItemCard key={value.cardId} cardId={value.cardId} img={"/api/images/main?id=" + value.cardId}
+                         header={value.header}
                          provider={value.provider} price={value.price} inStock={value.inStock ? "Да" : "Нет"}/>)
     }
     return l
@@ -34,8 +36,9 @@ function createItemsPanels(json) {
 
 function createItemsList(json) {
     const l = [];
-    for (let value in json) {
-        l.push(<ItemCardList cardId={value.cardId} img={"/api/images/main?id=" + value.cardId} header={value.header}
+    for (let value of json.items) {
+        l.push(<ItemCardList key={value.cardId} cardId={value.cardId} img={"/api/images/main?id=" + value.cardId}
+                             header={value.header}
                              provider={value.provider} price={value.price} inStock={value.inStock ? "Да" : "Нет"}/>)
     }
     return l
@@ -43,18 +46,19 @@ function createItemsList(json) {
 
 function createItemsCart(json) {
     const l = [];
-    for (let value in json) {
-        l.push(<ItemCartCard cardId={value.cardId} img={"/api/images/main?id=" + value.cardId}
+    for (let value of json.items) {
+        l.push(<ItemCartCard key={value.cardId} cardId={value.cardId} img={"/api/images/main?id=" + value.cardId}
                              header={value.header} price={value.price}/>)
     }
     return l
 }
 
-function getItems(maxCount, createList) {
+function requestItems(maxCount, createList) {
     return fetch("/api/items?count=" + maxCount)
         .catch(r => "{}")
         .then(t => t.json())
-        .then(createList).catch(r => [])
+        .then(t => createList(t))
+        .catch(r => [])
 }
 
 function getCartItems(createList) {
@@ -64,27 +68,43 @@ function getCartItems(createList) {
         .then(createList).catch(r => [])
 }
 
-export function CatalogPanels({visible = true, maxCount = 9}) {
-    const items = getItems(maxCount, createItemsPanels);
-    if (items.length > 0)
-        return (<div className="main pad" style={{visible: visible}}>
-            {items}
-        </div>);
-    return (<div className="main pad" style={{visible: visible}}>Couldn't load catalog</div>);
+function Awaiter({value, setValue, getter, err}) {
+    useEffect(() => {
+        async function get() {
+            const cats = await getter();
+            setValue(cats)
+        }
+
+        if (value === "pending")
+            get().catch(r => setValue(err))
+    }, []);
+    return value
 }
 
-export function CatalogList({visible = true, maxCount = 9}) {
-    const items = getItems(maxCount, createItemsList);
+export function CatalogPanels({visible = true, maxCount = 9}) {
+    const [items, setItems] = useState("pending");
 
-    return (<div className="main pad list" style={{visible: visible}}>
-        <Async await={items} catch={"Couldn't load catalog"}/>
+    return (<div className={"main pad"}>
+        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, createItemsPanels)}
+                 err={"Невозможно загрузить каталог"}/>
+    </div>);
+}
+
+
+export function CatalogList({visible = true, maxCount = 9}) {
+    const [items, setItems] = useState("pending");
+
+    return (<div className={"main pad list"}>
+        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, createItemsList)}
+                 err={"Невозможно загрузить каталог"}/>
     </div>);
 }
 
 export function CatalogCart({visible = true}) {
-    const items = getCartItems(createItemsCart);
+    const [items, setItems] = useState("pending");
 
-    return (<div className="main pad list" style={{visible: visible}}>
-        <Async await={items} catch={"Couldn't load catalog"}/>
+    return (<div className={"main pad list"}>
+        <Awaiter value={items} setValue={setItems} getter={() => getCartItems(createItemsCart)}
+                 err={"Невозможно загрузить корзину"}/>
     </div>);
 }

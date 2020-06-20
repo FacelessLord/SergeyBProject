@@ -3,12 +3,12 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    width: 40%;
+    width: 60%;
     background-color: #F2F2F2;
 }
 
 .main.panel {
-    height: 50vw;
+    min-height: 50vw;
 }
 
 .main.text {
@@ -46,7 +46,7 @@
 }
 
 .catalog.header {
-    margin: 8px;
+    margin: 16px;
     background-color: rgba(0, 0, 0, 0);
 
     font-size: 18px;
@@ -62,7 +62,7 @@
 }
 
 .main.pad.list {
-    display: none;
+    display: block;
 }
 
 .main.pad.list .item.card {

@@ -23,7 +23,6 @@ function createRandomId() {
 export function getOrCreateClientId() {
     const cookies = new Cookies();
     const accessToken = cookies.get("accessToken");
-    console.log(accessToken);
     if (accessToken)
         return accessToken;
     const newToken = createRandomId();
@@ -31,6 +30,27 @@ export function getOrCreateClientId() {
     return newToken
 }
 
+const views = ["list", "panels"];
+
+function getUserView() {
+    const cookies = new Cookies();
+    const view = cookies.get("catalogView");
+    if (views.indexOf(view) > -1)
+        return view;
+    cookies.set("catalogView", "list");
+    return "list"
+}
+
+export function setUserView(view) {
+    if (views.indexOf(view) > -1) {
+        const cookies = new Cookies();
+        cookies.set("catalogView", view);
+    }
+}
+
 export function getUser() {
-    return {"loggedIn": true, "username": "Lord_Faceless", "clientId": getOrCreateClientId()}
+    return {
+        "loggedIn": true, "username": "Lord_Faceless", "clientId": getOrCreateClientId(),
+        "view": getUserView()
+    }
 }
