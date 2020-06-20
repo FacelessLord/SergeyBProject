@@ -1,19 +1,22 @@
-import React from "react";
+import React, {useState} from "react";
 import {Header} from "../Common/Header/Header.js";
 import {Catalog} from "../Common/Catalog/Catalog";
 import {getUser} from "../Common/IdProvider";
 import {CatalogStyleSelector} from "../Common/Catalog/CatalogStyleSelector";
+import {FilterButton} from "../Common/Catalog/FilterButton";
 
 export function CatalogPage() {
+    const user = getUser();
+    const [view, setView] = useState(user.view);
     return (
         <div id="page">
             <Header user={getUser()}/>
             <div id="content_wrapper">
-                <span className="catalog header">
-                Каталог:<CatalogStyleSelector/>
-                </span>
+                <div className="catalog header">
+                    <FilterButton/><CatalogStyleSelector value={view} valueSetter={setView}/>
+                </div>
                 <div className="main panel">
-                    <Catalog type={"list"}/>
+                    <Catalog type={view}/>
                 </div>
             </div>
         </div>
