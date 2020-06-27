@@ -68,34 +68,29 @@ function getCartItems(createList) {
         .then(createList).catch(r => [])
 }
 
-function Awaiter({value, setValue, getter, err}) {
-    useEffect(() => {
-        async function get() {
-            const cats = await getter();
-            setValue(cats)
-        }
-
-        if (value === "pending")
-            get().catch(r => setValue(err))
-    }, []);
-    return value
-}
-
-export function CatalogPanels({visible = true, maxCount = 9}) {
+export function CatalogPanels({visible = true, maxCount = 9, filter}) {
     const [items, setItems] = useState("pending");
 
-    return (<div className={"main pad"}>
-        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, createItemsPanels)}
+    useEffect(() => {
+        setItems("pending");
+    }, [filter]);
+
+    return (<div className={"catalog items pad panels"}>
+        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, filter, createItemsPanels)}
                  err={"Невозможно загрузить каталог"}/>
     </div>);
 }
 
 
-export function CatalogList({visible = true, maxCount = 9}) {
+export function CatalogList({visible = true, maxCount = 9, filter}) {
     const [items, setItems] = useState("pending");
 
-    return (<div className={"main pad list"}>
-        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, createItemsList)}
+    useEffect(() => {
+        setItems("pending");
+    }, [filter]);
+
+    return (<div className={"catalog items pad list"}>
+        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, filter, createItemsList)}
                  err={"Невозможно загрузить каталог"}/>
     </div>);
 }
