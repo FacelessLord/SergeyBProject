@@ -11,9 +11,35 @@ def get_current_time():
     return {'time': time.time()}
 
 
+@app.route('/api/providers')
+def get_provider_list():
+    return {"items": [
+        {
+            "name": "AGala",
+            "id": 0,
+            "poc": 4
+        },
+        {
+            "name": "XtraFood",
+            "id": 3,
+            "poc": 125
+        },
+        {
+            "name": "RubyFarm",
+            "id": 5,
+            "poc": 5
+        },
+        {
+            "name": "GreenBoard",
+            "id": 8,
+            "poc": 12
+        }
+    ]}
+
+
 @app.route('/api/categories')
 def get_category_list():
-    return {"categories": [
+    return {"items": [
         {
             "nested": False,
             "id": "aaaa",

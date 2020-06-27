@@ -1,19 +1,18 @@
-import React from "react";
-import {GuestPanelButtons, UserPanel, UserPanelButtons} from "./UserPanel";
+import React, {useState} from "react";
+import {GuestPanelButtons, PanelButtons, UserPanel, UserPanelButtons} from "./UserPanel";
 
-import '../../styles/header_styles.css';
 import {Categories} from "./Categories";
 import {Link} from 'react-router-dom';
 
 function onSuperCatalogButtonSelect() {
-    let subcatalogs = document.getElementsByClassName('catalogs');
+    let subcatalogs = document.getElementsByClassName('categories');
     if (subcatalogs.length > 0) {
         subcatalogs[0].style.visibility = 'visible'
     }
 }
 
 function onSuperCatalogButtonDeselect() {
-    let subcatalogs = document.getElementsByClassName('catalogs');
+    let subcatalogs = document.getElementsByClassName('categories');
     if (subcatalogs.length > 0) {
         subcatalogs[0].style.visibility = 'hidden'
     }
@@ -47,4 +46,15 @@ export function Header({user}) {
             </span>
         </div>
     </div>)
+}
+
+
+function onUserSelected() {
+    const userPanel = document.getElementById("user_panel");
+    userPanel.style.display = "block";
+}
+
+function onUserDeselected() {
+    const userPanel = document.getElementById("user_panel");
+    userPanel.style.display = "none";
 }

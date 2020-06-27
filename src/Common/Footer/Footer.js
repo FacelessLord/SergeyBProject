@@ -1,5 +1,5 @@
 import React from "react";
 
 export function Footer() {
-    return (<footer></footer>)
+    return (<footer id={"footer_wrapper"}/>)
 }

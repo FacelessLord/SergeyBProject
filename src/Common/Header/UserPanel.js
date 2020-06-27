@@ -1,16 +1,15 @@
 import React from "react";
 
-import '../../styles/header_styles.css';
 import {Link} from "react-router-dom";
 
 export function GuestPanelButtons({hidden = true}) {
-    return (<div id="guest_panel" style={{visibility: (hidden ? "hidden" : "visible")}}>
-        <div className="guest panel">
-            <Link to={"/login"} className="guest button login" id="button_login">
-                <div className="guest button text">Войти</div>
+    return (<div id={"user_panel"} className="header user panel guest" style={{display: hidden ? "none" : "block"}}>
+        <div className="header user panel rect">
+            <Link to={"/login"} className="header buttons button user login" id="button_login">
+                Войти
             </Link>
-            <Link to={"/register"} className="guest button register" id="button_register">
-                <div className="guest button text">Регистрация</div>
+            <Link to={"/register"} className="header buttons button user register" id="button_register">
+                Регистрация
             </Link>
         </div>
         <div className="user panel pointer"/>
@@ -18,22 +17,24 @@ export function GuestPanelButtons({hidden = true}) {
 }
 
 export function UserPanelButtons({hidden, user}) {
-    return (<div id="user_panel" style={{visibility: hidden ? "hidden" : "visible"}}>
-        <div className="user panel">
-            <Link to={"/account?clientId=" + user.clientId} className="user button account" id="button_account">
-                <div className="user button text">Личный кабинет</div>
+    return (<div id={"user_panel"} className="header user panel logged" style={{display: hidden ? "none" : "block"}}>
+        <div className="header user panel rect">
+            <Link to={"/account?clientId=" + user.clientId} className="header user buttons button user account"
+                  id="button_account">
+                Личный кабинет
             </Link>
-            <Link to={"/cart?clientId=" + user.clientId} className="user button cart" id="button_cart">
-                <div className="user button text">Корзина</div>
+            <Link to={"/cart?clientId=" + user.clientId} className="header user buttons button user cart"
+                  id="button_cart">
+                Корзина
             </Link>
-            <button className="user button skip" style={{visibility: "hidden"}}>
-                <div className="user button text">skip</div>
+            <button className="header user buttons button user skip" style={{visibility: "hidden"}}>
+                <div className="header user text">skip</div>
             </button>
-            <Link to={"/logout"} className="user button logout" id="button_logout">
-                <div className="user button text">Выйти</div>
+            <Link to={"/logout"} className="header user buttons button user logout" id="button_logout">
+                Выйти
             </Link>
         </div>
-        <div className="user panel pointer"/>
+        <div className="header user panel pointer"/>
     </div>)
 }
 
@@ -41,10 +42,17 @@ const guest = "Гость";
 
 export function UserPanel({user}) {
     let name = user.loggedIn ? user.username : guest;
-    return (<div className="user container">
-        <span className="user text" id="username">{name}</span>
-        <div className="user pic">
+    return (<div className="header user panel profile">
+        <div className="header user text" id="username">{name}</div>
+        <div className="header user pic">
             <div className="fa fa-user"/>
         </div>
     </div>)
+}
+
+export function PanelButtons({hidden, user}) {
+    if (user.loggedIn) {
+        return (<UserPanelButtons hidden={hidden} user={user}/>)
+    }
+    return (<GuestPanelButtons hidden={hidden}/>)
 }

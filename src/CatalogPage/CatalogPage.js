@@ -3,7 +3,8 @@ import {Header} from "../Common/Header/Header.js";
 import {Catalog} from "../Common/Catalog/Catalog";
 import {getUser} from "../Common/IdProvider";
 import {CatalogStyleSelector} from "../Common/Catalog/CatalogStyleSelector";
-import {FilterButton} from "../Common/Catalog/FilterButton";
+import {Filter} from "../Common/Catalog/Filter";
+import {Footer} from "../Common/Footer/Footer";
 
 export function CatalogPage() {
     const user = getUser();
@@ -19,6 +20,7 @@ export function CatalogPage() {
                     <Catalog type={view}/>
                 </div>
             </div>
+            <Footer/>
         </div>
     )
 }

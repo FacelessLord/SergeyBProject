@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 
 function createList(json) {
     const l = [];
-    for (let value of json.categories) {
+    for (let value of json.items) {
         if (value.nested) {
             l.push(<NestedCategory key={value.id} categoryId={value.id} categoryName={value.name}
                                    subcategories={value.subcategories}/>)
@@ -45,7 +45,7 @@ export function Categories() {
             getCategories()
     });
 
-    return (<div className="catalogs" id="catalog_buttons">
+    return (<div className="categories" id="catalog_buttons">
         {categories}
     </div>);
 

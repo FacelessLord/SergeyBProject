@@ -1,31 +1,22 @@
 import {ItemCard, ItemCardList, ItemCartCard} from "./ItemCard";
 import React, {useEffect, useState} from "react";
-import {Async} from "react-async-await";
 
-import cat1 from "./img/cat1.jpg";
-import cat2 from "./img/cat1.jpg"
-import cat3 from "./img/cat2.jpeg";
-import cat4 from "./img/cat3.jpeg";
-import cat5 from "./img/cat5.jpg";
-import cat6 from "./img/cat6.jpeg";
 import {getOrCreateClientId} from "../IdProvider";
+import {Awaiter} from "../Awaiter";
 
-const img = [cat1, cat2, cat3, cat4, cat5, cat6];
-
-export function Catalog({type = "panels"}) {
+export function Catalog({type = "panels", filter}) {
     switch (type) {
         case "list":
-            return <CatalogList/>;
+            return <CatalogList filter={filter}/>;
         case "cart":
             return <CatalogCart/>;
         default:
-            return <CatalogPanels/>;
+            return <CatalogPanels filter={filter}/>;
     }
 }
 
 function createItemsPanels(json) {
     const l = [];
-    console.log(json.items);
     for (let value of json.items) {
         l.push(<ItemCard key={value.cardId} cardId={value.cardId} img={"/api/images/main?id=" + value.cardId}
                          header={value.header}
@@ -53,8 +44,17 @@ function createItemsCart(json) {
     return l
 }
 
-function requestItems(maxCount, createList) {
-    return fetch("/api/items?count=" + maxCount)
+function createFilterQuery(filter) {
+    let query = "";
+    for (let k in filter) {
+        if(k !== "display")
+            query += k + "=" + filter[k] + "&";
+    }
+    return query.slice(0, -1)
+}
+
+function requestItems(maxCount, filter, createList) {
+    return fetch("/api/items?count=" + maxCount + "&" + createFilterQuery(filter))
         .catch(r => "{}")
         .then(t => t.json())
         .then(t => createList(t))
@@ -103,7 +103,7 @@ export function CatalogList({visible = true, maxCount = 9}) {
 export function CatalogCart({visible = true}) {
     const [items, setItems] = useState("pending");
 
-    return (<div className={"main pad list"}>
+    return (<div className={"catalog items pad cart"}>
         <Awaiter value={items} setValue={setItems} getter={() => getCartItems(createItemsCart)}
                  err={"Невозможно загрузить корзину"}/>
     </div>);

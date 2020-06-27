@@ -4,11 +4,10 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter, Router} from 'react-router-dom';
 
-import './styles/styles.css';
-import './styles/main_styles.css';
+import './old_styles/styles.css';
 import './styles/header_styles.css';
-import './styles/catalogs_styles.css';
-import './styles/footer_styles.css';
+import './styles/catalog_styles.css';
+import './old_styles/footer_styles.css';
 import Main from "./Main";
 import { createBrowserHistory } from 'history'
 

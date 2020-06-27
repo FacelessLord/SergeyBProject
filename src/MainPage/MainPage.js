@@ -5,8 +5,7 @@ import {Catalog} from "../Common/Catalog/Catalog";
 import {getUser} from "../Common/IdProvider";
 import {Link} from "react-router-dom";
 import {Footer} from "../Common/Footer/Footer";
-import {CatalogStyleSelector} from "../Common/Catalog/CatalogStyleSelector";
-import {FilterButton} from "../Common/Catalog/FilterButton";
+import {PanelButtons, UserPanel} from "../Common/Header/UserPanel";
 
 
 export function MainPage() {
@@ -16,13 +15,10 @@ export function MainPage() {
         <div id="page">
             <Header user={user}/>
             <div id="content_wrapper">
-                <div className="main panel">
+                <div className="site main panel">
                     <ResourceDescription/>
-                    <div className="catalog header">
-                        <FilterButton/><CatalogStyleSelector value={view} valueSetter={setView}/>
-                    </div>
                     <Catalog type={view}/>
-                    <Link to={"/catalog"} className="main button more">
+                    <Link to={"/catalog"} className="catalog buttons button more">
                         Показать полностью
                     </Link>
                 </div>
@@ -31,3 +27,5 @@ export function MainPage() {
         </div>
     )
 }
+
+

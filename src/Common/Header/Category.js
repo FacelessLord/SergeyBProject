@@ -2,11 +2,9 @@ import React from "react";
 import {Link} from "react-router-dom";
 
 export function Category({categoryId, categoryName}) {
-    return (<div className="category">
-        <Link to={"catalog?category=" + categoryId}>
-            <button className="category button">
-                {categoryName}
-            </button>
+    return (<div className="categories category">
+        <Link className="categories buttons button" to={"catalog?category=" + categoryId}>
+            {categoryName}
         </Link>
     </div>)
 }
@@ -42,13 +40,13 @@ function createSubcatalogs(categoryId, subcategories) {
 }
 
 export function NestedCategory({categoryId, categoryName, subcategories}) {
-    return (<div className="category nested" id={categoryId} onMouseEnter={() => onCatalogButtonSelect(categoryId)}
+    return (<div className="categories category" id={categoryId} onMouseEnter={() => onCatalogButtonSelect(categoryId)}
                  onMouseLeave={() => onCatalogButtonDeselect(categoryId)}>
-        <Link to={"catalog?category=" + categoryId} className="category button nested">
+        <Link to={"catalog?category=" + categoryId} className="categories buttons button nested">
             {categoryName}
         </Link>
         <div className="fa fa-angle-right"/>
-        <div className="subcatalog">
+        <div className="categories subcatalog">
             {createSubcatalogs(categoryId, subcategories)}
         </div>
     </div>)

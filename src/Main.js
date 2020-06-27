@@ -1,4 +1,3 @@
-import App from "./App";
 import {Route, Switch} from "react-router-dom";
 import {MainPage} from "./MainPage/MainPage";
 import {CatalogPage} from "./CatalogPage/CatalogPage";
