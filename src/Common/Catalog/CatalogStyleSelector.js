@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {getUser, setUserView} from "../IdProvider";
 
 export function CatalogStyleSelector({value, valueSetter: setValue}) {
-    return (<span className="catalog selector">
+    return (<div className="catalog items selector form">
         <StyleOption value={value} onClick={() => {
             setValue("panels");
             setUserView("panels");
@@ -11,29 +11,29 @@ export function CatalogStyleSelector({value, valueSetter: setValue}) {
             setValue("list");
             setUserView("list");
         }} option="list"/>
-    </span>)
+    </div>)
 }
 
 function StyleOption({value, option, onClick}) {
     const design = getOptionDesign(option);
     const active = value === option ? "active" : "inactive";
-    return (<button className={"catalog selector option " + option + " " + active} id={"style_" + option}
+    return (<button className={"catalog items selector option " + option + " container " + active} id={"style_" + option}
                     onClick={onClick}>{design}</button>)
 }
 
 function getOptionDesign(option) {
     switch (option) {
         case "panels":
-            return ([<div key={0} className={"catalog selector option panels sub"}/>,
-                <div key={1} className={"catalog selector option panels sub"}/>,
-                <div key={2} className={"catalog selector option panels sub"}/>,
-                <div key={3} className={"catalog selector option panels sub"}/>]);
+            return ([<div key={0} className={"catalog items selector option panels element"}/>,
+                <div key={1} className={"catalog items selector option panels element"}/>,
+                <div key={2} className={"catalog items selector option panels element"}/>,
+                <div key={3} className={"catalog items selector option panels element"}/>]);
         case "list":
-            return ([<div key={0} className={"catalog selector option list sub1"}/>,
-                <div key={1} className={"catalog selector option list sub2"}/>,
-                <div key={2} className={"catalog selector option list sub1"}/>,
-                <div key={3} className={"catalog selector option list sub2"}/>,
-                <div key={4} className={"catalog selector option list sub1"}/>,
-                <div key={5} className={"catalog selector option list sub2"}/>,])
+            return ([<div key={0} className={"catalog items selector option list element1"}/>,
+                <div key={1} className={"catalog items selector option list element2"}/>,
+                <div key={2} className={"catalog items selector option list element1"}/>,
+                <div key={3} className={"catalog items selector option list element2"}/>,
+                <div key={4} className={"catalog items selector option list element1"}/>,
+                <div key={5} className={"catalog items selector option list element2"}/>,])
     }
 }
