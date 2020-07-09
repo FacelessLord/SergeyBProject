@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import {getUser, setUserView} from "../IdProvider";
 
-export function CatalogStyleSelector({value, valueSetter: setValue}) {
-    return (<div className="catalog items selector form">
+export function CatalogStyleSelector({value, type, valueSetter: setValue}) {
+    console.log(value);
+    return (<div className={"catalog items selector form" + (type === "cart" ? " cart" : "")}>
         <StyleOption value={value} onClick={() => {
             setValue("panels");
             setUserView("panels");
@@ -17,8 +18,9 @@ export function CatalogStyleSelector({value, valueSetter: setValue}) {
 function StyleOption({value, option, onClick}) {
     const design = getOptionDesign(option);
     const active = value === option ? "active" : "inactive";
-    return (<button className={"catalog items selector option " + option + " container " + active} id={"style_" + option}
-                    onClick={onClick}>{design}</button>)
+    return (
+        <button className={"catalog items selector option " + option + " container " + active} id={"style_" + option}
+                onClick={onClick}>{design}</button>)
 }
 
 function getOptionDesign(option) {
