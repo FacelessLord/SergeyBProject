@@ -22,6 +22,12 @@ class FINQ:
     def sort(self, func: Callable):
         return FINQ(sorted(self, key=func))
 
+    def skip(self, count: int):
+        return FINQ(o for i,o in enumerate(self, 0) if i >= count)
+
+    def take(self, count: int):
+        return FINQ(o for i,o in enumerate(self, 0) if i < count)
+
     def pairs(self):
         return FINQPairs(self)
 

@@ -1,14 +1,14 @@
 import {Category, NestedCategory} from "./Category";
 import React, {useEffect, useState} from "react";
 
-function createList(json) {
+function createList(json, setCategory) {
     const l = [];
     for (let value of json.items) {
         if (value.nested) {
             l.push(<NestedCategory key={value.id} categoryId={value.id} categoryName={value.name}
-                                   subcategories={value.subcategories}/>)
+                                   subcategories={value.subcategories} setCategory={setCategory}/>)
         } else {
-            l.push(<Category key={value.id} categoryId={value.id} categoryName={value.name}/>)
+            l.push(<Category key={value.id} categoryId={value.id} categoryName={value.name} setCategory={setCategory}/>)
         }
     }
     return l
@@ -28,7 +28,7 @@ function createList(json) {
 // }
 
 
-export function Categories() {
+export function Categories({setCategory}) {
     const [categories, setCategories] = useState([]);
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export function Categories() {
             const cats = await fetch("/api/categories")
                 .catch(r => "{}")
                 .then(t => t.json())
-                .then(j => createList(j))
+                .then(j => createList(j, setCategory))
                 .catch(r => []);
             setCategories(cats)
         }

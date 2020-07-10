@@ -1,5 +1,9 @@
+import math
+from typing import List
+
 from api.controllers.Controller import Controller
-from api.controllers.DatabaseController import DatabaseController as dbc
+from api.controllers.DatabaseController import DatabaseController as dbc, Product
+from api.finq import FINQ
 
 
 class ProductController(Controller):
@@ -7,36 +11,28 @@ class ProductController(Controller):
         super().__init__(db)
 
     def get_catalog(self, count: int, fromIndex: int, priceTo: float,
-                    priceFrom: float, providers: list):
-        return {"items": [
-            {
-                "cardId": 1241,
-                "header": "Red cat with green eyes",
-                # "Рыжий котик с зелёными глазами",
-                "provider": "Mommy-cat",
-                "price": 0,
-                "isStock": True
-            },
-            {
-                "cardId": 1341,
-                "header": "Kitty with blue eyes",
-                # "Котёнок с голубыми глазами",
-                "provider": "Mommy-cat",
-                "price": 0,
-                "isStock": True
-            },
-            {
-                "cardId": 1251,
-                "header": "Just nice cat",  # "Просто красивый котик",
-                "provider": "Mommy-cat",  # "Мама-кошка",
-                "price": 0,
-                "isStock": True
-            },
-            {
-                "cardId": 6421,
-                "header": "Just nice cat",
-                "provider": "Mommy-cat",
-                "price": 0,
-                "isStock": True
-            },
-        ]}
+                    priceFrom: float, providers: List[int], category: str):
+        products = FINQ(self.db.products())
+        if priceFrom == 0:
+            priceFrom = math.inf
+        if count == 0:
+            count = math.inf
+        print(category)
+        catalog = products \
+            .filter(lambda p: (str(p.category.id) == category or category in ["", "*"])
+                              and (priceTo <= p.price <= priceFrom)
+                              and (str(p.provider_id) in providers or len(providers) == 0)) \
+            .skip(fromIndex) \
+            .take(count) \
+            .map(lambda p:
+                 {
+                     "cardId": p.id,
+                     "header": p.name,
+                     "description": p.description,
+                     # "Рыжий котик с зелёными глазами",
+                     "provider": p.provider.name,
+                     "price": p.price,
+                     "isStock": p.in_stock
+                 })
+
+        return { "items": catalog.to_list() }

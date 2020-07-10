@@ -1,9 +1,9 @@
 import React from "react";
 import {Link} from "react-router-dom";
 
-export function Category({categoryId, categoryName}) {
+export function Category({categoryId, categoryName, setCategory}) {
     return (<div className="categories category">
-        <Link className="categories buttons button" to={"catalog?category=" + categoryId}>
+        <Link className="categories buttons button" onClick={() => setCategory(categoryId)} to={"catalog?category=" + categoryId}>
             {categoryName}
         </Link>
     </div>)
@@ -28,26 +28,26 @@ function onCatalogButtonDeselect(id) {
     }
 }
 
-function createSubcatalogs(categoryId, subcategories) {
+function createSubcatalogs(categoryId, subcategories, setCategory) {
     let l = [];
     for (let value of subcategories) {
         const subcategoryId = value.id;
         const categoryName = value.name;
         l.push(<Category key={categoryId + ":" + subcategoryId} categoryId={categoryId + ":" + subcategoryId}
-                         categoryName={categoryName}/>)
+                         categoryName={categoryName} setCategory={setCategory}/>)
     }
     return l
 }
 
-export function NestedCategory({categoryId, categoryName, subcategories}) {
+export function NestedCategory({categoryId, categoryName, subcategories, setCategory}) {
     return (<div className="categories category" id={categoryId} onMouseEnter={() => onCatalogButtonSelect(categoryId)}
                  onMouseLeave={() => onCatalogButtonDeselect(categoryId)}>
-        <Link to={"catalog?category=" + categoryId} className="categories buttons button nested">
+        <Link to={"catalog?category=" + categoryId}  onClick={() => setCategory(categoryId)} className="categories buttons button nested">
             {categoryName}
         </Link>
         <div className="fa fa-angle-right"/>
         <div className="categories subcatalog">
-            {createSubcatalogs(categoryId, subcategories)}
+            {createSubcatalogs(categoryId, subcategories, setCategory)}
         </div>
     </div>)
 }

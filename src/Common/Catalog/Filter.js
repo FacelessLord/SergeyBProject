@@ -47,8 +47,13 @@ function PriceLimits({state, setState}) {
     </div>)
 }
 
+const catRE = /.*?category=(.*?)(&.*)?$/g;
+
 function createProviderOptionsList(setState, state) {
-    return fetch("/api/providers")
+    const category = catRE.exec(window.location);
+    const category_param = category ? category[1] : '*';
+
+    return fetch("/api/providers?category=" + category_param)
         .catch(r => "{ }")
         .then(t => t.json())
         .then(t => t.items)

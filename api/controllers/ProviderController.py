@@ -1,6 +1,5 @@
 from api.controllers.Controller import Controller
-from api.controllers.DatabaseController import DatabaseController as dbc, \
-    Provider, Product
+from api.controllers.DatabaseController import DatabaseController as dbc
 from api.finq import FINQ
 
 
@@ -12,27 +11,11 @@ class ProviderController(Controller):
         providers = self.db \
             .providers().all()
         providers_for_category = FINQ(providers) \
-            .filter(lambda p: category == '*' or FINQ(p.products) \
-                    .any(lambda pp: pp.category.name == category))
-        return {"items": [
-            {
-                "name": "AGala",
-                "id": 0,
-                "poc": 4
-            },
-            {
-                "name": "XtraFood",
-                "id": 3,
-                "poc": 125
-            },
-            {
-                "name": "RubyFarm",
-                "id": 5,
-                "poc": 5
-            },
-            {
-                "name": "GreenBoard",
-                "id": 8,
-                "poc": 12
-            }
-        ]}
+            .filter(lambda p: category == '*' or FINQ(p.products)
+                    .any(lambda pp: str(pp.category.id) == category)) \
+            .map(lambda p: {
+                "name": p.name,
+                "id": p.id,
+                "poc": len(p.products)  # all offer count, not for given category
+            })
+        return { "items": providers_for_category.to_list() }

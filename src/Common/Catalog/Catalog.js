@@ -4,14 +4,18 @@ import React, {useEffect, useState} from "react";
 import {getOrCreateClientId} from "../IdProvider";
 import {Awaiter} from "../Awaiter";
 
+const catRE = /.*?category=(.*?)(&.*)?$/g;
+
 export function Catalog({type = "panels", filter}) {
+    const category = catRE.exec(window.location);
+    const category_param = category ? category[1] : '*';
     switch (type) {
         case "list":
-            return <CatalogList filter={filter}/>;
+            return <CatalogList filter={filter} category={category_param}/>;
         case "cart":
             return <CatalogCart/>;
         default:
-            return <CatalogPanels filter={filter}/>;
+            return <CatalogPanels filter={filter} category={category_param}/>;
     }
 }
 
@@ -53,8 +57,8 @@ function createFilterQuery(filter) {
     return query.slice(0, -1)
 }
 
-function requestItems(maxCount, filter, createList) {
-    return fetch("/api/items?count=" + maxCount + "&" + createFilterQuery(filter))
+function requestItems(maxCount, filter, createList, category) {
+    return fetch("/api/items?count=" + maxCount + "&category="+category+"&" + createFilterQuery(filter))
         .catch(r => "{}")
         .then(t => t.json())
         .then(t => createList(t))
@@ -68,7 +72,7 @@ function getCartItems(createList) {
         .then(createList).catch(r => [])
 }
 
-export function CatalogPanels({visible = true, maxCount = 9, filter}) {
+export function CatalogPanels({visible = true, maxCount = 9, filter, category}) {
     const [items, setItems] = useState("pending");
 
     useEffect(() => {
@@ -76,13 +80,13 @@ export function CatalogPanels({visible = true, maxCount = 9, filter}) {
     }, [filter]);
 
     return (<div className={"catalog items pad panels"}>
-        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, filter, createItemsPanels)}
+        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, filter, createItemsPanels, category)}
                  err={"Невозможно загрузить каталог"}/>
     </div>);
 }
 
 
-export function CatalogList({visible = true, maxCount = 9, filter}) {
+export function CatalogList({visible = true, maxCount = 9, filter, category}) {
     const [items, setItems] = useState("pending");
 
     useEffect(() => {
@@ -90,7 +94,7 @@ export function CatalogList({visible = true, maxCount = 9, filter}) {
     }, [filter]);
 
     return (<div className={"catalog items pad list"}>
-        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, filter, createItemsList)}
+        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, filter, createItemsList, category)}
                  err={"Невозможно загрузить каталог"}/>
     </div>);
 }

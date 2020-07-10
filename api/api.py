@@ -1,9 +1,21 @@
 import time
 from flask import Flask, request
 
-from api.utils import send_image
+from api.controllers.CategoryController import CategoryController
+from api.controllers.ImageController import ImageController
+from api.controllers.ProductController import ProductController
+from api.controllers.ProviderController import ProviderController
+import api.controllers.DatabaseController as dbc
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/lord_faceless/PycharmProjects/Work/Sergey/react-flask-app/api/data/UserData.db'
+
+db = dbc.DatabaseController(app)
+
+providers = ProviderController(db)
+categories = CategoryController(db)
+products = ProductController(db)
+images = ImageController(db)
 
 
 @app.route('/time')
@@ -13,97 +25,27 @@ def get_current_time():
 
 @app.route('/api/providers')
 def get_provider_list():
-    return {"items": [
-        {
-            "name": "AGala",
-            "id": 0,
-            "poc": 4
-        },
-        {
-            "name": "XtraFood",
-            "id": 3,
-            "poc": 125
-        },
-        {
-            "name": "RubyFarm",
-            "id": 5,
-            "poc": 5
-        },
-        {
-            "name": "GreenBoard",
-            "id": 8,
-            "poc": 12
-        }
-    ]}
+    args = request.args
+    category = args.get("category", "*", type=str)
+    return providers.get_provider_list(category)
 
 
 @app.route('/api/categories')
 def get_category_list():
-    return {"items": [
-        {
-            "nested": False,
-            "id": "aaaa",
-            "name": "AAAA"
-        },
-        {
-            "nested": True,
-            "id": "bbbb",
-            "name": "BBBB",
-            "subcategories": [{"nested": False, "id": "a", "name": "BBBB-A"},
-                              {"nested": False, "id": "b", "name": "BBBB-B"},
-                              {"nested": False, "id": "c", "name": "BBBB-C"},
-                              {"nested": False, "id": "d", "name": "BBBB-D"}]
-        },
-        {
-            "nested": False,
-            "id": "cccc",
-            "name": "CCCC"
-        },
-        {
-            "nested": True,
-            "id": "dddd",
-            "name": "DDDD",
-            "subcategories": [{"nested": False, "id": "a", "name": "DDDD-A"}]
-        }
-    ]}
+    return categories.get_category_list()
 
 
 @app.route('/api/items')
 def get_items_list():
     args = request.args
-    count = args.get("count", -1)
+    count = args.get("count", -1, type=int)
+    category = args.get("category", "", type=str)
+    fromIndex = args.get("from", 0, type=int)
+    priceTo = args.get("priceTo", 0, type=float)
+    priceFrom = args.get("priceFrom", 0, type=float)
+    providers = args.get("providers", [], type=list)
 
-    return {"items": [
-        {
-            "cardId": 1241,
-            "header": "Red cat with green eyes",
-            # "Рыжий котик с зелёными глазами",
-            "provider": "Mommy-cat",
-            "price": 0,
-            "isStock": True
-        },
-        {
-            "cardId": 1341,
-            "header": "Kitty with blue eyes",  # "Котёнок с голубыми глазами",
-            "provider": "Mommy-cat",
-            "price": 0,
-            "isStock": True
-        },
-        {
-            "cardId": 1251,
-            "header": "Just nice cat",  # "Просто красивый котик",
-            "provider": "Mommy-cat",  # "Мама-кошка",
-            "price": 0,
-            "isStock": True
-        },
-        {
-            "cardId": 6421,
-            "header": "Just nice cat",
-            "provider": "Mommy-cat",
-            "price": 0,
-            "isStock": True
-        },
-    ]}
+    return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
 
 
 @app.route('/api/images/main')
@@ -111,4 +53,4 @@ def get_main_icon():
     args = request.args
     product_id = args.get("id", -1)
 
-    return send_image("cat1.jpg")
+    return images.get_main_image(product_id)

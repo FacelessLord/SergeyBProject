@@ -1,5 +1,27 @@
+from typing import List
+
 from api.controllers.Controller import Controller
-from api.controllers.DatabaseController import DatabaseController as dbc
+from api.controllers.DatabaseController import DatabaseController as dbc, Category
+from api.finq import FINQ
+
+
+def create_category_json(category: Category, categories: List[Category]):
+    if category.nested:
+        sub_cats = FINQ(categories) \
+            .filter(lambda c: c.parent_id == category.id) \
+            .map(lambda c: create_category_json(c, categories))
+        return {
+            "nested": category.nested,
+            "id": category.id,
+            "name": category.name,
+            "subcategories": sub_cats.to_list()
+        }
+    else:
+        return {
+            "nested": category.nested,
+            "id": category.id,
+            "name": category.name,
+        }
 
 
 class CategoryController(Controller):
@@ -7,32 +29,9 @@ class CategoryController(Controller):
         super().__init__(db)
 
     def get_category_list(self):
-        return {"items": [
-            {
-                "nested": False,
-                "id": "aaaa",
-                "name": "AAAA"
-            },
-            {
-                "nested": True,
-                "id": "bbbb",
-                "name": "BBBB",
-                "subcategories": [
-                    {"nested": False, "id": "a", "name": "BBBB-A"},
-                    {"nested": False, "id": "b", "name": "BBBB-B"},
-                    {"nested": False, "id": "c", "name": "BBBB-C"},
-                    {"nested": False, "id": "d", "name": "BBBB-D"}]
-            },
-            {
-                "nested": False,
-                "id": "cccc",
-                "name": "CCCC"
-            },
-            {
-                "nested": True,
-                "id": "dddd",
-                "name": "DDDD",
-                "subcategories": [
-                    {"nested": False, "id": "a", "name": "DDDD-A"}]
-            }
-        ]}
+        categories = self.db.categories()
+        cat_list = FINQ(categories)\
+            .filter(lambda c: c.parent_id == -1)\
+            .map(lambda c: create_category_json(c, categories))\
+            .to_list()
+        return { "items": cat_list }
