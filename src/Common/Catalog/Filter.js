@@ -24,7 +24,7 @@ function FilterSelector({state, setState}) {
 }
 
 function extractNumberString(value) {
-    const str = value.replace(/^0+/g, '').replace(/[^\.0-9]/g, '');
+    const str = value.replace(/^0+(?=[0-9])/g, '').replace(/[^\.0-9]/g, '');
     const parts = str.split('.');
     return parts.length > 2 ? parts[0] + '.' + parts.slice(1).join('') : str;
 }
@@ -36,12 +36,12 @@ function PriceLimits({state, setState}) {
             <input type={"text"} value={state.priceFrom} className={"catalog filter selector price value"}
                    onChange={e => updateState({
                        priceFrom: extractNumberString(e.target.value),
-                       priceTo: Math.max(extractNumberString(e.target.value), state.priceTo)
+                       priceTo: (state.priceTo == 0 || state.priceTo == "") ? state.priceTo : Math.max(extractNumberString(e.target.value), state.priceTo)
                    }, state, setState)}/>
             ₽ - до<input type={"text"} value={state.priceTo} className={"catalog filter selector price value"}
                          onChange={e => updateState({
                              priceTo: extractNumberString(e.target.value),
-                             priceFrom: Math.min(extractNumberString(e.target.value), state.priceFrom)
+                             priceFrom: (e.target.value == "0" || e.target.value == "") ? state.priceFrom : Math.min(extractNumberString(e.target.value), state.priceFrom)
                          }, state, setState)}/>₽
         </div>
     </div>)

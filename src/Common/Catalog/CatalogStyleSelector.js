@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import {getUser, setUserView} from "../IdProvider";
 
 export function CatalogStyleSelector({value, type, valueSetter: setValue}) {
-    console.log(value);
     return (<div className={"catalog items selector form" + (type === "cart" ? " cart" : "")}>
         <StyleOption value={value} onClick={() => {
             setValue("panels");

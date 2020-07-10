@@ -14,17 +14,20 @@ export function CatalogPage() {
     });
 
     const setFilter = f => setData({view: data.view, filter: f});
-    const setView = v => setData({view: v, filter: data.filter});
+    const setView = v => {
+        user.view = v;
+        setData({view: user.view, filter: data.filter})
+    };
     return (
         <div id="page">
             <Header user={getUser()}/>
             <div id="content_wrapper">
                 <div className="catalog header">
                     <Filter value={data.filter} setValue={setFilter}/>
-                    <CatalogStyleSelector value={data.view} valueSetter={setView}/>
+                    <CatalogStyleSelector value={user.view} valueSetter={setView}/>
                 </div>
                 <div className="site main panel">
-                    <Catalog type={data.view} filter={data.filter} setFilter={setFilter}/>
+                    <Catalog type={user.view} filter={data.filter} setFilter={setFilter}/>
                 </div>
             </div>
             <Footer/>

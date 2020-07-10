@@ -13,14 +13,14 @@ class ProductController(Controller):
     def get_catalog(self, count: int, fromIndex: int, priceTo: float,
                     priceFrom: float, providers: List[int], category: str):
         products = FINQ(self.db.products())
-        if priceFrom == 0:
-            priceFrom = math.inf
+        if priceTo == 0:
+            priceTo = math.inf
         if count == 0:
             count = math.inf
         print(category)
         catalog = products \
             .filter(lambda p: (str(p.category.id) == category or category in ["", "*"])
-                              and (priceTo <= p.price <= priceFrom)
+                              and (priceFrom <= p.price <= priceTo)
                               and (str(p.provider_id) in providers or len(providers) == 0)) \
             .skip(fromIndex) \
             .take(count) \
