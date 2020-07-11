@@ -19,7 +19,7 @@ class ProductController(Controller):
             count = math.inf
         print(category)
         catalog = products \
-            .filter(lambda p: (str(p.category.id) == category or category in ["", "*"])
+            .filter(lambda p: (str(p.category.id).startswith(category) or category in ["", "*"])
                               and (priceFrom <= p.price <= priceTo)
                               and (str(p.provider_id) in providers or len(providers) == 0)) \
             .skip(fromIndex) \
