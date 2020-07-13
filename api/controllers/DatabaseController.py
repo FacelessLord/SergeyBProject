@@ -1,7 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 import api.guid as guid
 
@@ -77,9 +78,43 @@ class DatabaseController:
             password_hash = db.Column(db.String(100), nullable=False)
             created_on = db.Column(db.DateTime(), default=datetime.utcnow)
             last_login = db.Column(db.DateTime(), default=datetime.utcnow)
-            access_token = db.Column(db.Integer(), default=guid.new_formatted)
+            access_token = db.Column(db.String(), default=guid.new_formatted)
             updated_on = db.Column(db.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
             permission_level = db.Column(db.Integer(), default=lambda: 0)
+            ttl = timedelta(hours=8)
+
+            def is_authenticated(self):
+                return (datetime.utcnow() - self.last_login) < self.ttl \
+                       and self.access_token != ""
+
+            def is_anonymous(self):
+                return not self.is_authenticated()
+
+            def load(self, password: str):
+                if self.check_password(password):
+                    if self.is_anonymous():
+                        self.access_token = guid.new_formatted
+                    self.last_login = datetime.utcnow()
+                    db.session.commit()
+                    return self.access_token
+
+            def unload(self, access_token: str):  # logouts user from everywhere
+                if access_token == self.access_token:
+                    self.access_token = ""
+
+            def set_password(self, password: str):
+                self.password_hash = generate_password_hash(password)
+                db.session.commit()
+
+            def check_password(self, password: str):
+                return check_password_hash(self.password_hash, password)
+
+            def change_password(self, old_password, new_password):
+                if self.is_authenticated() and self.check_password(old_password):
+                    self.set_password(new_password)
+                    self.unload(self.access_token)
+                    return True
+                return False
 
             def __repr__(self):
                 return "<{}:{}>".format(self.id, self.username)
@@ -141,57 +176,60 @@ class DatabaseController:
         category = Category(name=name, nested=nested, parent_id=parent_id)
         self.db.session.add(category)
 
-    def get_category_by_name(self, name: str):
-        return self.db.session.query(Category) \
+    def get_category_by_name(self, name: str) -> Category:
+        categories = self.db.session.query(Category) \
             .filter(Category.name == name) \
             .all()
 
-    def get_category(self, id: str):
-        return self.db.session.query(Category) \
-            .filter(Category.id == id) \
-            .all()
+        if len(categories) > 0:
+            return categories[0]
 
-    def categories(self):
+    def get_category(self, id: int) -> Category:
+        return self.db.session.query(Category) \
+            .get(id)
+
+    def categories(self) -> List[Category]:
         return self.db.session.query(Category).all()
 
-    def get_item_from_cart(self, batch_id: int) -> List[ProductBatch]:
+    def get_item_from_cart(self, batch_id: int) -> ProductBatch:
         return self.db.session.query(ProductBatch) \
-            .filter(ProductBatch.id == batch_id) \
-            .all()
+            .get(batch_id)
 
     def batches(self) -> List[ProductBatch]:
         return self.db.session.query(ProductBatch)
 
-    def get_user(self, user_id: int) -> List[User]:
-        return self.db.session.query(User) \
-            .filter(User.id == user_id) \
-            .all()
+    def load_user(self, user_id) -> User:
+        return self.db.session.query(User).get(user_id)
 
-    def get_user_by_name(self, username: str) -> List[User]:
-        return self.db.session.query(User) \
+    def get_user_by_name(self, username: str) -> User:
+        users = self.db.session.query(User) \
             .filter(User.username == username) \
             .all()
+
+        if len(users) > 0:
+            return users[0]
 
     def users(self) -> List[User]:
         return self.db.session.query(User)
 
-    def get_product(self, product_id: int) -> List[Product]:
+    def get_product(self, product_id: int) -> Product:
         return self.db.session.query(Product) \
-            .filter(Product.id == product_id) \
-            .all()
+            .get(product_id)
 
     def products(self) -> List[Product]:
         return self.db.session.query(Product)
 
-    def get_provider(self, provider_id: int) -> List[Provider]:
+    def get_provider(self, provider_id: int) -> Provider:
         return self.db.session.query(Provider) \
-            .filter(Provider.id == provider_id) \
-            .all()
+            .get(provider_id)
 
-    def get_provider_by_name(self, provider_name: str) -> List[Provider]:
-        return self.db.session.query(Provider) \
+    def get_provider_by_name(self, provider_name: str) -> Provider:
+        providers = self.db.session.query(Provider) \
             .filter(Provider.name == provider_name) \
             .all()
+
+        if len(providers) > 0:
+            return providers[0]
 
     def providers(self) -> List[Provider]:
         return self.db.session.query(Provider)
