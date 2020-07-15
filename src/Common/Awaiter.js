@@ -1,5 +1,6 @@
 import {useEffect} from "react";
 
+/* eslint-disable react-hooks/exhaustive-deps */
 export function Awaiter({value, setValue, getter, err, base = "pending"}) {
     useEffect(() => {
         async function get() {
@@ -8,9 +9,8 @@ export function Awaiter({value, setValue, getter, err, base = "pending"}) {
         }
 
         if (value === base)
-            get().catch(r => {
+            get().catch(() => {
                 setValue(err);
-                console.log(r)
             })
     }, [value]);
     return value

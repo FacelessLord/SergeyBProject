@@ -1,0 +1,33 @@
+.login {
+    max-width: 10vw;
+    margin: 8px 0;
+
+}
+
+.login.form {
+    display: contents;
+}
+
+.login.form input {
+    text-align: left;
+}
+
+.login.block {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+}
+
+.login.buttons.button.submit {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    text-align: center;
+    background: #6FCF97;
+    border-color: #6FCF97;
+    border-radius: 4px;
+}
+
+.login.buttons.button.submit:hover {
+    background-color: #27AE60;
+}

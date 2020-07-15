@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {GuestPanelButtons, PanelButtons, UserPanel, UserPanelButtons} from "./UserPanel";
+import {PanelButtons, UserPanel} from "./UserPanel";
 
 import {Categories} from "./Categories";
 import {Link} from 'react-router-dom';
@@ -18,13 +18,9 @@ function onSuperCatalogButtonDeselect() {
     }
 }
 
-export function Header({category, setCategory}) {
-    const {loggedIn, access_token} = window.user;
+export function Header({setCategory}) {
+    const {access_token} = window.user;
     const [userSelected, setUserSelected] = useState(false);
-    const setCategoryAndReload = function (newCategory) {
-        const newLocation = newCategory ? "?category=" + newCategory : "";
-        document.location = "/catalog" + newLocation;
-    }
     return (<div className="header wrapper">
         <div className="header buttons container">
             <div className="header buttons wrapper"
@@ -38,14 +34,14 @@ export function Header({category, setCategory}) {
             <Link to={"/providers"} className="header buttons button providers" id="button_providers">
                 Поставщикам
             </Link>
-            <Link to={"/cart?clientId=" + clientId} className="header buttons button cart" id="button_cart_main">
+            <Link to={"/cart?access_token=" + access_token} className="header buttons button cart" id="button_cart_main">
                 Корзина
             </Link>
         </div>
         <div className="header user container" onMouseEnter={e => onUserSelected(e, userSelected, setUserSelected)}
              onMouseLeave={e => onUserDeselected(e, userSelected, setUserSelected)}>
-            <UserPanel user={user}/>
-            <PanelButtons hidden={!userSelected} user={user}/>
+            <UserPanel/>
+            <PanelButtons hidden={!userSelected}/>
         </div>
     </div>)
 }

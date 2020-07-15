@@ -20,7 +20,30 @@ class User:
         last_login = \
         access_token = \
         updated_on = \
-        permission_level = None
+        permission_level = \
+        ttl = None
+
+    def is_authenticated(self) -> bool:
+        pass
+
+    def is_anonymous(self) -> bool:
+        pass
+
+    def load(self, password: str) -> str:
+        pass
+
+    def unload(self, access_token: str) -> bool:
+        """logouts user from everywhere"""
+        pass
+
+    def set_password(self, password: str):
+        pass
+
+    def check_password(self, password: str) -> bool:
+        pass
+
+    def change_password(self, old_password, new_password) -> bool:
+        pass
 
 
 class ProductBatch:
@@ -54,8 +77,9 @@ class Category:
         parent_id = None
 
 
-# noinspection PyArgumentList
+# noinspection PyArgumentList,PyGlobalUndefined
 class DatabaseController:
+    # noinspection PyRedeclaration
     def __init__(self, app):
         self.db = SQLAlchemy(app)
         db = self.db
@@ -78,38 +102,41 @@ class DatabaseController:
             password_hash = db.Column(db.String(100), nullable=False)
             created_on = db.Column(db.DateTime(), default=datetime.utcnow)
             last_login = db.Column(db.DateTime(), default=datetime.utcnow)
-            access_token = db.Column(db.String(), default=guid.new_formatted)
+            access_token = db.Column(db.String(12), default="")
             updated_on = db.Column(db.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
             permission_level = db.Column(db.Integer(), default=lambda: 0)
             ttl = timedelta(hours=8)
 
-            def is_authenticated(self):
+            def is_authenticated(self) -> bool:
                 return (datetime.utcnow() - self.last_login) < self.ttl \
                        and self.access_token != ""
 
-            def is_anonymous(self):
+            def is_anonymous(self) -> bool:
                 return not self.is_authenticated()
 
-            def load(self, password: str):
+            def load(self, password: str) -> str:
                 if self.check_password(password):
                     if self.is_anonymous():
-                        self.access_token = guid.new_formatted
+                        self.access_token = guid.new_formatted()
                     self.last_login = datetime.utcnow()
                     db.session.commit()
                     return self.access_token
 
-            def unload(self, access_token: str):  # logouts user from everywhere
+            def unload(self, access_token: str) -> bool:  # logouts user from everywhere
                 if access_token == self.access_token:
                     self.access_token = ""
+                    db.session.commit()
+                    return True
+                return False
 
             def set_password(self, password: str):
                 self.password_hash = generate_password_hash(password)
                 db.session.commit()
 
-            def check_password(self, password: str):
+            def check_password(self, password: str) -> bool:
                 return check_password_hash(self.password_hash, password)
 
-            def change_password(self, old_password, new_password):
+            def change_password(self, old_password, new_password) -> bool:
                 if self.is_authenticated() and self.check_password(old_password):
                     self.set_password(new_password)
                     self.unload(self.access_token)

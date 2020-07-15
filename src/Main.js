@@ -1,8 +1,8 @@
 import {Route, Switch} from "react-router-dom";
-import {MainPage} from "./MainPage/MainPage";
-import {CatalogPage} from "./CatalogPage/CatalogPage";
+import {MainPage} from "./pages/MainPage/MainPage";
+import {CatalogPage} from "./pages/CatalogPage/CatalogPage";
 import React, {useState} from "react";
-import {CartPage} from "./CartPage/CartPage";
+import {CartPage} from "./pages/CartPage/CartPage";
 import {loadUser, saveUser} from "./Common/IdProvider";
 
 function Main() {

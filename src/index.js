@@ -4,10 +4,10 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter} from 'react-router-dom';
 
-import './old_styles/styles.css';
+import './styles/styles.css';
 import './styles/header_styles.css';
 import './styles/catalog_styles.css';
-import './old_styles/footer_styles.css';
+import './styles/footer_styles.css';
 import Main from "./Main";
 import {createBrowserHistory} from 'history'
 
@@ -19,8 +19,8 @@ function importRemote(url) {
     return resource
 }
 
-const fa = importRemote('https://use.fontawesome.com/4b2a7d7bba.js');
-const gf = importRemote('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+importRemote('https://use.fontawesome.com/4b2a7d7bba.js');
+importRemote('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 const history = createBrowserHistory({});
 
