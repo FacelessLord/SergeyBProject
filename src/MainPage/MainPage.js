@@ -1,16 +1,13 @@
-import React, {useState} from "react";
+import React from "react";
 import {Header} from "../Common/Header/Header.js"
 import {ResourceDescription} from "./ResourceDescription";
 import {Catalog} from "../Common/Catalog/Catalog";
-import {getUser} from "../Common/IdProvider";
 import {Link} from "react-router-dom";
 import {Footer} from "../Common/Footer/Footer";
-import {PanelButtons, UserPanel} from "../Common/Header/UserPanel";
+import {LoginForm} from "../Common/LoginForm";
 
 
-export function MainPage() {
-    const user = getUser();
-    const [view, setView] = useState(user.view);
+export function MainPage({category, setCategory}) {
     return (
         <div id="page">
             <Header user={user}/>

@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import {BrowserRouter, Router} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 
 import './old_styles/styles.css';
 import './styles/header_styles.css';
 import './styles/catalog_styles.css';
 import './old_styles/footer_styles.css';
 import Main from "./Main";
-import { createBrowserHistory } from 'history'
+import {createBrowserHistory} from 'history'
 
 function importRemote(url) {
     const resource = document.createElement("script");
@@ -32,6 +32,7 @@ ReactDOM.render(
     </React.StrictMode>,
     document.getElementById('root')
 );
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

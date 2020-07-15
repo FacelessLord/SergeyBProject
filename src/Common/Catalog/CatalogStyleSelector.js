@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {getUser, setUserView} from "../IdProvider";
+import React from "react";
+import {setUserView} from "../IdProvider";
 
 export function CatalogStyleSelector({value, type, valueSetter: setValue}) {
     return (<div className={"catalog items selector form" + (type === "cart" ? " cart" : "")}>

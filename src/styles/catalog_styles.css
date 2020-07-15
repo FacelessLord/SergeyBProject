@@ -356,14 +356,14 @@ a.catalog.buttons.button.more {
     width: 160px;
     height: 32px;
     left: 400px;
-    top: 0;
+    top: 10px;
     padding: 8px;
     line-height: 30px;
 
     color: black;
     font-size: 14px;
-    background-color: #6FCF97;
-    border-color: #6FCF97;
+    background: #6FCF97;
+    border: outset #6FCF97 2px;
     border-radius: 4px;
 
     text-align: center;

@@ -1,21 +1,16 @@
 import {ItemCard, ItemCardList, ItemCartCard} from "./ItemCard";
 import React, {useEffect, useState} from "react";
 
-import {getOrCreateClientId} from "../IdProvider";
 import {Awaiter} from "../Awaiter";
 
-const catRE = /.*?category=(.*?)(&.*)?$/g;
-
-export function Catalog({type = "panels", filter}) {
-    const category = catRE.exec(window.location);
-    const category_param = category ? category[1] : '*';
+export function Catalog({type = "panels", filter, category}) {
     switch (type) {
         case "list":
-            return <CatalogList filter={filter} category={category_param}/>;
+            return <CatalogList filter={filter} category={category}/>;
         case "cart":
             return <CatalogCart/>;
         default:
-            return <CatalogPanels filter={filter} category={category_param}/>;
+            return <CatalogPanels filter={filter} category={category}/>;
     }
 }
 
@@ -66,7 +61,7 @@ function requestItems(maxCount, filter, createList, category) {
 }
 
 function getCartItems(createList) {
-    return fetch("/api/items/cart?clientId=" + getOrCreateClientId())
+    return fetch("/api/items/cart?access_token=" + window.user.access_token)
         .catch(r => "{}")
         .then(t => t.json())
         .then(createList).catch(r => [])
@@ -91,7 +86,7 @@ export function CatalogList({visible = true, maxCount = 9, filter, category}) {
 
     useEffect(() => {
         setItems("pending");
-    }, [filter]);
+    }, [filter, category]);
 
     return (<div className={"catalog items pad list"}>
         <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, filter, createItemsList, category)}

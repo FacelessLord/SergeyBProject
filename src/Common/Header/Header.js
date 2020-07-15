@@ -18,9 +18,8 @@ function onSuperCatalogButtonDeselect() {
     }
 }
 
-
-export function Header({user}) {
-    const {loggedIn, clientId} = user;
+export function Header({category, setCategory}) {
+    const {loggedIn, access_token} = window.user;
     const [userSelected, setUserSelected] = useState(false);
     const setCategoryAndReload = function (newCategory) {
         const newLocation = newCategory ? "?category=" + newCategory : "";
@@ -31,10 +30,10 @@ export function Header({user}) {
             <div className="header buttons wrapper"
                  onMouseEnter={onSuperCatalogButtonSelect}
                  onMouseLeave={onSuperCatalogButtonDeselect}>
-                <Link to={"/catalog"} onClick={() => setCategoryAndReload("")} className="header buttons button catalog" id="button_catalog">
+                <Link to={"/catalog"} onClick={() => setCategory("")} className="header buttons button catalog" id="button_catalog">
                     Каталог
                 </Link>
-                <Categories setCategory={setCategoryAndReload}/>
+                <Categories setCategory={setCategory}/>
             </div>
             <Link to={"/providers"} className="header buttons button providers" id="button_providers">
                 Поставщикам

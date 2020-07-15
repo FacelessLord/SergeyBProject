@@ -30,8 +30,8 @@ class CategoryController(Controller):
 
     def get_category_list(self):
         categories = self.db.categories()
-        cat_list = FINQ(categories)\
-            .filter(lambda c: c.parent_id == -1)\
+        cat_list = FINQ(categories) \
+            .filter(lambda c: c.parent_id == - 1) \
             .map(lambda c: create_category_json(c, categories))\
             .to_list()
         return { "items": cat_list }
