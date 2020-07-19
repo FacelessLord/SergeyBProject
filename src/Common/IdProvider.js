@@ -10,7 +10,7 @@ export function setUserView(view) {
 }
 
 export function checkAuth() {
-    return fetch(`/check_auth?username=${window.user.username}&access_token=${window.user.access_token}`)
+    return fetch(`/api/check_auth?username=${window.user.username}&access_token=${window.user.access_token}`)
         .then(t => t.json())
         .then(j => {
             window.updateUser({loggedIn: j.result});
@@ -20,8 +20,12 @@ export function checkAuth() {
         .then(saveUser)
 }
 
+export function logoutUser() {
+    window.updateUser({access_token: "", loggedIn: false});
+}
+
 export function loginUser(username, password) {
-    return fetch(`/login?username=${username}&password=${password}`, {
+    return fetch(`/api/login?username=${username}&password=${password}`, {
         method: "POST"
     }).then(t => t.json())
 }
@@ -29,7 +33,7 @@ export function loginUser(username, password) {
 export function loadUser() {
     const cookies = new Cookies();
     const accessToken = cookies.get("accessToken");
-    const loggedIn = cookies.get("loggedIn");
+    const loggedIn = cookies.get("loggedIn") === "true";
     const username = cookies.get("username");
     const view = cookies.get("catalogView") ?? "list";
     return {

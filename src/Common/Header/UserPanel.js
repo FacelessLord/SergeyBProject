@@ -1,6 +1,7 @@
 import React from "react";
 
 import {Link} from "react-router-dom";
+import {logoutUser} from "../IdProvider";
 
 export function GuestPanelButtons({hidden = true}) {
     return (<div id={"user_panel"} className="header user panel guest" style={{display: hidden ? "none" : "block"}}>
@@ -30,7 +31,7 @@ export function UserPanelButtons({hidden}) {
             <button className="header user buttons button user skip" style={{visibility: "hidden"}}>
                 <div className="header user text">skip</div>
             </button>
-            <Link to={"/logout"} className="header user buttons button user logout" id="button_logout">
+            <Link className="header user buttons button user logout" id="button_logout" to={document.location} onClick={logoutUser}>
                 Выйти
             </Link>
         </div>

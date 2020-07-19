@@ -1,12 +1,19 @@
-import React from "react";
+import React, {useState} from "react";
 import '../styles/login_styles.css'
 import {loginUser} from "./IdProvider"
 
-async function performLogin() {
+async function performLogin(setMessage) {
     const username = document.getElementById("login_username").value;
     const password = document.getElementById("login_password").value;
     await loginUser(username, password).then(t => {
-        window.updateUser({username: username, access_token: t.access_token, loggedIn: t.access_token !== ""});
+        if (t.access_token === "") {
+            setMessage(t.message);
+        } else
+            setMessage("");
+        if (t.access_token !== "") {
+            window.updateUser({username: username, access_token: t.access_token, loggedIn: t.access_token !== ""});
+            document.location = "/";
+        }
     })
 }
 
@@ -16,9 +23,14 @@ function formKeyPressed(t) {
 }
 
 export function LoginForm() {
+    const [message, setMessage] = useState("");
+    console.log(message);
     if (window.user.loggedIn)
-        return (<span/>);
-    return (<div className="login form" id={"login_form"} onKeyPress={formKeyPressed}>
+        return (<div className={"login message success"}>Вы уже выполнили вход</div>);
+    const l = [];
+    if (message) l.push(<div key={0} className={"login message err"}>{message}</div>);
+
+    l.push(<div key={1} className="login form" id={"login_form"} onKeyPress={formKeyPressed}>
         <div className={"login block"}>
             <label htmlFor={"login_username"}>Логин</label>
             <input id={"login_username"} type={"login"}/>
@@ -27,7 +39,9 @@ export function LoginForm() {
             <label htmlFor={"login_password"}>Пароль</label>
             <input id={"login_password"} type={"password"}/>
         </div>
-        <input type={"submit"} id={"submit_login"} className={"login buttons button submit"} onClick={performLogin} value={"Войти"}/>
-    </div>)
+        <input type={"submit"} id={"submit_login"} className={"login buttons button submit"} onClick={() => performLogin(setMessage)} value={"Войти"}/>
+    </div>);
+
+    return l;
 
 }
