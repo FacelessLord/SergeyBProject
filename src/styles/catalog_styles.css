@@ -25,6 +25,7 @@
     border-right-color: #27AE60;
     border-bottom-color: #27AE60;
 }
+
 .catalog.filter.button:hover {
     background: #6FCF97;
 }
@@ -131,6 +132,7 @@
 .catalog.items.selector.form.cart {
     left: calc(100% - 220px);
 }
+
 .catalog.items.selector.form {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -195,7 +197,7 @@
     background: #6FCF97;
 }
 
-.active:hover .catalog.items.selector.option.panels.element{
+.active:hover .catalog.items.selector.option.panels.element {
     background: #27AE60;
     border-top-color: #6FCF97;
     border-left-color: #6FCF97;
@@ -221,7 +223,7 @@
     width: 8px;
     height: 8px;
     background: #E0E0E0;
-    left: 0px;
+    left: 0;
 }
 
 .active .catalog.items.selector.option.list.element1 {
@@ -281,6 +283,7 @@
 .catalog.items.pad.panels .catalog.items.item.card {
     height: auto;
 }
+
 .catalog.items.pad.list .catalog.items.item.card {
     display: flex;
     flex-direction: row;
@@ -317,9 +320,11 @@
     user-select: none;
 
 }
+
 .catalog.items.item.text.main {
     font-size: 16px;
 }
+
 .catalog.items.item.text.attributes {
 
 }
@@ -370,6 +375,29 @@ a.catalog.buttons.button.more {
 }
 
 .catalog.buttons.button.more:hover {
+    background-color: #27AE60;
+}
+
+.catalog.buttons.button.source {
+    position: relative;
+    width: 160px;
+    height: 16px;
+    left: calc(50% - 80px);
+    top: 10px;
+    padding: 8px;
+    line-height: 16px;
+
+    color: black;
+    font-size: 14px;
+    background: #6FCF97;
+    border: outset #6FCF97 2px;
+    border-radius: 4px;
+
+    text-align: center;
+}
+
+
+.catalog.buttons.button.source:hover {
     background-color: #27AE60;
 }
 

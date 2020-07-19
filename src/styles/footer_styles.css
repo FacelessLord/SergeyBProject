@@ -1,14 +1,44 @@
-footer {
-    position: relative;
-    z-index: 1;
+
+.footer {
+    font-size: .9rem;
+}
+
+.footer.wrapper {
     background-color: #333333;
+}
 
-    height: 128px; /* Высота блока footer */
-    width: 100%;
-    overflow: hidden;
-    align-self: end;
-    bottom: 0;
+.footer.columnHeader {
+    color: #fff;
+    font-size: 1.25rem;
+}
 
-    min-height: 128px; /* Высота блока footer */
-    max-height: 1280px;
+.footer a, p {
+    color: #fff;
+}
+
+.footer.row {
+    display: flex;
+    padding-left: 208px;
+}
+
+.footer.column.main {
+    flex: 0 0 33.33%;
+    /*max-width: 30%;*/
+}
+
+.footer.column.secondary {
+    flex: 0 0 16.66%
+}
+
+.footer.hr {
+    margin: 8px 16px;
+}
+
+.footer.copyright {
+    padding-bottom: 8px;
+    padding-left: 208px;
+}
+
+.footer .container-fluid {
+    color: #fff;
 }

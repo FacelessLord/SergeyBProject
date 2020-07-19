@@ -35,9 +35,10 @@ html, body {
     padding-left: 160px;
     padding-right: 208px;
     width: 100%;
+    min-height: 75vh;
 }
 
 .site.main.panel {
-    min-height: calc(100vh - 196px);
+    min-height: calc(100vh - 300px);
     margin-right: 208px;
 }
