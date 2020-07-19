@@ -2,6 +2,7 @@ import {ItemCard, ItemCardList, ItemCartCard} from "./ItemCard";
 import React, {useEffect, useState} from "react";
 
 import {Awaiter} from "../Awaiter";
+import {Link} from "react-router-dom";
 
 export function Catalog({type = "panels", filter, category}) {
     switch (type) {
@@ -46,14 +47,14 @@ function createItemsCart(json) {
 function createFilterQuery(filter) {
     let query = "";
     for (let k in filter) {
-        if(k !== "display")
+        if (k !== "display")
             query += k + "=" + filter[k] + "&";
     }
     return query.slice(0, -1)
 }
 
 function requestItems(maxCount, filter, createList, category) {
-    return fetch("/api/items?count=" + maxCount + "&category="+category+"&" + createFilterQuery(filter))
+    return fetch("/api/items?count=" + maxCount + "&category=" + category + "&" + createFilterQuery(filter))
         .catch(r => "{}")
         .then(t => t.json())
         .then(t => createList(t))
@@ -64,7 +65,11 @@ function getCartItems(createList) {
     return fetch("/api/items/cart?access_token=" + window.user.access_token)
         .catch(r => "{}")
         .then(t => t.json())
-        .then(createList).catch(r => [])
+        .then(createList).catch(r => []).then(l => l ? l :
+            (<div>
+                <span>Вы еще ничего не добавили в корзину</span><br/>
+                <Link to={"/catalog"} className={"catalog buttons button source"}>Перейти в каталог</Link>
+            </div>));
 }
 
 export function CatalogPanels({visible = true, maxCount = 9, filter, category}) {

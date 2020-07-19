@@ -34,7 +34,7 @@ export function Header({setCategory}) {
             <Link to={"/providers"} className="header buttons button providers" id="button_providers">
                 Поставщикам
             </Link>
-            <Link to={"/cart?access_token=" + access_token} className="header buttons button cart" id="button_cart_main">
+            <Link to={"/cart"} className="header buttons button cart" id="button_cart_main">
                 Корзина
             </Link>
         </div>
