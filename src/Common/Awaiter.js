@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 
 /* eslint-disable react-hooks/exhaustive-deps */
-export function Awaiter({value, setValue, getter, err, base = "pending"}) {
+export function Awaiter({value, setValue, getter, err, base = "pending", deps = []}) {
     useEffect(() => {
         async function get() {
             const cats = await getter();
@@ -12,6 +12,6 @@ export function Awaiter({value, setValue, getter, err, base = "pending"}) {
             get().catch(() => {
                 setValue(err);
             })
-    }, [value]);
+    }, [value, ...deps]);
     return value
 }
