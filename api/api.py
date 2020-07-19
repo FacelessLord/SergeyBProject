@@ -43,7 +43,7 @@ images = ImageController(db)
 # mail = Mail(app)
 
 
-@app.route('/login', methods=['post', 'get'])
+@app.route('/api/login', methods=['post', 'get'])
 def login():
     access_token = ""
     message = ''
@@ -64,7 +64,7 @@ def login():
     return { "message": message, "access_token": access_token }
 
 
-@app.route('/check_auth')
+@app.route('/api/check_auth')
 def check_auth():
     username = request.args.get('username')
     access_token = request.args.get('access_token', type=int)
@@ -72,7 +72,7 @@ def check_auth():
     return { "result": user is not None and user.access_token == access_token }
 
 
-@app.route('/logout', methods=['post'])
+@app.route('/api/logout', methods=['post'])
 def logout():
     access_token = request.headers['access_token']
     username = request.headers['username']
