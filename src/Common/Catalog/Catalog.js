@@ -47,15 +47,16 @@ function createItemsCart(json) {
 function createFilterQuery(filter) {
     let query = "";
     for (let k in filter) {
-        if (k !== "display")
+        if (k !== "display") { // noinspection JSUnfilteredForInLoop
             query += k + "=" + filter[k] + "&";
+        }
     }
     return query.slice(0, -1)
 }
 
 function requestItems(maxCount, filter, createList, category) {
     return fetch("/api/items?count=" + maxCount + "&category=" + category + "&" + createFilterQuery(filter))
-        .catch(r => "{}")
+        .catch(() => "{}")
         .then(t => t.json())
         .then(t => createList(t))
         .catch(r => [])
@@ -65,14 +66,14 @@ function getCartItems(createList) {
     return fetch("/api/items/cart?access_token=" + window.user.access_token)
         .catch(r => "{}")
         .then(t => t.json())
-        .then(createList).catch(r => []).then(l => l ? l :
+        .then(createList).catch(r => []).then(l => l.length !== 0 ? l :
             (<div>
                 <span>Вы еще ничего не добавили в корзину</span><br/>
                 <Link to={"/catalog"} className={"catalog buttons button source"}>Перейти в каталог</Link>
             </div>));
 }
 
-export function CatalogPanels({visible = true, maxCount = 9, filter, category}) {
+export function CatalogPanels({maxCount = 9, filter, category}) {
     const [items, setItems] = useState("pending");
 
     useEffect(() => {
@@ -86,7 +87,7 @@ export function CatalogPanels({visible = true, maxCount = 9, filter, category}) 
 }
 
 
-export function CatalogList({visible = true, maxCount = 9, filter, category}) {
+export function CatalogList({maxCount = 9, filter, category}) {
     const [items, setItems] = useState("pending");
 
     useEffect(() => {
@@ -99,7 +100,7 @@ export function CatalogList({visible = true, maxCount = 9, filter, category}) {
     </div>);
 }
 
-export function CatalogCart({visible = true}) {
+export function CatalogCart() {
     const [items, setItems] = useState("pending");
 
     return (<div className={"catalog items pad cart"}>
