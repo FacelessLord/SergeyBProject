@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Awaiter} from "../Awaiter";
 
 export function Filter({value, setValue}) {
@@ -71,13 +71,14 @@ function createProviderOptionsList(setState, state) {
 }
 
 function addProvider(setState, state, id, checked) {
+    let providers = [...state.providers];
     if (checked)
-        state.providers.push(id);
+        providers.push(id);
     else
-        state.providers.splice(state.providers.indexOf(id), 1);
-    if (state.providers.length === 0)
-        state.providers = [];
-    updateState({providers: state.providers}, state, setState);
+        providers.splice(providers.indexOf(id), 1);
+    if (providers.length === 0)
+        providers = [];
+    setState({...state, providers: providers, display: !state.display});//!state.display - workaround
 }
 
 function Provider({state, setState}) {

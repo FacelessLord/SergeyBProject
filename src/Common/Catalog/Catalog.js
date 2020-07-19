@@ -76,7 +76,7 @@ export function CatalogPanels({visible = true, maxCount = 9, filter, category}) 
 
     return (<div className={"catalog items pad panels"}>
         <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, filter, createItemsPanels, category)}
-                 err={"Невозможно загрузить каталог"}/>
+                 err={"Невозможно загрузить каталог"} deps={[filter]}/>
     </div>);
 }
 
@@ -90,7 +90,7 @@ export function CatalogList({visible = true, maxCount = 9, filter, category}) {
 
     return (<div className={"catalog items pad list"}>
         <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, filter, createItemsList, category)}
-                 err={"Невозможно загрузить каталог"}/>
+                 err={"Невозможно загрузить каталог"} deps={[filter]}/>
     </div>);
 }
 
