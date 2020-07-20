@@ -1,1 +1,2 @@
 flask_login==0.4.1
+flask_mail
