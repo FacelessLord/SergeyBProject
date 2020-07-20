@@ -5,6 +5,8 @@ import React, {useState} from "react";
 import {CartPage} from "./pages/CartPage";
 import {loadUser, saveUser} from "./Common/IdProvider";
 import {LoginPage} from "./pages/LoginPage";
+import {RegisterSuccessPage} from "./pages/RegisterSuccessPage";
+import {RegisterPage} from "./pages/RegisterPage";
 
 let _user = null;
 
@@ -26,6 +28,8 @@ function Main() {
         <Route exact path="/catalog" component={() => CatalogPage({category, setCategory})}/>
         <Route path="/cart" component={() => CartPage({setCategory})}/>
         <Route path="/login" component={() => LoginPage({setCategory})}/>
+        <Route path="/register/success" component={() => RegisterSuccessPage({setCategory})}/>
+        <Route path="/register" component={() => RegisterPage({setCategory})}/>
         <Route path="/" component={() => MainPage({category, setCategory})}/>
     </Switch>)
 }

@@ -30,6 +30,21 @@ export function loginUser(username, password) {
     }).then(t => t.json())
 }
 
+export async function registerUser(username, name, email, password) {
+    if (email === "") {
+        return {success: false, reason: "noemail"}
+    }
+    if (username === "") {
+        return {success: false, reason: "nousername"}
+    }
+    if (password.length < 6) {
+        return {success: false, reason: "shortpassword"}
+    }
+    return fetch(`/api/register?username=${username}&password=${password}&name=${name}&email=${email}`, {
+        method: "POST"
+    }).then(t => t.json())
+}
+
 export function loadUser() {
     const cookies = new Cookies();
     const accessToken = cookies.get("accessToken");

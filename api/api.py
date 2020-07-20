@@ -10,6 +10,7 @@ from api.controllers.ImageController import ImageController
 from api.controllers.MailController import MailController
 from api.controllers.ProductController import ProductController
 from api.controllers.ProviderController import ProviderController
+from api.finq import FINQ
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/lord_faceless/PycharmProjects/Work/Sergey/react-flask-app/api/data/UserData.db'
@@ -45,7 +46,7 @@ mailer = MailController(app, db)
 @app.route('/api/register', methods=['post'])
 def register():
     username = request.args.get('username')
-    name = request.args.get('name', type=list)
+    name = FINQ(request.args.get('name', type=str).split(',')).map(str.strip).to_list()
     email = request.args.get('email')
     password = request.args.get('password')
 
@@ -53,6 +54,10 @@ def register():
         return { "success": False, "reason": "username" }
     if any(filter(lambda u: u.username == username, db.registrars())):
         return { "success": False, "reason": "username" }
+    if any(filter(lambda u: u.email == email, db.users())):
+        return { "success": False, "reason": "email" }
+    if any(filter(lambda u: u.email == email, db.registrars())):
+        return { "success": False, "reason": "email" }
     registrar = db.add_user_registrar(name, username, email, generate_password_hash(password))
     db.commit()
     link = registrar.create_confirmation_link()
@@ -141,7 +146,7 @@ def get_items_list():
     fromIndex = args.get("from", 0, type=int)
     priceTo = args.get("priceTo", 0, type=float)
     priceFrom = args.get("priceFrom", 0, type=float)
-    providers = args.get("providers", [], type=list)
+    providers = FINQ(request.args.get('providers', [], type=str).spilt(',')).map(str.strip).to_list()
 
     return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
 
