@@ -4,7 +4,7 @@ from typing import List
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
-import api.guid as guid
+import backend.guid as guid
 
 
 class User:

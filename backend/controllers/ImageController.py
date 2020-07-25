@@ -1,6 +1,6 @@
-from api.controllers.Controller import Controller
-from api.utils import send_image
-from api.controllers.DatabaseController import DatabaseController as dbc
+from backend.controllers.Controller import Controller
+from backend.utils import send_image
+from backend.controllers.DatabaseController import DatabaseController as dbc
 
 
 class ImageController(Controller):

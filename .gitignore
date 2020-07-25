@@ -21,8 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/api/.flaskenv
+/backend/.flaskenv
 
-api/venv/
+backend/venv/
 .idea/
-api/__pycache__/
+backend/__pycache__/

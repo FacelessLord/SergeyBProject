@@ -2,8 +2,8 @@ from typing import List
 
 from flask_mail import Message, Mail
 
-from api.controllers.Controller import Controller
-from api.controllers.DatabaseController import DatabaseController as dbc
+from backend.controllers.Controller import Controller
+from backend.controllers.DatabaseController import DatabaseController as dbc
 
 
 class MailController(Controller):

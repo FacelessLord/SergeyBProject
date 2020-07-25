@@ -1,8 +1,8 @@
 from typing import List
 
-from api.controllers.Controller import Controller
-from api.controllers.DatabaseController import DatabaseController as dbc, Category
-from api.finq import FINQ
+from backend.controllers.Controller import Controller
+from backend.controllers.DatabaseController import DatabaseController as dbc, Category
+from backend.finq import FINQ
 
 
 def create_category_json(category: Category, categories: List[Category]):

@@ -4,16 +4,16 @@ from json import JSONDecoder
 from flask import Flask, request
 from werkzeug.security import generate_password_hash
 
-import api.controllers.DatabaseController as dbc
-from api.controllers.CategoryController import CategoryController
-from api.controllers.ImageController import ImageController
-from api.controllers.MailController import MailController
-from api.controllers.ProductController import ProductController
-from api.controllers.ProviderController import ProviderController
-from api.finq import FINQ
+import backend.controllers.DatabaseController as dbc
+from backend.controllers.CategoryController import CategoryController
+from backend.controllers.ImageController import ImageController
+from backend.controllers.MailController import MailController
+from backend.controllers.ProductController import ProductController
+from backend.controllers.ProviderController import ProviderController
+from backend.finq import FINQ
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/lord_faceless/PycharmProjects/Work/Sergey/react-flask-app/api/data/UserData.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/facelesslord/Work/Sergey/react-flask-app/backend/data/UserData.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -146,7 +146,7 @@ def get_items_list():
     fromIndex = args.get("from", 0, type=int)
     priceTo = args.get("priceTo", 0, type=float)
     priceFrom = args.get("priceFrom", 0, type=float)
-    providers = FINQ(request.args.get('providers', [], type=str).split(',')).map(str.strip).to_list()
+    providers = FINQ(request.args.get('providers', "", type=str).split(',')).map(str.strip).to_list()
 
     return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
 

@@ -48,15 +48,16 @@ function createFilterQuery(filter) {
     let query = "";
     for (let k in filter) {
         if (k !== "display") { // noinspection JSUnfilteredForInLoop
-            if(filter[k])
+            if (filter[k] && (!('length' in filter[k]) || filter[k].length)) {
                 query += k + "=" + filter[k] + "&";
+            }
         }
     }
     return query.slice(0, -1)
 }
 
 function requestItems(maxCount, filter, createList, category) {
-    return fetch("/api/items?count=" + maxCount + "&category=" + category + "&" + createFilterQuery(filter))
+    return fetch("/api/items?count=" + maxCount + (category ? "&category=" + category + "&" : "") + createFilterQuery(filter))
         .catch(() => "{}")
         .then(t => t.json())
         .then(t => createList(t))
@@ -82,7 +83,8 @@ export function CatalogPanels({maxCount = 9, filter, category}) {
     }, [filter]);
 
     return (<div className={"catalog items pad panels"}>
-        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, filter, createItemsPanels, category)}
+        <Awaiter value={items} setValue={setItems}
+                 getter={() => requestItems(maxCount, filter, createItemsPanels, category)}
                  err={"Невозможно загрузить каталог"} deps={[filter]}/>
     </div>);
 }
@@ -96,7 +98,8 @@ export function CatalogList({maxCount = 9, filter, category}) {
     }, [filter, category]);
 
     return (<div className={"catalog items pad list"}>
-        <Awaiter value={items} setValue={setItems} getter={() => requestItems(maxCount, filter, createItemsList, category)}
+        <Awaiter value={items} setValue={setItems}
+                 getter={() => requestItems(maxCount, filter, createItemsList, category)}
                  err={"Невозможно загрузить каталог"} deps={[filter]}/>
     </div>);
 }

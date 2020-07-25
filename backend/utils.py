@@ -1,4 +1,3 @@
-from PIL import Image
 from flask import send_file
 
 

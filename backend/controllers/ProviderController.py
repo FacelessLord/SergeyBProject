@@ -1,6 +1,6 @@
-from api.controllers.Controller import Controller
-from api.controllers.DatabaseController import DatabaseController as dbc
-from api.finq import FINQ
+from backend.controllers.Controller import Controller
+from backend.controllers.DatabaseController import DatabaseController as dbc
+from backend.finq import FINQ
 
 
 class ProviderController(Controller):

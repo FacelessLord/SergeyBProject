@@ -1,9 +1,9 @@
 import math
 from typing import List
 
-from api.controllers.Controller import Controller
-from api.controllers.DatabaseController import DatabaseController as dbc, Product
-from api.finq import FINQ
+from backend.controllers.Controller import Controller
+from backend.controllers.DatabaseController import DatabaseController as dbc, Product
+from backend.finq import FINQ
 
 
 class ProductController(Controller):
