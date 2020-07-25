@@ -48,7 +48,8 @@ function createFilterQuery(filter) {
     let query = "";
     for (let k in filter) {
         if (k !== "display") { // noinspection JSUnfilteredForInLoop
-            query += k + "=" + filter[k] + "&";
+            if(filter[k])
+                query += k + "=" + filter[k] + "&";
         }
     }
     return query.slice(0, -1)
