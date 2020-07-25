@@ -5,7 +5,7 @@ const views = ["list", "panels"];
 export function setUserView(view) {
     if (views.indexOf(view) > -1) {
         const cookies = new Cookies();
-        cookies.set("catalogView", view);
+        cookies.set("catalogView", view, {path: "/"});
     }
 }
 
@@ -61,8 +61,8 @@ export function loadUser() {
 
 export function saveUser() {
     const cookies = new Cookies();
-    cookies.set("accessToken", window.user.access_token);
-    cookies.set("username", window.user.username);
-    cookies.set("loggedIn", window.user.loggedIn);
-    cookies.set("catalogView", window.user.view);
+    cookies.set("accessToken", window.user.access_token, {path: "/"});
+    cookies.set("username", window.user.username, {path: "/"});
+    cookies.set("loggedIn", window.user.loggedIn, {path: "/"});
+    cookies.set("catalogView", window.user.view, {path: "/"});
 }
