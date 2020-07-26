@@ -2,6 +2,7 @@ import React from "react";
 import {Header} from "../Common/Header/Header.js";
 import {Catalog} from "../Common/Catalog/Catalog";
 import {CatalogStyleSelector} from "../Common/Catalog/CatalogStyleSelector";
+import {Footer} from "../Common/Footer/Footer";
 
 export function CartPage({setCategory}) {
     let filter = {display: true, priceFrom: 0, priceTo: 0, providers: []};
@@ -20,5 +21,6 @@ export function CartPage({setCategory}) {
                 <Catalog type={"cart"} filter={filter} setFilter={setFilter}/>
             </div>
         </div>
+        <Footer/>
     </div>)
 }

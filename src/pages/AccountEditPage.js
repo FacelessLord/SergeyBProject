@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import {AccountForm} from "../Common/Account/AccountForm";
 import {AccountFinishEditButton, EditAccountButton} from "../Common/Account/EditAccountButton";
 import {AccountEditForm} from "../Common/Account/AccountEditForm";
+import {Footer} from "../Common/Footer/Footer";
 
 export function AccountEditPage({setCategory}) {
     const [userData, setUserData] = useState({email: "", name: ["", "", ""], created: "", lastUpdate: ""})
@@ -16,5 +17,6 @@ export function AccountEditPage({setCategory}) {
                 <AccountFinishEditButton userData={userData} setMessage={setMessage}/>
             </div>
         </div>
+        <Footer/>
     </div>)
 }

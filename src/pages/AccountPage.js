@@ -2,6 +2,7 @@ import {Header} from "../Common/Header/Header";
 import React from "react";
 import {AccountForm} from "../Common/Account/AccountForm";
 import {EditAccountButton} from "../Common/Account/EditAccountButton";
+import {Footer} from "../Common/Footer/Footer";
 
 export function AccountPage({setCategory}) {
     return (<div id="page">
@@ -13,5 +14,6 @@ export function AccountPage({setCategory}) {
                 <EditAccountButton/>
             </div>
         </div>
+        <Footer/>
     </div>)
 }
