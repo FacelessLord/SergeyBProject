@@ -148,6 +148,10 @@ def get_items_list():
     priceFrom = args.get("priceFrom", 0, type=float)
     providers = FINQ(request.args.get('providers', "", type=str).split(',')).map(str.strip).to_list()
 
+    if len(providers) == 1 and len(providers[0]) == 0:
+        providers = []
+    print(providers)
+
     return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
 
 

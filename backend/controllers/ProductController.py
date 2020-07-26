@@ -17,7 +17,6 @@ class ProductController(Controller):
             priceTo = math.inf
         if count == 0:
             count = math.inf
-        print(category)
         catalog = products \
             .filter(lambda p: (str(p.category.id).startswith(category) or category in ["", "*"])
                               and (priceFrom <= p.price <= priceTo)
@@ -34,5 +33,6 @@ class ProductController(Controller):
                      "price": p.price,
                      "isStock": p.in_stock
                  })
-
-        return { "items": catalog.to_list() }
+        catalogList = catalog.to_list()
+        print(catalogList)
+        return { "items": catalogList }
