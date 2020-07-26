@@ -80,7 +80,7 @@ export function CatalogPanels({maxCount = 9, filter, category}) {
 
     useEffect(() => {
         setItems("pending");
-    }, [filter]);
+    }, [filter, category]);
 
     return (<div className={"catalog items pad panels"}>
         <Awaiter value={items} setValue={setItems}

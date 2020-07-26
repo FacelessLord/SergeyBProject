@@ -130,6 +130,7 @@ def get_current_time():
 def get_provider_list():
     args = request.args
     category = args.get("category", "*", type=str)
+    print(category)
     return providers.get_provider_list(category)
 
 
@@ -150,7 +151,6 @@ def get_items_list():
 
     if len(providers) == 1 and len(providers[0]) == 0:
         providers = []
-    print(providers)
 
     return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
 

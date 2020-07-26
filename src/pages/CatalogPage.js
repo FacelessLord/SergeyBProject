@@ -15,7 +15,7 @@ export function CatalogPage({category, setCategory}) {
             <Header category={category} setCategory={setCategory}/>
             <div id="content_wrapper">
                 <div className="catalog header">
-                    <Filter value={filter} setValue={setFilter}/>
+                    <Filter value={filter} setValue={setFilter} category={category}/>
                     <CatalogStyleSelector value={window.user.view} valueSetter={setView}/>
                 </div>
                 <div className="site main panel">

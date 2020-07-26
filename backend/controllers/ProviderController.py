@@ -12,7 +12,7 @@ class ProviderController(Controller):
             .providers().all()
         providers_for_category = FINQ(providers) \
             .filter(lambda p: category == '*' or FINQ(p.products)
-                    .any(lambda pp: str(pp.category.id) == category)) \
+                    .any(lambda pp: str(pp.category.id).startswith(category))) \
             .map(lambda p: {
                 "name": p.name,
                 "id": p.id,

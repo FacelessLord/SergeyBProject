@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import {Awaiter} from "../Awaiter";
 
-export function Filter({value, setValue}) {
+export function Filter({value, setValue, category}) {
     return (<div className="catalog filter container">
         <FilterButton onClick={() => updateState({display: !value.display}, value, setValue)}/>
-        <FilterSelector state={value} setState={setValue}/>
+        <FilterSelector state={value} setState={setValue} category={category}/>
     </div>)
 }
 
@@ -16,10 +16,10 @@ function FilterButton({onClick}) {
     return (<button className="catalog filter button" onClick={onClick}>Фильтры</button>)
 }
 
-function FilterSelector({state, setState}) {
+function FilterSelector({state, setState, category}) {
     return (<div className={"catalog filter selector"} style={{display: state.display ? "flex" : "none"}}>
         <PriceLimits state={state} setState={setState}/>
-        <Provider state={state} setState={setState}/>
+        <Provider state={state} setState={setState} category={category}/>
     </div>)
 }
 
@@ -49,11 +49,8 @@ function PriceLimits({state, setState}) {
 
 const catRE = /.*?category=(.*?)(&.*)?$/g;
 
-function createProviderOptionsList(setState, state) {
-    const category = catRE.exec(window.location);
-    const category_param = category ? category[1] : '*';
-
-    return fetch("/api/providers?category=" + category_param)
+function createProviderOptionsList(setState, state, category) {
+    return fetch("/api/providers?category=" + category)
         .catch(r => "{ }")
         .then(t => t.json())
         .then(t => t.items)
@@ -81,12 +78,12 @@ function addProvider(setState, state, id, checked) {
     setState({...state, providers: providers, display: !state.display});//!state.display - workaround
 }
 
-function Provider({state, setState}) {
+function Provider({state, setState, category}) {
     const [content, setContent] = useState("pending");
     return (<div className={"catalog filter container selector"} id={"filter_provider_container"}>
         <label className={"catalog filter selector provider label"}
                htmlFor={"filter_provider_container"}>Поставщики:</label>
-        <Awaiter value={content} getter={() => createProviderOptionsList(setState, state)}
+        <Awaiter value={content} getter={() => createProviderOptionsList(setState, state, category)}
                  setValue={setContent}
                  err={<span className={"catalog filter selector provider selector"}>Не получилось загрузить список поставщиков</span>}/>
     </div>)
