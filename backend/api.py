@@ -13,7 +13,7 @@ from backend.controllers.ProviderController import ProviderController
 from backend.finq import FINQ
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////home/facelesslord/Work/Sergey/react-flask-app/backend/data/UserData.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/UserData.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -51,19 +51,19 @@ def register():
     password = request.args.get('password')
 
     if any(filter(lambda u: u.username == username, db.users())):
-        return { "success": False, "reason": "username" }
+        return {"success": False, "reason": "username"}
     if any(filter(lambda u: u.username == username, db.registrars())):
-        return { "success": False, "reason": "username" }
+        return {"success": False, "reason": "username"}
     if any(filter(lambda u: u.email == email, db.users())):
-        return { "success": False, "reason": "email" }
+        return {"success": False, "reason": "email"}
     if any(filter(lambda u: u.email == email, db.registrars())):
-        return { "success": False, "reason": "email" }
+        return {"success": False, "reason": "email"}
     registrar = db.add_user_registrar(name, username, email, generate_password_hash(password))
     db.commit()
     link = registrar.create_confirmation_link()
     html = f"""<p>Для подтверждения регистрации пройдите по ссылке:</p><br><a>{link}</a>"""
     mailer.send_html_message("Registration confirmation", [email], html)
-    return { "success": True }
+    return {"success": True}
 
 
 @app.route('/api/confirmRegister')
@@ -75,8 +75,8 @@ def confirm_register():
     if registrar.code == token:
         db.add_user_from_registrar(registrar)
         db.commit()
-        return { "success": True }
-    return { "success": False }
+        return {"success": True}
+    return {"success": False}
 
 
 @app.route('/api/login', methods=['post', 'get'])
@@ -95,12 +95,13 @@ def login():
                 message = "Correct username and password"
             else:
                 message = "Wrong username or password"
+                access_token = ""
         elif registrar:
             message = "You need to confirm your registration."
         else:
             message = "Wrong username or password"
-
-    return { "message": message, "access_token": access_token }
+    print(access_token)
+    return {"message": message, "access_token": access_token}
 
 
 @app.route('/api/check_auth')
@@ -108,7 +109,7 @@ def check_auth():
     username = request.args.get('username')
     access_token = request.args.get('access_token', type=str)
     user = db.get_user_by_name(username)
-    return { "result": user is not None and user.access_token == access_token }
+    return {"result": user is not None and user.access_token == access_token}
 
 
 @app.route('/api/logout', methods=['post'])
@@ -117,13 +118,13 @@ def logout():
     username = request.headers['username']
     user = db.get_user_by_name(username)
     if user:
-        return { "supported": True, "unloaded": user.unload(access_token) }
-    return { "supported": False }  # user doesn't exist
+        return {"supported": True, "unloaded": user.unload(access_token)}
+    return {"supported": False}  # user doesn't exist
 
 
 @app.route('/time')
 def get_current_time():
-    return { 'time': time.time() }
+    return {'time': time.time()}
 
 
 @app.route('/api/providers')
