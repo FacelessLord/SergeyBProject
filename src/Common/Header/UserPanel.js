@@ -20,7 +20,7 @@ export function GuestPanelButtons({hidden = true}) {
 export function UserPanelButtons({hidden}) {
     return (<div id={"user_panel"} className="header user panel logged" style={{display: hidden ? "none" : "block"}}>
         <div className="header user panel rect">
-            <Link to={"/account"} className="header user buttons button user account"
+            <Link to={"/account"} className="header user buttons button user accountLink"
                   id="button_account">
                 Личный кабинет
             </Link>
