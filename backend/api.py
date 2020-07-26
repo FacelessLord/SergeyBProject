@@ -43,6 +43,29 @@ images = ImageController(db)
 mailer = MailController(app, db)
 
 
+@app.route('/api/userData', methods=['post'])
+def set_user_data():
+    username = request.args.get('username')
+    accessToken = request.args.get('accessToken')
+
+    user = db.get_user_by_name(username)
+    if user:
+        if user.access_token == accessToken:
+            data = request.data.decode(encoding='utf-8')
+            newData = JSONDecoder().decode(data)
+            user.name = newData["name"][0]
+            user.surname = newData["name"][1]
+            user.last_name = newData["name"][2]
+            db.commit()
+            return {"success": True}
+        else:
+            return {"success": False,
+                    "reason": "accessToken"}
+    else:
+        return {"success": False,
+                "reason": "noUser"}
+
+
 @app.route('/api/userData', methods=['get'])
 def get_user_data():
     username = request.args.get('username')
