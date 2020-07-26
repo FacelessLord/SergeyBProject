@@ -43,6 +43,27 @@ images = ImageController(db)
 mailer = MailController(app, db)
 
 
+@app.route('/api/userData', methods=['get'])
+def get_user_data():
+    username = request.args.get('username')
+    accessToken = request.args.get('accessToken')
+
+    user = db.get_user_by_name(username)
+    if user:
+        if user.access_token == accessToken:
+            return {"success": True,
+                    "email": user.email,
+                    "name": [user.name, user.surname, user.last_name],
+                    "created": str(user.created_on),
+                    "lastUpdate": str(user.updated_on)}
+        else:
+            return {"success": False,
+                    "reason": "accessToken"}
+    else:
+        return {"success": False,
+                "reason": "noUser"}
+
+
 @app.route('/api/register', methods=['post'])
 def register():
     username = request.args.get('username')
@@ -89,6 +110,7 @@ def login():
 
         user = db.get_user_by_name(username)
         registrar = db.get_user_registrar(username=username)
+        # db.remove_registrar(registrar)
         if user:
             access_token = user.load(password)
             if access_token:
