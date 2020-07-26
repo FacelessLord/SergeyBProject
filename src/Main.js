@@ -7,6 +7,7 @@ import {loadUser, saveUser} from "./Common/IdProvider";
 import {LoginPage} from "./pages/LoginPage";
 import {RegisterSuccessPage} from "./pages/RegisterSuccessPage";
 import {RegisterPage} from "./pages/RegisterPage";
+import {AccountPage} from "./pages/AccountPage";
 
 let _user = null;
 
@@ -30,6 +31,7 @@ function Main() {
         <Route path="/login" component={() => LoginPage({setCategory})}/>
         <Route path="/register/success" component={() => RegisterSuccessPage({setCategory})}/>
         <Route path="/register" component={() => RegisterPage({setCategory})}/>
+        <Route path="/account" component={() => AccountPage({setCategory})}/>
         <Route path="/" component={() => MainPage({category, setCategory})}/>
     </Switch>)
 }

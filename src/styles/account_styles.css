@@ -1,0 +1,31 @@
+.account {
+
+}
+
+.account.form {
+    margin-top: 8px;
+}
+
+.account.message {
+
+}
+
+.account.field {
+    background: #FCFCFC;
+    border: 1px solid #BCBEBF;
+    border-radius: 3px;
+    height: 32px;
+    line-height: 32px;
+    padding: 0px 8px;
+    margin-top: 0;
+}
+
+.account.field.login {
+
+}
+
+.account.block {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+}
