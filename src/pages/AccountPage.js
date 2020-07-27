@@ -4,16 +4,12 @@ import {AccountForm} from "../Common/Account/AccountForm";
 import {EditAccountButton} from "../Common/Account/EditAccountButton";
 import {Footer} from "../Common/Footer/Footer";
 
-export function AccountPage({setCategory}) {
-    return (<div id="page">
-        <Header setCategory={setCategory}/>
-        <div id="content_wrapper">
-            <h2>Личный кабинет</h2>
-            <div className="main panel">
-                <AccountForm/>
-                <EditAccountButton/>
-            </div>
+export function AccountPage() {
+    return (<div id="content_wrapper">
+        <h2>Личный кабинет</h2>
+        <div className="main panel">
+            <AccountForm/>
+            <EditAccountButton/>
         </div>
-        <Footer/>
     </div>)
 }

@@ -5,18 +5,14 @@ import {AccountFinishEditButton, EditAccountButton} from "../Common/Account/Edit
 import {AccountEditForm} from "../Common/Account/AccountEditForm";
 import {Footer} from "../Common/Footer/Footer";
 
-export function AccountEditPage({setCategory}) {
+export function AccountEditPage() {
     const [userData, setUserData] = useState({email: "", name: ["", "", ""], created: "", lastUpdate: ""})
     const [message, setMessage] = useState("");
-    return (<div id="page">
-        <Header setCategory={setCategory}/>
-        <div id="content_wrapper">
-            <h2>Личный кабинет</h2>
-            <div className="main panel">
-                <AccountEditForm userData={userData} setUserData={setUserData} message={message}/>
-                <AccountFinishEditButton userData={userData} setMessage={setMessage}/>
-            </div>
+    return (<div id="content_wrapper">
+        <h2>Личный кабинет</h2>
+        <div className="main panel">
+            <AccountEditForm userData={userData} setUserData={setUserData} message={message}/>
+            <AccountFinishEditButton userData={userData} setMessage={setMessage}/>
         </div>
-        <Footer/>
     </div>)
 }

@@ -26,16 +26,21 @@ function Main() {
     //     const handle = setTimeout(checkAuth, 10000);
     //     return () => clearTimeout(handle);
     // });
-    return (<Switch>
-        <Route exact path="/catalog" component={() => CatalogPage({category, setCategory})}/>
-        <Route path="/cart" component={() => CartPage({setCategory})}/>
-        <Route path="/login" component={() => LoginPage({setCategory})}/>
-        <Route path="/register/success" component={() => RegisterSuccessPage({setCategory})}/>
-        <Route path="/register" component={() => RegisterPage({setCategory})}/>
-        <Route path="/account/edit" component={() => AccountEditPage({setCategory})}/>
-        <Route path="/account" component={() => AccountPage({setCategory})}/>
-        <Route path="/" component={() => MainPage({category, setCategory})}/>
-    </Switch>)
+    return (<div id="page">
+        <Header category={category} setCategory={setCategory}/>
+        <Switch>
+            <Route exact path="/catalog" component={() => CatalogPage({category})}/>
+            <Route path="/cart" component={CartPage}/>
+            <Route path="/login" component={LoginPage}/>
+            <Route path="/register/success" component={RegisterSuccessPage}/>
+            <Route path="/register" component={RegisterPage}/>
+            <Route path="/account/edit" component={AccountEditPage}/>
+            <Route path="/account" component={AccountPage}/>
+            <Route path="/item/:itemId" component={ItemPage}/>
+            <Route path="/" component={() => MainPage({category})}/>
+        </Switch>
+        <Footer/>
+    </div>)
 }
 
 

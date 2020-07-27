@@ -4,14 +4,13 @@ import {Catalog} from "../Common/Catalog/Catalog";
 import {CatalogStyleSelector} from "../Common/Catalog/CatalogStyleSelector";
 import {Footer} from "../Common/Footer/Footer";
 
-export function CartPage({setCategory}) {
+export function CartPage() {
     let filter = {display: true, priceFrom: 0, priceTo: 0, providers: []};
     const setView = v => {
         window.updateUser({view: v});
     };
     const setFilter = f => filter = {...f};
-    return (<div id="page">
-        <Header setCategory={setCategory}/>
+    return (
         <div id="content_wrapper">
             <div className="main panel">
                 <div className="catalog header">
@@ -20,7 +19,5 @@ export function CartPage({setCategory}) {
                 </div>
                 <Catalog type={"cart"} filter={filter} setFilter={setFilter}/>
             </div>
-        </div>
-        <Footer/>
-    </div>)
+        </div>)
 }

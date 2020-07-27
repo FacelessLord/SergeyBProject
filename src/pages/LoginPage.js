@@ -3,14 +3,9 @@ import {LoginForm} from "../Common/LoginForm";
 import React from "react";
 import {Footer} from "../Common/Footer/Footer";
 
-export function LoginPage({setCategory}) {
+export function LoginPage() {
     return (
-        <div id="page">
-            <Header setCategory={setCategory}/>
-            <div id="content_wrapper">
-                <LoginForm/>
-            </div>
-            <Footer/>
-        </div>
-    )
+        <div id="content_wrapper">
+            <LoginForm/>
+        </div>)
 }
