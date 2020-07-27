@@ -10,8 +10,7 @@ async function getItemData(item) {
         })
 }
 
-function wrapData(data, getImgId, setImgId) {
-    const imgId = getImgId()
+function wrapData(data, imgId, setImgId) {
     const imgList = []
     for (let i = 1; i < data.img_count; i++) {
         imgList.push(<img key={i} className="catalogBig items item img hidden"
@@ -62,18 +61,9 @@ function wrapData(data, getImgId, setImgId) {
     </div>)
 }
 
-export function ItemBigCard({item, setItemName}) {
-    const [data, setData] = useState({img_count: -1, success: "pending"})
-    useEffect(() => {
-        if (data.img_count === -1)
-            getItemData(item).then(t => {
-                setData(t);
-                setItemName(t.name);
-            }).catch(r => setData({}))
-    })
+export function ItemBigCard({data}) {
     const [imgId, setImgId] = useState(0)
-    const getImgId = () => imgId;
     if (data.success)
-        return wrapData(data, getImgId, setImgId)
+        return wrapData(data, imgId, setImgId)
     return "Не удалось загрузить товар"
 }
