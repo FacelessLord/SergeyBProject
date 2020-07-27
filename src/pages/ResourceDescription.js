@@ -9,5 +9,5 @@ export function ResourceDescription() {
         pretium sollicitudin mauris. Nullam eu enim venenatis,
         consequat quam nec, laoreet mi. Aliquam purus metus,
         semper nec fringilla sed, ullamcorper eu felis
-      </div>)
+    </div>)
 }

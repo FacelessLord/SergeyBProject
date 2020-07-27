@@ -19,14 +19,14 @@ function onSuperCatalogButtonDeselect() {
 }
 
 export function Header({setCategory}) {
-    const {access_token} = window.user;
     const [userSelected, setUserSelected] = useState(false);
     return (<div className="header wrapper">
         <div className="header buttons container">
             <div className="header buttons wrapper"
                  onMouseEnter={onSuperCatalogButtonSelect}
                  onMouseLeave={onSuperCatalogButtonDeselect}>
-                <Link to={"/catalog"} onClick={() => setCategory("")} className="header buttons button catalog" id="button_catalog">
+                <Link to={"/catalog"} onClick={() => setCategory("")} className="header buttons button catalog"
+                      id="button_catalog">
                     Каталог
                 </Link>
                 <Categories setCategory={setCategory}/>

@@ -1,9 +1,7 @@
 import React, {useState} from "react";
-import {Header} from "../Common/Header/Header.js";
 import {Catalog} from "../Common/Catalog/Catalog";
 import {CatalogStyleSelector} from "../Common/Catalog/CatalogStyleSelector";
 import {Filter} from "../Common/Catalog/Filter";
-import {Footer} from "../Common/Footer/Footer";
 
 export function CatalogPage({category}) {
     const [filter, setFilter] = useState({display: false, priceFrom: 0, priceTo: 0, providers: []});

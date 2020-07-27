@@ -1,14 +1,6 @@
-import React, {useEffect, useState} from "react";
-import {Awaiter} from "../Awaiter";
+import React, {useState} from "react";
 import "../../styles/catalogBig.css"
 
-async function getItemData(item) {
-    return fetch(`/api/item/data?itemId=${item}`).then(t => t.json())
-        .then(async t => {
-            t.provider = (await fetch(`/api/providerName?providerId=${t.provider_id}`).then(t => t.json())).name;
-            return t
-        })
-}
 
 function wrapData(data, imgId, setImgId) {
     const imgList = []

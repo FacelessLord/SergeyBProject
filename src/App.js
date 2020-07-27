@@ -4,17 +4,17 @@ import Main from "./Main";
 
 function App(props) {
     return (<div>
-      <header>
-        This is website!
-      </header>
+        <header>
+            This is website!
+        </header>
 
-      <main>
-        <Main/>
-      </main>
+        <main>
+            <Main/>
+        </main>
 
-      <footer>
-        Your copyright message
-      </footer>
+        <footer>
+            Your copyright message
+        </footer>
     </div>);
 }
 

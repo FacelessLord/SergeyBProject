@@ -1,7 +1,3 @@
-import {Header} from "../Common/Header/Header";
-import {AccountForm} from "../Common/Account/AccountForm";
-import {EditAccountButton} from "../Common/Account/EditAccountButton";
-import {Footer} from "../Common/Footer/Footer";
 import React, {useEffect, useState} from "react";
 import {ItemBigCard} from "../Common/Item/ItemBigCard";
 import {ItemDescription} from "../Common/Item/ItemDescription";

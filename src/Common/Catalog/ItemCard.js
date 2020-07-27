@@ -2,7 +2,7 @@ import React from "react";
 
 export function ItemCard({cardId, img, header, provider, price, inStock}) {
     return (<a className="catalog items item card" href={"item/" + cardId} id={cardId}>
-        <img className="catalog items item img" src={img}/>
+        <img className="catalog items item img" src={img} alt={"Картинка товара"}/>
         <span className="catalog items item text main">{header}</span>
         <div className="catalog items item text attributes">
             <span className="catalog items item text provider">
@@ -40,7 +40,7 @@ export function ItemCardList({cardId, img, header, provider, price, inStock}) {
 
 export function ItemCartCard({cardId, img, header, price}) {
     return (<a className="catalog items item card" href={"item/" + cardId} id={cardId}>
-        <img className="catalog items item img" src={img}/>
+        <img className="catalog items item img" src={img} alt={"Картинка товара"}/>
         <div className="catalog items item info">
             <span className="catalog items item text main">{header}</span>
             <div className="catalog items item text attributes cart">

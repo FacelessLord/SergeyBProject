@@ -42,7 +42,7 @@ function createSubcatalogs(categoryId, subcategories, setCategory) {
 export function NestedCategory({categoryId, categoryName, subcategories, setCategory}) {
     return (<div className="categories category" id={categoryId} onMouseEnter={() => onCatalogButtonSelect(categoryId)}
                  onMouseLeave={() => onCatalogButtonDeselect(categoryId)}>
-        <Link to={"catalog"}  onClick={() => setCategory(categoryId)} className="categories buttons button nested">
+        <Link to={"catalog"} onClick={() => setCategory(categoryId)} className="categories buttons button nested">
             {categoryName}
         </Link>
         <div className="categories fa fa-angle-right"/>

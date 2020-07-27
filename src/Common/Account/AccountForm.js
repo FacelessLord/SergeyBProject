@@ -36,7 +36,7 @@ function wrapData(data) {
 }
 
 export function AccountForm() {
-    const [message, setMessage] = useState("");
+    const [message] = useState("");
     const [userData, setUserData] = useState("")
     return (<div className={"account form"}>
         {message ? <div className={"account message"} id={"account_message"}>{message}</div> : ""}

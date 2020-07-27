@@ -39,7 +39,8 @@ export function LoginForm() {
             <label htmlFor={"login_password"}>Пароль</label>
             <input id={"login_password"} type={"password"}/>
         </div>
-        <input type={"submit"} id={"submit_login"} className={"login buttons button submit"} onClick={() => performLogin(setMessage)} value={"Войти"}/>
+        <input type={"submit"} id={"submit_login"} className={"login buttons button submit"}
+               onClick={() => performLogin(setMessage)} value={"Войти"}/>
     </div>);
 
     return l;

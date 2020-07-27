@@ -1,9 +1,6 @@
-import {Header} from "../Common/Header/Header";
 import React, {useState} from "react";
-import {AccountForm} from "../Common/Account/AccountForm";
-import {AccountFinishEditButton, EditAccountButton} from "../Common/Account/EditAccountButton";
+import {AccountFinishEditButton} from "../Common/Account/EditAccountButton";
 import {AccountEditForm} from "../Common/Account/AccountEditForm";
-import {Footer} from "../Common/Footer/Footer";
 
 export function AccountEditPage() {
     const [userData, setUserData] = useState({email: "", name: ["", "", ""], created: "", lastUpdate: ""})

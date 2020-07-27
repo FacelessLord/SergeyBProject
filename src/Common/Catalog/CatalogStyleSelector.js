@@ -36,5 +36,7 @@ function getOptionDesign(option) {
                 <div key={3} className={"catalog items selector option list element2"}/>,
                 <div key={4} className={"catalog items selector option list element1"}/>,
                 <div key={5} className={"catalog items selector option list element2"}/>,])
+        default:
+            return ([])
     }
 }

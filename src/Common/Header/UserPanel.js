@@ -31,7 +31,8 @@ export function UserPanelButtons({hidden}) {
             <button className="header user buttons button user skip" style={{visibility: "hidden"}}>
                 <div className="header user text">skip</div>
             </button>
-            <Link className="header user buttons button user logout" id="button_logout" to={document.location} onClick={logoutUser}>
+            <Link className="header user buttons button user logout" id="button_logout" to={document.location}
+                  onClick={logoutUser}>
                 Выйти
             </Link>
         </div>

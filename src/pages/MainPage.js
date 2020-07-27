@@ -1,9 +1,7 @@
 import React from "react";
-import {Header} from "../Common/Header/Header.js"
 import {ResourceDescription} from "./ResourceDescription";
 import {Catalog} from "../Common/Catalog/Catalog";
 import {Link} from "react-router-dom";
-import {Footer} from "../Common/Footer/Footer";
 
 
 export function MainPage({category}) {

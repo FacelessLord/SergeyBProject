@@ -7,11 +7,10 @@ export function EditAccountButton() {
 }
 
 async function saveUserData(userData) {
-    const result = await fetch(`/api/userData?username=${window.user.username}&accessToken=${window.user.access_token}`, {
+    return await fetch(`/api/userData?username=${window.user.username}&accessToken=${window.user.access_token}`, {
         method: "POST",
         body: JSON.stringify(userData)
     }).then(t => t.json())
-    return result
 }
 
 export function AccountFinishEditButton({userData, setMessage}) {

@@ -24,7 +24,7 @@ function FilterSelector({state, setState, category}) {
 }
 
 function extractNumberString(value) {
-    const str = value.replace(/^0+(?=[0-9])/g, '').replace(/[^\.0-9]/g, '');
+    const str = value.replace(/^0+(?=[0-9])/g, '').replace(/[^.0-9]/g, '');
     const parts = str.split('.');
     return parts.length > 2 ? parts[0] + '.' + parts.slice(1).join('') : str;
 }
@@ -36,18 +36,16 @@ function PriceLimits({state, setState}) {
             <input type={"text"} value={state.priceFrom} className={"catalog filter selector price value"}
                    onChange={e => updateState({
                        priceFrom: extractNumberString(e.target.value),
-                       priceTo: (state.priceTo == 0 || state.priceTo == "") ? state.priceTo : Math.max(extractNumberString(e.target.value), state.priceTo)
+                       priceTo: (state.priceTo === 0 || state.priceTo === "") ? state.priceTo : Math.max(extractNumberString(e.target.value), state.priceTo)
                    }, state, setState)}/>
             ₽ - до<input type={"text"} value={state.priceTo} className={"catalog filter selector price value"}
                          onChange={e => updateState({
                              priceTo: extractNumberString(e.target.value),
-                             priceFrom: (e.target.value == "0" || e.target.value == "") ? state.priceFrom : Math.min(extractNumberString(e.target.value), state.priceFrom)
+                             priceFrom: (e.target.value === "0" || e.target.value === "") ? state.priceFrom : Math.min(extractNumberString(e.target.value), state.priceFrom)
                          }, state, setState)}/>₽
         </div>
     </div>)
 }
-
-const catRE = /.*?category=(.*?)(&.*)?$/g;
 
 function createProviderOptionsList(setState, state, category) {
     return fetch("/api/providers?category=" + category)
@@ -56,7 +54,8 @@ function createProviderOptionsList(setState, state, category) {
         .then(t => t.items)
         .catch(r => [])
         .then(l => l.map(o => (<div className={"catalog filter selector provider value"} key={o.id}>
-            <input type="checkbox" name={o.id} onChange={e => addProvider(setState, state, o.id, e.target.checked)}/>{o.name}
+            <input type="checkbox" name={o.id}
+                   onChange={e => addProvider(setState, state, o.id, e.target.checked)}/>{o.name}
         </div>)))
         .then(l => (
             <div className={"catalog filter selector provider form"}

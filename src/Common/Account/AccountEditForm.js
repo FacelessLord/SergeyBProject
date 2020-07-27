@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from "react";
-import {Awaiter} from "../Awaiter";
+import React, {useEffect} from "react";
 
 async function getUserData() {
     return fetch(`/api/userData?username=${window.user.username}&accessToken=${window.user.access_token}`)
@@ -12,7 +11,7 @@ function CharacteristicField({field, setField, id, text}) {
     return [<label key={0} htmlFor={"account_" + id}>{text}</label>,
         <input type={"text"} value={field} onChange={t => setField(t.target.value)} key={1}
                className={"account field " + id}
-               id={"account_" + id} type={id}/>]
+               id={"account_" + id}/>]
 }
 
 async function loadUserData(setUserData) {

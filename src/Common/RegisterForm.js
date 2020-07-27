@@ -30,7 +30,8 @@ async function performRegister(setMessage) {
                 case "shortpassword":
                     setMessage("Минимальная длина пароля - 6 символов");
                     break;
-
+                default:
+                    break;
             }
         }
     })
@@ -80,7 +81,8 @@ export function RegisterForm() {
                 <input id={"register_last_name"} type={"last_name"}/>
             </div>
         </div>
-        <input type={"submit"} id={"submit_register"} className={"register buttons button submit"} onClick={() => performRegister(setMessage)} value={"Зарегистрироваться"}/>
+        <input type={"submit"} id={"submit_register"} className={"register buttons button submit"}
+               onClick={() => performRegister(setMessage)} value={"Зарегистрироваться"}/>
     </div>);
 
     return l;
