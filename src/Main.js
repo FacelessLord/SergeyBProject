@@ -9,6 +9,9 @@ import {RegisterSuccessPage} from "./pages/RegisterSuccessPage";
 import {RegisterPage} from "./pages/RegisterPage";
 import {AccountPage} from "./pages/AccountPage";
 import {AccountEditPage} from "./pages/AccountEditPage";
+import {ItemPage} from "./pages/ItemPage";
+import {Header} from "./Common/Header/Header";
+import {Footer} from "./Common/Footer/Footer";
 
 let _user = null;
 

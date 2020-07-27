@@ -60,6 +60,12 @@ function requestItems(maxCount, filter, createList, category) {
     return fetch("/api/items?count=" + maxCount + (category ? "&category=" + category + "&" : "") + createFilterQuery(filter))
         .catch(() => "{}")
         .then(t => t.json())
+        .then(async t => {
+            for (let i = 0; i < t.items.length; i++) {
+                t.items[i].provider = fetch(`/api/providerName?providerId=${t.items[i].provider}`).then(t => t.json()).name
+            }
+            return t
+        })
         .then(t => createList(t))
         .catch(r => [])
 }
@@ -68,6 +74,12 @@ function getCartItems(createList) {
     return fetch("/api/items/cart?access_token=" + window.user.access_token)
         .catch(r => "{}")
         .then(t => t.json())
+        .then(async t => {
+            for (let i = 0; i < t.items.length; i++) {
+                t.items[i].provider = fetch(`/api/providerName?providerId=${t.items[i].provider}`).then(t => t.json()).name
+            }
+            return t
+        })
         .then(createList).catch(r => []).then(l => l.length !== 0 ? l :
             (<div>
                 <span>Вы еще ничего не добавили в корзину</span><br/>

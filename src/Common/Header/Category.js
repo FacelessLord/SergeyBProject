@@ -45,7 +45,7 @@ export function NestedCategory({categoryId, categoryName, subcategories, setCate
         <Link to={"catalog"}  onClick={() => setCategory(categoryId)} className="categories buttons button nested">
             {categoryName}
         </Link>
-        <div className="fa fa-angle-right"/>
+        <div className="categories fa fa-angle-right"/>
         <div className="categories subcatalog">
             {createSubcatalogs(categoryId, subcategories, setCategory)}
         </div>

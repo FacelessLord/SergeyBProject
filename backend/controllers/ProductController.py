@@ -29,7 +29,7 @@ class ProductController(Controller):
                      "header": p.name,
                      "description": p.description,
                      # "Рыжий котик с зелёными глазами",
-                     "provider": p.provider.name,
+                     "provider": p.provider.id,
                      "price": p.price,
                      "isStock": p.in_stock
                  })

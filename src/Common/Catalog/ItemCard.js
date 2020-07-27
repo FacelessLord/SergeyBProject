@@ -1,7 +1,7 @@
 import React from "react";
 
 export function ItemCard({cardId, img, header, provider, price, inStock}) {
-    return (<a className="catalog items item card" href={"item?itemId=" + cardId} id={cardId}>
+    return (<a className="catalog items item card" href={"item/" + cardId} id={cardId}>
         <img className="catalog items item img" src={img}/>
         <span className="catalog items item text main">{header}</span>
         <div className="catalog items item text attributes">
@@ -19,7 +19,7 @@ export function ItemCard({cardId, img, header, provider, price, inStock}) {
 }
 
 export function ItemCardList({cardId, img, header, provider, price, inStock}) {
-    return (<a className="catalog items item card" href={"item?itemId=" + cardId} id={cardId}>
+    return (<a className="catalog items item card" href={"item/" + cardId} id={cardId}>
         <img className="catalog items item img" src={img} alt={"Product main icon"}/>
         <div className="catalog items item info">
             <span className="catalog items item text main">{header}</span>
@@ -39,7 +39,7 @@ export function ItemCardList({cardId, img, header, provider, price, inStock}) {
 }
 
 export function ItemCartCard({cardId, img, header, price}) {
-    return (<a className="catalog items item card" href={"item?itemId=" + cardId} id={cardId}>
+    return (<a className="catalog items item card" href={"item/" + cardId} id={cardId}>
         <img className="catalog items item img" src={img}/>
         <div className="catalog items item info">
             <span className="catalog items item text main">{header}</span>

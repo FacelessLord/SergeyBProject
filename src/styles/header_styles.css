@@ -247,7 +247,7 @@
     display: block;
 }
 
-.fa.fa-angle-right {
+.categories.fa.fa-angle-right {
     visibility: inherit;
     position: relative;
     z-index: 5;
