@@ -174,10 +174,19 @@ def get_current_time():
 
 @app.route('/api/providers')
 def get_provider_list():
-    args = request.args
-    category = args.get("category", "*", type=str)
+    category = request.args.get("category", "*", type=str)
     print(category)
     return providers.get_provider_list(category)
+
+
+@app.route('/api/providerName')
+def get_provider_name():
+    provider_id = request.args.get("providerId", "-1", type=str)
+    provider = db.get_provider(provider_id)
+
+    if provider:
+        return {"success": True, "name": provider.name}
+    return {"success": False, "reason": "noprovider"}
 
 
 @app.route('/api/categories')
@@ -201,9 +210,62 @@ def get_items_list():
     return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
 
 
+@app.route('/api/item/data')
+def get_item_data():
+    item_id = request.args.get("itemId", -1)
+
+    return {"success": True,
+            "provider_id": 1,
+            "id": item_id,
+            "price": 1255125,
+            "name": "super duper product",
+            "in_stock": True,
+            "img_count": 3,
+            "category": 1}
+
+    product = db.get_product(item_id)
+    if product:
+        return {"success": True,
+                "provider_id": product.provider_id,
+                "id": product.id,
+                "price": product.price,
+                "name": product.name,
+                "in_stock": product.in_stock,
+                "img_count": product.img_count,
+                "category": product.category_id}
+    else:
+        return {"success": False, "reason": "noItem"}
+
+@app.route('/api/item/description')
+def get_item_description():
+    item_id = request.args.get("itemId", -1)
+
+    return {"success": True,
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nunc vestibulum ex fermentum pretium sed et ipsum. Phasellus ultricies enim eu est faucibus, id consectetur quam posuere. Suspendisse potenti. Etiam metus arcu, hendrerit sit amet lorem vitae, pretium sollicitudin mauris. Nullam eu enim venenatis, consequat quam nec, laoreet mi. Aliquam purus metus, semper nec fringilla sed, ullamcorper eu felis"}
+
+    product = db.get_product(item_id)
+    if product:
+        return {"success": True,
+                "provider_id": product.provider_id,
+                "id": product.id,
+                "price": product.price,
+                "name": product.name,
+                "in_stock": product.in_stock,
+                "img_count": product.img_count,
+                "category": product.category_id}
+    else:
+        return {"success": False, "reason": "noItem"}
+
+
 @app.route('/api/images/main')
 def get_main_icon():
-    args = request.args
-    product_id = args.get("id", -1)
+    product_id = request.args.get("id", -1)
+
+    return images.get_main_image(product_id)
+
+@app.route('/api/images/forItem')
+def get_product_image():
+    product_id = request.args.get("id", -1)
+    image_id = request.args.get("imgId", 0)
 
     return images.get_main_image(product_id)

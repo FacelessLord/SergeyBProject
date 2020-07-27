@@ -60,6 +60,7 @@ class Product:
         name = \
         provider_id = \
         in_stock = \
+        img_count = \
         category_id = None
 
 
@@ -102,6 +103,13 @@ class DatabaseController:
         global Provider
         global Category
         global UserRegistrar
+
+        class ProductBatch(db.Model):
+            __tablename__ = 'cart'
+            id = db.Column(db.Integer(), primary_key=True)
+            customer_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
+            product_id = db.Column(db.Integer(), db.ForeignKey('products.id'))
+            amount = db.Column(db.Float())
 
         class User(db.Model):
             __tablename__ = 'users'
@@ -174,13 +182,6 @@ class DatabaseController:
             def create_confirmation_link(self):
                 return f'/api/confirmRegister?username={self.username}&token={self.code}'
 
-        class ProductBatch(db.Model):
-            __tablename__ = 'cart'
-            id = db.Column(db.Integer(), primary_key=True)
-            customer_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
-            product_id = db.Column(db.Integer(), db.ForeignKey('products.id'))
-            amount = db.Column(db.Float())
-
         class Product(db.Model):
             __tablename__ = 'products'
             id = db.Column(db.Integer(), primary_key=True)
@@ -191,6 +192,7 @@ class DatabaseController:
             provider_id = db.Column(db.Integer(), db.ForeignKey('providers.id'))
             in_stock = db.Column(db.Boolean())
             category_id = db.Column(db.Integer(), db.ForeignKey('categories.id'))
+            img_count = db.Column(db.Integer())
 
         class Category(db.Model):
             __tablename__ = "categories"
