@@ -58,6 +58,7 @@ class Product:
         batches = \
         price = \
         name = \
+        description = \
         provider_id = \
         in_stock = \
         img_count = \
@@ -188,7 +189,7 @@ class DatabaseController:
             batches = db.relationship("ProductBatch", backref="product", cascade='all,delete-orphan')
             price = db.Column(db.Float)
             name = db.Column(db.String(255))
-            description = db.Column(db.String(255))
+            description = db.Column(db.Text())
             provider_id = db.Column(db.Integer(), db.ForeignKey('providers.id'))
             in_stock = db.Column(db.Boolean())
             category_id = db.Column(db.Integer(), db.ForeignKey('categories.id'))

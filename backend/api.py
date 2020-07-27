@@ -218,6 +218,7 @@ def get_item_data():
             "provider_id": 1,
             "id": item_id,
             "price": 1255125,
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nunc vestibulum ex fermentum pretium sed et ipsum. Phasellus ultricies enim eu est faucibus, id consectetur quam posuere. Suspendisse potenti. Etiam metus arcu, hendrerit sit amet lorem vitae, pretium sollicitudin mauris. Nullam eu enim venenatis, consequat quam nec, laoreet mi. Aliquam purus metus, semper nec fringilla sed, ullamcorper eu felis",
             "name": "super duper product",
             "in_stock": True,
             "img_count": 3,
@@ -228,26 +229,7 @@ def get_item_data():
         return {"success": True,
                 "provider_id": product.provider_id,
                 "id": product.id,
-                "price": product.price,
-                "name": product.name,
-                "in_stock": product.in_stock,
-                "img_count": product.img_count,
-                "category": product.category_id}
-    else:
-        return {"success": False, "reason": "noItem"}
-
-@app.route('/api/item/description')
-def get_item_description():
-    item_id = request.args.get("itemId", -1)
-
-    return {"success": True,
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nunc vestibulum ex fermentum pretium sed et ipsum. Phasellus ultricies enim eu est faucibus, id consectetur quam posuere. Suspendisse potenti. Etiam metus arcu, hendrerit sit amet lorem vitae, pretium sollicitudin mauris. Nullam eu enim venenatis, consequat quam nec, laoreet mi. Aliquam purus metus, semper nec fringilla sed, ullamcorper eu felis"}
-
-    product = db.get_product(item_id)
-    if product:
-        return {"success": True,
-                "provider_id": product.provider_id,
-                "id": product.id,
+                "description": product.description,
                 "price": product.price,
                 "name": product.name,
                 "in_stock": product.in_stock,
@@ -263,9 +245,11 @@ def get_main_icon():
 
     return images.get_main_image(product_id)
 
+
 @app.route('/api/images/forItem')
 def get_product_image():
     product_id = request.args.get("id", -1)
     image_id = request.args.get("imgId", 0)
+    product_id = request.args.get("id", -1)
 
     return images.get_main_image(product_id)
