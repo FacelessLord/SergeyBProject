@@ -1,7 +1,8 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 export function ItemCard({cardId, img, header, provider, price, inStock}) {
-    return (<a className="catalog items item card" href={"item/" + cardId} id={cardId}>
+    return (<Link className="catalog items item card" to={"item/" + cardId} id={cardId}>
         <img className="catalog items item img" src={img} alt={"Картинка товара"}/>
         <span className="catalog items item text main">{header}</span>
         <div className="catalog items item text attributes">
@@ -15,11 +16,11 @@ export function ItemCard({cardId, img, header, provider, price, inStock}) {
               В наличии: {inStock}
             </span><br/>
         </div>
-    </a>)
+    </Link>)
 }
 
 export function ItemCardList({cardId, img, header, provider, price, inStock}) {
-    return (<a className="catalog items item card" href={"item/" + cardId} id={cardId}>
+    return (<Link className="catalog items item card" to={"item/" + cardId} id={cardId}>
         <img className="catalog items item img" src={img} alt={"Product main icon"}/>
         <div className="catalog items item info">
             <span className="catalog items item text main">{header}</span>
@@ -35,11 +36,11 @@ export function ItemCardList({cardId, img, header, provider, price, inStock}) {
               </span><br/>
             </div>
         </div>
-    </a>)
+    </Link>)
 }
 
 export function ItemCartCard({cardId, img, header, price}) {
-    return (<a className="catalog items item card" href={"item/" + cardId} id={cardId}>
+    return (<Link className="catalog items item card" to={"item/" + cardId} id={cardId}>
         <img className="catalog items item img" src={img} alt={"Картинка товара"}/>
         <div className="catalog items item info">
             <span className="catalog items item text main">{header}</span>
@@ -49,5 +50,5 @@ export function ItemCartCard({cardId, img, header, price}) {
               </span>
             </div>
         </div>
-    </a>)
+    </Link>)
 }

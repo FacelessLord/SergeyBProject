@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Catalog} from "../Common/Catalog/Catalog";
 import {CatalogStyleSelector} from "../Common/Catalog/CatalogStyleSelector";
 import {Filter} from "../Common/Catalog/Filter";
