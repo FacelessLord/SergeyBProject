@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Catalog} from "../Common/Catalog/Catalog";
 import {CatalogStyleSelector} from "../Common/Catalog/CatalogStyleSelector";
 import {Filter} from "../Common/Catalog/Filter";
@@ -15,7 +15,7 @@ export function CatalogPage({category}) {
                 <CatalogStyleSelector value={window.user.view} valueSetter={setView}/>
             </div>
             <div className="site main panel">
-                <Catalog type={window.user.view} category={category} filter={filter} setFilter={setFilter}/>
+                <Catalog type={window.user.view} category={category} filter={filter}/>
             </div>
         </div>
     )
