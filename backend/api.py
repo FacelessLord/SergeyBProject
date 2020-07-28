@@ -207,6 +207,7 @@ def get_items_list():
     if len(providers) == 1 and len(providers[0]) == 0:
         providers = []
 
+
     return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
 
 

@@ -44,25 +44,20 @@ function createItemsCart(json) {
     return l
 }
 
-function createFilterQuery(filter) {
-    let query = "";
-    for (let k in filter) {
-        if (k !== "display") { // noinspection JSUnfilteredForInLoop
-            if (filter[k] && (!('length' in filter[k]) || filter[k].length)) {
-                query += k + "=" + filter[k] + "&";
-            }
-        }
-    }
-    return query.slice(0, -1)
+function createFilterQuery(filter) {//display: false, priceFrom: 0, priceTo: 0, providers: []
+    const priceFromParam = filter.priceFrom ? `&priceFrom=${filter.priceFrom}` : "";
+    const priceToParam = filter.priceTo ? `&priceTo=${filter.priceTo}` : "";
+    const providersParam = filter.providers.length > 0 ? `&providers=${filter.providers}` : "";
+    return priceFromParam + priceToParam + providersParam;
 }
 
 function requestItems(maxCount, filter, createList, category) {
-    return fetch("/api/items?count=" + maxCount + (category ? "&category=" + category + "&" : "") + createFilterQuery(filter))
+    return fetch("/api/items?count=" + maxCount + (category ? "&category=" + category : "") + createFilterQuery(filter))
         .catch(() => "{}")
         .then(t => t.json())
         .then(async t => {
             for (let i = 0; i < t.items.length; i++) {
-                t.items[i].provider = fetch(`/api/providerName?providerId=${t.items[i].provider}`).then(t => t.json()).name
+                t.items[i].provider = (await fetch(`/api/providerName?providerId=${t.items[i].provider}`).then(t => t.json())).name
             }
             return t
         })
