@@ -214,16 +214,6 @@ def get_items_list():
 def get_item_data():
     item_id = request.args.get("itemId", -1)
 
-    return {"success": True,
-            "provider_id": 1,
-            "id": item_id,
-            "price": 1255125,
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vitae nunc vestibulum ex fermentum pretium sed et ipsum. Phasellus ultricies enim eu est faucibus, id consectetur quam posuere. Suspendisse potenti. Etiam metus arcu, hendrerit sit amet lorem vitae, pretium sollicitudin mauris. Nullam eu enim venenatis, consequat quam nec, laoreet mi. Aliquam purus metus, semper nec fringilla sed, ullamcorper eu felis",
-            "name": "super duper product",
-            "in_stock": True,
-            "img_count": 3,
-            "category": 1}
-
     product = db.get_product(item_id)
     if product:
         return {"success": True,
