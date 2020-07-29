@@ -26,7 +26,7 @@ function wrapData(data, imgId, setImgId) {
                  src={`/api/images/forItem?id=${data.id}&imgId=${0}`}
                  alt={"Картинка товара"}/>
             {imgList}
-            <button disabled={imgId === data.img_count - 1} className={"catalogBig fa fa-angle-right"}
+            <button disabled={imgId >= data.img_count - 1} className={"catalogBig fa fa-angle-right"}
                     id={"img_right_button"} onClick={() => {
                 const newValue = Math.min(data.img_count - 1, imgId + 1);
                 if (newValue !== imgId) {
