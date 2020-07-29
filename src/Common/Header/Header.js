@@ -22,6 +22,7 @@ export function Header({setCategory}) {
     const [userSelected, setUserSelected] = useState(false);
     return (<div className="header wrapper">
         <div className="header buttons container">
+            <Link to="/" className="header buttons button fa fa-home"/>
             <div className="header buttons wrapper"
                  onMouseEnter={onSuperCatalogButtonSelect}
                  onMouseLeave={onSuperCatalogButtonDeselect}>

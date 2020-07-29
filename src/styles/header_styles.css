@@ -32,7 +32,7 @@
     position: relative;
     width: 1000px;
     height: 64px;
-    left: 200px;
+    left: 168px;
 }
 
 .header.buttons.wrapper {
@@ -69,6 +69,11 @@
 
 .header.buttons.button:hover {
     background-color: #BDBDBD;
+}
+
+.header.buttons.button.fa.fa-home {
+    width: 44px;
+    font-size: 40px;
 }
 
 .header.user {
