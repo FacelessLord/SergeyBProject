@@ -2,7 +2,7 @@ import math
 from typing import List
 
 from backend.controllers.Controller import Controller
-from backend.controllers.DatabaseController import DatabaseController as dbc, Product
+from backend.controllers.DatabaseController import DatabaseController as dbc
 from backend.finq import FINQ
 
 
@@ -35,4 +35,13 @@ class ProductController(Controller):
                  })
         catalogList = catalog.to_list()
         print(catalogList)
-        return { "items": catalogList }
+        return {"items": catalogList}
+
+    def add_item_to_cart(self, item_id, username, access_token):
+        user = self.db.get_user_by_name(username)
+        if not user:
+            return {"success": False, "reason": "nouser"}
+        if user.access_token != access_token:
+            return {"success": False, "reason": "not_authorized"}
+        self.db.add_item_to_cart(customer=user.id, product=item_id, amount=1)
+        self.db.commit()

@@ -172,6 +172,15 @@ def get_current_time():
     return {'time': time.time()}
 
 
+@app.route('/api/addItem', methods=['post'])
+def add_item_to_cart():
+    item_id = request.args.get("itemId", "-1", type=str)
+    access_token = request.headers['access_token']
+    username = request.headers['username']
+
+    products.add_item_to_cart(item_id, username, access_token)
+
+
 @app.route('/api/providers')
 def get_provider_list():
     category = request.args.get("category", "*", type=str)
@@ -206,7 +215,6 @@ def get_items_list():
 
     if len(providers) == 1 and len(providers[0]) == 0:
         providers = []
-
 
     return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
 
