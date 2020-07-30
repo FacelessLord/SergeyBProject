@@ -37,11 +37,14 @@ class ProductController(Controller):
         print(catalogList)
         return {"items": catalogList}
 
-    def add_item_to_cart(self, item_id, username, access_token):
+    def add_item_to_cart(self, item_id, username, accessToken, amount):
+        if amount <= 0:
+            return {"success": False, "reason": "wrongAmount"}
         user = self.db.get_user_by_name(username)
         if not user:
             return {"success": False, "reason": "nouser"}
-        if user.access_token != access_token:
+        if user.accessToken != accessToken:
             return {"success": False, "reason": "not_authorized"}
-        self.db.add_item_to_cart(customer=user.id, product=item_id, amount=1)
+        self.db.add_item_to_cart(customer=user.id, product=item_id, amount=amount)
         self.db.commit()
+        return {"success": True}

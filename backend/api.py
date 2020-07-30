@@ -50,7 +50,7 @@ def set_user_data():
 
     user = db.get_user_by_name(username)
     if user:
-        if user.access_token == accessToken:
+        if user.accessToken == accessToken:
             data = request.data.decode(encoding='utf-8')
             newData = JSONDecoder().decode(data)
             user.name = newData["name"][0]
@@ -73,7 +73,7 @@ def get_user_data():
 
     user = db.get_user_by_name(username)
     if user:
-        if user.access_token == accessToken:
+        if user.accessToken == accessToken:
             return {"success": True,
                     "email": user.email,
                     "name": [user.name, user.surname, user.last_name],
@@ -125,7 +125,7 @@ def confirm_register():
 
 @app.route('/api/login', methods=['post', 'get'])
 def login():
-    access_token = ""
+    accessToken = ""
     message = ''
     if request.method == "POST":
         username = request.args.get('username')
@@ -135,35 +135,35 @@ def login():
         registrar = db.get_user_registrar(username=username)
         # db.remove_registrar(registrar)
         if user:
-            access_token = user.load(password)
-            if access_token:
+            accessToken = user.load(password)
+            if accessToken:
                 message = "Correct username and password"
             else:
                 message = "Wrong username or password"
-                access_token = ""
+                accessToken = ""
         elif registrar:
             message = "You need to confirm your registration."
         else:
             message = "Wrong username or password"
-    print(access_token)
-    return {"message": message, "access_token": access_token}
+    print(accessToken)
+    return {"message": message, "accessToken": accessToken}
 
 
 @app.route('/api/check_auth')
 def check_auth():
     username = request.args.get('username')
-    access_token = request.args.get('access_token', type=str)
+    accessToken = request.args.get('accessToken', type=str)
     user = db.get_user_by_name(username)
-    return {"result": user is not None and user.access_token == access_token}
+    return {"result": user is not None and user.accessToken == accessToken}
 
 
 @app.route('/api/logout', methods=['post'])
 def logout():
-    access_token = request.headers['access_token']
+    accessToken = request.headers['accessToken']
     username = request.headers['username']
     user = db.get_user_by_name(username)
     if user:
-        return {"supported": True, "unloaded": user.unload(access_token)}
+        return {"supported": True, "unloaded": user.unload(accessToken)}
     return {"supported": False}  # user doesn't exist
 
 
@@ -174,11 +174,12 @@ def get_current_time():
 
 @app.route('/api/addItem', methods=['post'])
 def add_item_to_cart():
-    item_id = request.args.get("itemId", "-1", type=str)
-    access_token = request.headers['access_token']
-    username = request.headers['username']
+    item_id = request.args.get("itemId", -1, type=int)
+    accessToken = request.args.get('accessToken', "")
+    username = request.args.get('username', "")
+    amount = request.args.get('amount', 0, type=int)
 
-    products.add_item_to_cart(item_id, username, access_token)
+    return products.add_item_to_cart(item_id, username, accessToken, amount)
 
 
 @app.route('/api/providers')
