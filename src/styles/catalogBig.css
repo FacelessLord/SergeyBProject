@@ -1,5 +1,6 @@
 .catalogBig.buttons.button.add {
     height: 48px;
+    max-width: 180px;
     position: relative;
 
     background: #27AE60;
@@ -11,10 +12,20 @@
     background-color: #6FCF97;
 }
 
-.catalogBig.buttons.container {
+.catalogBig.buttons.column {
     display: flex;
     flex-direction: row-reverse;
     flex: max-content;
+
+    width: fit-content;
+    width: -moz-fit-content;
+    align-self: end;
+}
+
+
+.catalogBig.buttons.container {
+    display: flex;
+    flex-direction: column;
 
     width: fit-content;
     width: -moz-fit-content;
@@ -120,4 +131,33 @@
 
 .catalogBig.items.pad.list {
     display: block;
+}
+
+.catalogBig.counter.container {
+    width: fit-content;
+    width: -moz-fit-content;
+    margin-bottom: 8px;
+}
+
+.catalogBig.counter.buttonLess, .catalogBig.counter.buttonMore {
+    height: 32px;
+    width: 32px;
+    margin: 0;
+    text-align: center;
+    text-align: -moz-center;
+}
+
+.catalogBig.counter.valueField {
+    display: inline-block;
+    height: 24px;
+    width: 24px;
+    margin: 0 8px;
+    padding: 4px;
+
+    background: #F2F2F2;
+
+    border-radius: 4px;
+
+    line-height: 28px;
+    text-align: center;
 }

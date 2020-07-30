@@ -1,8 +1,10 @@
 import React, {useState} from "react";
 import "../../styles/catalogBig.css"
+import {Counter} from "../Counter";
 
 
-function wrapData(data, imgId, setImgId) {
+function wrapData(data, imgId, setImgId, count, setCount, message, setMessage) {
+
     const imgList = []
     for (let i = 1; i < data.img_count; i++) {
         imgList.push(<img key={i} className="catalogBig items item img hidden"
@@ -47,15 +49,41 @@ function wrapData(data, imgId, setImgId) {
               В наличии: {data.in_stock ? "Да" : "Нет"}
             </span><br/>
         </div>
-        <div className={"catalogBig buttons container"}>
-            <button className={"catalogBig buttons button add"}>Добавить в корзину</button>
+        <div className={"catalogBig buttons column"}>
+            <div className={"catalogBig buttons container"}>
+                {message ? <div className={"account message"} id={"account_message"}>{message}</div> : ""}
+                <Counter from={1} to={2000} value={count} setValue={setCount} className={"catalogBig"}/>
+                <button className={"catalogBig buttons button add"} onClick={() => {
+                    fetch(`/api/addItem?itemId=${data.id}&accessToken=${window.user.accessToken}&username=${window.user.username}&amount=${count}`, {method: "POST"})
+                        .then(t => t.json())
+                        .then(j => {
+                            if (j.success) {
+                                setMessage("Товар добавлен в корзину")
+                            } else
+                                switch (j.reason) {
+                                    case "wrongAmount":
+                                        setMessage("Количество должно быть больше нуля");
+                                        break;
+                                    case "nouser":
+                                    case "not_authorized":
+                                        setMessage("Для заказа товаров необходимо выполнить вход");
+                                        break;
+                                    default:
+                                        break;
+                                }
+                        })
+                }}>Добавить в корзину
+                </button>
+            </div>
         </div>
     </div>)
 }
 
 export function ItemBigCard({data}) {
+    const [count, setCount] = useState(1)
     const [imgId, setImgId] = useState(0)
+    const [message, setMessage] = useState("")
     if (data.success)
-        return wrapData(data, imgId, setImgId)
+        return wrapData(data, imgId, setImgId, count, setCount, message, setMessage)
     return "Не удалось загрузить товар"
 }

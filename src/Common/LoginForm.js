@@ -6,12 +6,12 @@ async function performLogin(setMessage) {
     const username = document.getElementById("login_username").value;
     const password = document.getElementById("login_password").value;
     await loginUser(username, password).then(t => {
-        if (t.access_token === "") {
+        if (t.accessToken === "") {
             setMessage(t.message);
         } else
             setMessage("");
-        if (t.access_token !== "") {
-            window.updateUser({username: username, access_token: t.access_token, loggedIn: t.access_token !== ""});
+        if (t.accessToken !== "") {
+            window.updateUser({username: username, accessToken: t.accessToken, loggedIn: t.accessToken !== ""});
             document.location = "/";
         }
     })

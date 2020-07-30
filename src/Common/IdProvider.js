@@ -10,7 +10,7 @@ export function setUserView(view) {
 }
 
 export function checkAuth() {
-    return fetch(`/api/check_auth?username=${window.user.username}&access_token=${window.user.access_token}`)
+    return fetch(`/api/check_auth?username=${window.user.username}&accessToken=${window.user.accessToken}`)
         .then(t => t.json())
         .then(j => {
             window.updateUser({loggedIn: j.result});
@@ -21,7 +21,7 @@ export function checkAuth() {
 }
 
 export function logoutUser() {
-    window.updateUser({access_token: "", loggedIn: false});
+    window.updateUser({accessToken: "", loggedIn: false});
 }
 
 export function loginUser(username, password) {
@@ -54,14 +54,14 @@ export function loadUser() {
     return {
         loggedIn: loggedIn,
         username: username,
-        access_token: accessToken,
+        accessToken: accessToken,
         view: view
     };
 }
 
 export function saveUser() {
     const cookies = new Cookies();
-    cookies.set("accessToken", window.user.access_token, {path: "/"});
+    cookies.set("accessToken", window.user.accessToken, {path: "/"});
     cookies.set("username", window.user.username, {path: "/"});
     cookies.set("loggedIn", window.user.loggedIn, {path: "/"});
     cookies.set("catalogView", window.user.view, {path: "/"});

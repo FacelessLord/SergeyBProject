@@ -66,7 +66,7 @@ function requestItems(maxCount, filter, createList, category) {
 }
 
 function getCartItems(createList) {
-    return fetch("/api/items/cart?access_token=" + window.user.access_token)
+    return fetch("/api/items/cart?accessToken=" + window.user.accessToken)
         .catch(r => "{}")
         .then(t => t.json())
         .then(async t => {

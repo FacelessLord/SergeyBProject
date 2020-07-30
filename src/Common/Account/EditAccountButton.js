@@ -7,7 +7,7 @@ export function EditAccountButton() {
 }
 
 async function saveUserData(userData) {
-    return await fetch(`/api/userData?username=${window.user.username}&accessToken=${window.user.access_token}`, {
+    return await fetch(`/api/userData?username=${window.user.username}&accessToken=${window.user.accessToken}`, {
         method: "POST",
         body: JSON.stringify(userData)
     }).then(t => t.json())

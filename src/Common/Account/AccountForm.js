@@ -3,7 +3,7 @@ import "../../styles/account_styles.css"
 import {Awaiter} from "../Awaiter";
 
 async function getUserData() {
-    return fetch(`/api/userData?username=${window.user.username}&accessToken=${window.user.access_token}`)
+    return fetch(`/api/userData?username=${window.user.username}&accessToken=${window.user.accessToken}`)
         .then(t => t.json())
         .catch(_ => {
         })

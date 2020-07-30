@@ -18,7 +18,7 @@ class User:
         password_hash = \
         created_on = \
         last_login = \
-        access_token = \
+        accessToken = \
         updated_on = \
         permission_level = \
         ttl = None
@@ -32,7 +32,7 @@ class User:
     def load(self, password: str) -> str:
         pass
 
-    def unload(self, access_token: str) -> bool:
+    def unload(self, accessToken: str) -> bool:
         """logouts user from everywhere"""
         pass
 
@@ -124,14 +124,14 @@ class DatabaseController:
             password_hash = db.Column(db.String(100), nullable=False)
             created_on = db.Column(db.DateTime(), default=datetime.utcnow)
             last_login = db.Column(db.DateTime(), default=datetime.utcnow)
-            access_token = db.Column(db.String(12), default="")
+            accessToken = db.Column(db.String(12), default="")
             updated_on = db.Column(db.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
             permission_level = db.Column(db.Integer(), default=lambda: 0)
             ttl = timedelta(hours=8)
 
             def is_authenticated(self) -> bool:
                 return (datetime.utcnow() - self.last_login) < self.ttl \
-                       and self.access_token != ""
+                       and self.accessToken != ""
 
             def is_anonymous(self) -> bool:
                 return not self.is_authenticated()
@@ -139,14 +139,14 @@ class DatabaseController:
             def load(self, password: str) -> str:
                 if self.check_password(password):
                     if self.is_anonymous():
-                        self.access_token = guid.new_formatted()
+                        self.accessToken = guid.new_formatted()
                     self.last_login = datetime.utcnow()
                     db.session.commit()
-                    return self.access_token
+                    return self.accessToken
 
-            def unload(self, access_token: str) -> bool:  # logouts user from everywhere
-                if access_token == self.access_token:
-                    self.access_token = ""
+            def unload(self, accessToken: str) -> bool:  # logouts user from everywhere
+                if accessToken == self.accessToken:
+                    self.accessToken = ""
                     db.session.commit()
                     return True
                 return False
@@ -161,7 +161,7 @@ class DatabaseController:
             def change_password(self, old_password, new_password) -> bool:
                 if self.is_authenticated() and self.check_password(old_password):
                     self.set_password(new_password)
-                    self.unload(self.access_token)
+                    self.unload(self.accessToken)
                     return True
                 return False
 
