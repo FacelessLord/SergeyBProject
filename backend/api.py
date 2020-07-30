@@ -182,6 +182,14 @@ def add_item_to_cart():
     return products.add_item_to_cart(item_id, username, accessToken, amount)
 
 
+@app.route("/api/items/cart")
+def get_cart_for_user():
+    accessToken = request.args.get('accessToken', "")
+    username = request.args.get('username', "")
+
+    return products.get_cart_for_user(username, accessToken)
+
+
 @app.route('/api/providers')
 def get_provider_list():
     category = request.args.get("category", "*", type=str)

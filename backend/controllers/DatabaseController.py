@@ -49,7 +49,9 @@ class User:
 class ProductBatch:
     id = \
         customer_id = \
+        customer = \
         product_id = \
+        product = \
         amount = None
 
 
@@ -60,9 +62,11 @@ class Product:
         name = \
         description = \
         provider_id = \
+        provider = \
         in_stock = \
         img_count = \
-        category_id = None
+        category_id = \
+        category = None
 
 
 class Provider:
