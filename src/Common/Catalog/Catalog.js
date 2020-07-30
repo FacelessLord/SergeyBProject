@@ -1,15 +1,12 @@
-import {ItemCard, ItemCardList, ItemCartCard} from "./ItemCard";
+import {ItemCard, ItemCardList} from "./ItemCard";
 import React, {useEffect, useState} from "react";
 
 import {Awaiter} from "../Awaiter";
-import {Link} from "react-router-dom";
 
 export function Catalog({type = "panels", filter, category}) {
     switch (type) {
         case "list":
             return <CatalogList filter={filter} category={category}/>;
-        case "cart":
-            return <CatalogCart/>;
         default:
             return <CatalogPanels filter={filter} category={category}/>;
     }
@@ -35,15 +32,6 @@ function createItemsList(json) {
     return l
 }
 
-function createItemsCart(json) {
-    const l = [];
-    for (let value of json.items) {
-        l.push(<ItemCartCard key={value.cardId} cardId={value.cardId} img={"/api/images/main?id=" + value.cardId}
-                             header={value.header} price={value.price}/>)
-    }
-    return l
-}
-
 function createFilterQuery(filter) {//display: false, priceFrom: 0, priceTo: 0, providers: []
     const priceFromParam = filter.priceFrom ? `&priceFrom=${filter.priceFrom}` : "";
     const priceToParam = filter.priceTo ? `&priceTo=${filter.priceTo}` : "";
@@ -63,23 +51,6 @@ function requestItems(maxCount, filter, createList, category) {
         })
         .then(t => createList(t))
         .catch(r => [])
-}
-
-function getCartItems(createList) {
-    return fetch("/api/items/cart?accessToken=" + window.user.accessToken)
-        .catch(r => "{}")
-        .then(t => t.json())
-        .then(async t => {
-            for (let i = 0; i < t.items.length; i++) {
-                t.items[i].provider = fetch(`/api/providerName?providerId=${t.items[i].provider}`).then(t => t.json()).name
-            }
-            return t
-        })
-        .then(createList).catch(r => []).then(l => l.length !== 0 ? l :
-            (<div>
-                <span>Вы еще ничего не добавили в корзину</span><br/>
-                <Link to={"/catalog"} className={"catalog buttons button source"}>Перейти в каталог</Link>
-            </div>));
 }
 
 export function CatalogPanels({maxCount = 9, filter, category}) {
@@ -108,14 +79,5 @@ export function CatalogList({maxCount = 9, filter, category}) {
         <Awaiter value={items} setValue={setItems}
                  getter={() => requestItems(maxCount, filter, createItemsList, category)}
                  err={"Невозможно загрузить каталог"} deps={[filter]}/>
-    </div>);
-}
-
-export function CatalogCart() {
-    const [items, setItems] = useState("pending");
-
-    return (<div className={"catalog items pad cart"}>
-        <Awaiter value={items} setValue={setItems} getter={() => getCartItems(createItemsCart)}
-                 err={"Невозможно загрузить корзину"}/>
     </div>);
 }

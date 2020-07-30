@@ -322,12 +322,28 @@
 }
 
 .catalog.items.item.text.main {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 4px;
+    left: 16px;
     font-size: 16px;
+    text-align: center;
 }
 
 .catalog.items.item.text.attributes {
-
+    margin-bottom: 0;
 }
+
+.catalog.items.item.text.summary {
+    position: relative;
+    right: 0;
+
+    display: inline-block;
+    margin-top: 8px;
+    margin-bottom: 0;
+    text-align: right;
+}
+
 
 /*Catalog pads*/
 .catalog.items.pad {
