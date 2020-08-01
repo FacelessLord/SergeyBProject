@@ -110,12 +110,38 @@
 
 }
 
+.catalog.buttons.form {
+
+}
+
+
 .catalog.buttons.button {
 
 }
 
 .catalog.buttons.button.more {
 
+}
+
+.catalog.buttons.button.remove.fa.fa-trash-o {
+    border-radius: 4px;
+    padding: 4px;
+    line-height: 12px;
+
+    width: 24px;
+    height: 24px;
+    background: #C4C4C4;
+}
+
+.catalog.item.card.form {
+    display: flex;
+    justify-content: space-between;
+
+    width: 100%;
+}
+
+.catalog.buttons.button.remove.fa.fa-trash-o:hover {
+    background-color: #ABABAB;
 }
 
 /*Items*/
@@ -295,6 +321,10 @@
     background-color: #ABABAB;
 }
 
+.catalog.items.item.card.noHover:hover {
+    background-color: #C4C4C4;
+}
+
 .catalog.items.item.img {
     object-fit: cover;
 }
@@ -318,7 +348,6 @@
     color: #000000;
     margin-bottom: 8px;
     user-select: none;
-
 }
 
 .catalog.items.item.text.main {

@@ -72,24 +72,34 @@ export function CartPanelItem({cardId, img, header, provider, price, summary, am
 }
 
 export function CartListItem({cardId, img, header, provider, price, summary, amount}) {
-    return (<Link className="catalog items item card" to={"item/" + cardId} id={cardId}>
-        <img className="catalog items item img" src={img} alt={"Product main icon"}/>
-        <div className="catalog items item info">
-            <span className="catalog items item text main">{header}</span>
-            <div className="catalog items item text attributes">
+    return (<div className="catalog items item card noHover">
+        <Link to={"item/" + cardId} id={cardId} style={{padding: '0px', display: "contents"}}>
+            <img className="catalog items item img" src={img} alt={"Product main icon"}/>
+        </Link>
+        <div className={"catalog item card form"}>
+            <Link to={"item/" + cardId} id={cardId} style={{padding: '0px', display: "contents"}}>
+                <div className="catalog items item info">
+                    <span className="catalog items item text main">{header}</span>
+                    <div className="catalog items item text attributes">
                 <span className="catalog items item text provider">
                     Изготовитель: {provider}
                 </span><br/>
-                <span className="catalog items item text price">
+                        <span className="catalog items item text price">
                     Цена: {price}
                 </span><br/>
-                <span className="catalog items item text amount">
+                        <span className="catalog items item text amount">
                     Количество: {amount}
                 </span><br/>
-                <span className="catalog items item text summary">
+                        <span className="catalog items item text summary">
                     Стоимость: {summary}
                 </span><br/>
+                    </div>
+                </div>
+            </Link>
+            <div className={"catalog buttons form"}>
+                <button onClick={() => {
+                }} className={"catalog buttons button remove fa fa-trash-o"}/>
             </div>
         </div>
-    </Link>)
+    </div>)
 }
