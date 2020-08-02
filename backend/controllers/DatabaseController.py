@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 import backend.guid as guid
+from backend.finq import FINQ
 
 
 class User:
@@ -20,6 +21,7 @@ class User:
         last_login = \
         accessToken = \
         updated_on = \
+        orders = \
         permission_level = \
         ttl = None
 
@@ -52,6 +54,8 @@ class ProductBatch:
         customer = \
         product_id = \
         product = \
+        ordered = \
+        order_id = \
         amount = None
 
 
@@ -95,6 +99,13 @@ class UserRegistrar:
         pass
 
 
+class Order:
+    id = \
+        batches = \
+        customer_id = \
+        summary = None
+
+
 # noinspection PyArgumentList,PyGlobalUndefined
 class DatabaseController:
     # noinspection PyRedeclaration
@@ -107,6 +118,7 @@ class DatabaseController:
         global Product
         global Provider
         global Category
+        global Order
         global UserRegistrar
 
         class ProductBatch(db.Model):
@@ -115,6 +127,8 @@ class DatabaseController:
             customer_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
             product_id = db.Column(db.Integer(), db.ForeignKey('products.id'))
             amount = db.Column(db.Float())
+            ordered = db.Column(db.Boolean(), default=False)
+            order_id = db.Column(db.Integer(), db.ForeignKey('order.id'), default=-1)
 
         class User(db.Model):
             __tablename__ = 'users'
@@ -131,6 +145,7 @@ class DatabaseController:
             accessToken = db.Column(db.String(12), default="")
             updated_on = db.Column(db.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow)
             permission_level = db.Column(db.Integer(), default=lambda: 0)
+            orders = db.relationship("Order", backref="customer", cascade='all,delete-orphan')
             ttl = timedelta(hours=8)
 
             def is_authenticated(self) -> bool:
@@ -203,10 +218,11 @@ class DatabaseController:
             __tablename__ = "categories"
             id = db.Column(db.Integer(), primary_key=True)
             name = db.Column(db.String(40), unique=True)
-            products = db.relationship("Product", backref="category", cascade='all,delete-orphan')
+            products = db.relationship(Product, backref="category", cascade='all,delete-orphan')
             nested = db.Column(db.Boolean())
             parent_id = db.Column(db.Integer(), db.ForeignKey('categories.id'), default=-1)
-            sub_categories = db.relationship("Category", backref="parent", cascade='all,delete-orphan', remote_side=[id], single_parent=True)
+            sub_categories = db.relationship("Category", backref="parent", cascade='all,delete-orphan',
+                                             remote_side=[id], single_parent=True)
 
         class Provider(db.Model):
             __tablename__ = 'providers'
@@ -214,11 +230,19 @@ class DatabaseController:
             products = db.relationship("Product", backref="provider", cascade='all,delete-orphan')
             name = db.Column(db.String(255), unique=True)
 
+        class Order(db.Model):
+            _tablename__ = 'orders'
+            id = db.Column(db.Integer(), primary_key=True)
+            batches = db.relationship("ProductBatch", backref="order", cascade='all,delete-orphan')
+            customer_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
+            summary = db.Column(db.Float())
+
         db.create_all()
 
     def add_user(self, name: List[str], username: str, email: str,
                  password_hash: str):
-        user = User(name=name[0], surname=name[1], last_name=name[2], username=username, email=email, password_hash=password_hash)
+        user = User(name=name[0], surname=name[1], last_name=name[2], username=username, email=email,
+                    password_hash=password_hash)
         self.db.session.add(user)
         return user
 
@@ -229,7 +253,8 @@ class DatabaseController:
 
     def add_user_registrar(self, name: List[str], username: str, email: str,
                            password_hash: str):
-        user_registrar = UserRegistrar(name=name[0], surname=name[1], last_name=name[2], username=username, email=email, password_hash=password_hash)
+        user_registrar = UserRegistrar(name=name[0], surname=name[1], last_name=name[2], username=username, email=email,
+                                       password_hash=password_hash)
         self.db.session.add(user_registrar)
         return user_registrar
 
@@ -243,6 +268,21 @@ class DatabaseController:
         provider = Provider(name=name)
         self.db.session.add(provider)
         return provider
+
+    def set_batch_order(self, batch: ProductBatch, order: Order):
+        batch.order_id = order.id
+        batch.ordered = True
+
+    def create_order(self, user: User):
+        order = Order(customer_id=user.id)
+        summary = FINQ(user.cart) \
+            .filter(lambda a: not a.ordered) \
+            .peek(lambda a: self.set_batch_order(a, order)) \
+            .map(lambda a: a.amount * a.product.price) \
+            .reduce(lambda a, b: a + b).first()
+        order.summary = summary
+        self.db.session.add(order)
+        return order
 
     def add_item_to_cart(self, customer: int, product: int, amount: float):
         cart_item = ProductBatch(customer_id=customer, product_id=product, amount=amount)
@@ -328,6 +368,9 @@ class DatabaseController:
 
     def providers(self) -> List[Provider]:
         return self.db.session.query(Provider)
+
+    def remove_batch(self, batch) -> List[Provider]:
+        return self.db.session.delete(batch)
 
     def commit(self):
         self.db.session.commit()
