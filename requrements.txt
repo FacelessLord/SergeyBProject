@@ -1,2 +1,0 @@
-flask_mail
-flask_sqlalchemy
