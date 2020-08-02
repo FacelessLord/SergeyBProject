@@ -64,10 +64,11 @@ class ProductController(Controller):
         product = batch.product
         return {
             "cardId": product.id,
+            "batchId": batch.id,
             "header": product.name,
             "description": product.description,
             "provider_id": product.provider.id,
             "price": product.price,
-            "summary": product.price*batch.amount,
+            "summary": product.price * batch.amount,
             "amount": batch.amount
         }
