@@ -10,7 +10,7 @@ export function setUserView(view) {
 }
 
 export function checkAuth() {
-    return fetch(`/api/check_auth?username=${window.user.username}&accessToken=${window.user.accessToken}`)
+    return fetch(`/api/user/check_auth?username=${window.user.username}&accessToken=${window.user.accessToken}`)
         .then(t => t.json())
         .then(j => {
             window.updateUser({loggedIn: j.result});
@@ -25,7 +25,7 @@ export function logoutUser() {
 }
 
 export function loginUser(username, password) {
-    return fetch(`/api/login?username=${username}&password=${password}`, {
+    return fetch(`/api/user/login?username=${username}&password=${password}`, {
         method: "POST"
     }).then(t => t.json())
 }
@@ -40,7 +40,7 @@ export async function registerUser(username, name, email, password) {
     if (password.length < 6) {
         return {success: false, reason: "shortpassword"}
     }
-    return fetch(`/api/register?username=${username}&password=${password}&name=${name}&email=${email}`, {
+    return fetch(`/api/user/register?username=${username}&password=${password}&name=${name}&email=${email}`, {
         method: "POST"
     }).then(t => t.json())
 }

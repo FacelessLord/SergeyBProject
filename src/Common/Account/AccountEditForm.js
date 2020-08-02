@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 
 async function getUserData() {
-    return fetch(`/api/userData?username=${window.user.username}&accessToken=${window.user.accessToken}`)
+    return fetch(`/api/user/data?username=${window.user.username}&accessToken=${window.user.accessToken}`)
         .then(t => t.json())
         .catch(_ => {
         })

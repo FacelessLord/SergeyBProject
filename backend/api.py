@@ -43,7 +43,107 @@ images = ImageController(db)
 mailer = MailController(app, db)
 
 
-@app.route('/api/userData', methods=['post'])
+@app.route('/time')
+def get_current_time():
+    return {'time': time.time()}
+
+
+# items
+@app.route('/api/items')
+def get_items_list():
+    args = request.args
+    count = args.get("count", -1, type=int)
+    category = args.get("category", "", type=str)
+    fromIndex = args.get("from", 0, type=int)
+    priceTo = args.get("priceTo", 0, type=float)
+    priceFrom = args.get("priceFrom", 0, type=float)
+    providers = FINQ(request.args.get('providers', "", type=str).split(',')).map(str.strip).to_list()
+
+    if len(providers) == 1 and len(providers[0]) == 0:
+        providers = []
+
+    return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
+
+
+@app.route('/api/items/add', methods=['post'])
+def add_item_to_cart():
+    item_id = request.args.get("itemId", -1, type=int)
+    accessToken = request.args.get('accessToken', "")
+    username = request.args.get('username', "")
+    amount = request.args.get('amount', 0, type=int)
+
+    return products.add_item_to_cart(item_id, username, accessToken, amount)
+
+
+@app.route("/api/items/cart")
+def get_cart_for_user():
+    accessToken = request.args.get('accessToken', "")
+    username = request.args.get('username', "")
+
+    return products.get_cart_for_user(username, accessToken)
+
+
+@app.route('/api/items/data')
+def get_item_data():
+    item_id = request.args.get("itemId", -1)
+
+    product = db.get_product(item_id)
+    if product:
+        return {"success": True,
+                "provider_id": product.provider_id,
+                "id": product.id,
+                "description": product.description,
+                "price": product.price,
+                "name": product.name,
+                "in_stock": product.in_stock,
+                "img_count": product.img_count,
+                "category": product.category_id}
+    else:
+        return {"success": False, "reason": "noItem"}
+
+
+# providers
+@app.route('/api/providers')
+def get_provider_list():
+    category = request.args.get("category", "*", type=str)
+    print(category)
+    return providers.get_provider_list(category)
+
+
+@app.route('/api/providers/name')
+def get_provider_name():
+    provider_id = request.args.get("providerId", "-1", type=str)
+    provider = db.get_provider(provider_id)
+
+    if provider:
+        return {"success": True, "name": provider.name}
+    return {"success": False, "reason": "noprovider"}
+
+
+@app.route('/api/categories')
+def get_category_list():
+    return categories.get_category_list()
+
+
+# images
+@app.route('/api/images/main')
+def get_main_icon():
+    product_id = request.args.get("id", -1)
+
+    return images.get_main_image(product_id)
+
+
+@app.route('/api/images/forItem')
+def get_product_image():
+    product_id = request.args.get("id", -1)
+    image_id = request.args.get("imgId", 0)
+    product_id = request.args.get("id", -1)
+
+    return images.get_main_image(product_id)
+
+
+# user
+@app.route('/api/user/data', methods=['post'])
 def set_user_data():
     username = request.args.get('username')
     accessToken = request.args.get('accessToken')
@@ -66,7 +166,7 @@ def set_user_data():
                 "reason": "noUser"}
 
 
-@app.route('/api/userData', methods=['get'])
+@app.route('/api/user/data', methods=['get'])
 def get_user_data():
     username = request.args.get('username')
     accessToken = request.args.get('accessToken')
@@ -87,7 +187,7 @@ def get_user_data():
                 "reason": "noUser"}
 
 
-@app.route('/api/register', methods=['post'])
+@app.route('/api/user/register', methods=['post'])
 def register():
     username = request.args.get('username')
     name = FINQ(request.args.get('name', type=str).split(',')).map(str.strip).to_list()
@@ -110,7 +210,7 @@ def register():
     return {"success": True}
 
 
-@app.route('/api/confirmRegister')
+@app.route('/api/user/confirmRegister')
 def confirm_register():
     username = request.args.get('username')
     token = request.args.get('token')
@@ -123,7 +223,7 @@ def confirm_register():
     return {"success": False}
 
 
-@app.route('/api/login', methods=['post', 'get'])
+@app.route('/api/user/login', methods=['post', 'get'])
 def login():
     accessToken = ""
     message = ''
@@ -149,7 +249,7 @@ def login():
     return {"message": message, "accessToken": accessToken}
 
 
-@app.route('/api/check_auth')
+@app.route('/api/user/check_auth')
 def check_auth():
     username = request.args.get('username')
     accessToken = request.args.get('accessToken', type=str)
@@ -157,7 +257,7 @@ def check_auth():
     return {"result": user is not None and user.accessToken == accessToken}
 
 
-@app.route('/api/logout', methods=['post'])
+@app.route('/api/user/logout', methods=['post'])
 def logout():
     accessToken = request.headers['accessToken']
     username = request.headers['username']
@@ -165,99 +265,3 @@ def logout():
     if user:
         return {"supported": True, "unloaded": user.unload(accessToken)}
     return {"supported": False}  # user doesn't exist
-
-
-@app.route('/time')
-def get_current_time():
-    return {'time': time.time()}
-
-
-@app.route('/api/addItem', methods=['post'])
-def add_item_to_cart():
-    item_id = request.args.get("itemId", -1, type=int)
-    accessToken = request.args.get('accessToken', "")
-    username = request.args.get('username', "")
-    amount = request.args.get('amount', 0, type=int)
-
-    return products.add_item_to_cart(item_id, username, accessToken, amount)
-
-
-@app.route("/api/items/cart")
-def get_cart_for_user():
-    accessToken = request.args.get('accessToken', "")
-    username = request.args.get('username', "")
-
-    return products.get_cart_for_user(username, accessToken)
-
-
-@app.route('/api/providers')
-def get_provider_list():
-    category = request.args.get("category", "*", type=str)
-    print(category)
-    return providers.get_provider_list(category)
-
-
-@app.route('/api/providerName')
-def get_provider_name():
-    provider_id = request.args.get("providerId", "-1", type=str)
-    provider = db.get_provider(provider_id)
-
-    if provider:
-        return {"success": True, "name": provider.name}
-    return {"success": False, "reason": "noprovider"}
-
-
-@app.route('/api/categories')
-def get_category_list():
-    return categories.get_category_list()
-
-
-@app.route('/api/items')
-def get_items_list():
-    args = request.args
-    count = args.get("count", -1, type=int)
-    category = args.get("category", "", type=str)
-    fromIndex = args.get("from", 0, type=int)
-    priceTo = args.get("priceTo", 0, type=float)
-    priceFrom = args.get("priceFrom", 0, type=float)
-    providers = FINQ(request.args.get('providers', "", type=str).split(',')).map(str.strip).to_list()
-
-    if len(providers) == 1 and len(providers[0]) == 0:
-        providers = []
-
-    return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
-
-
-@app.route('/api/item/data')
-def get_item_data():
-    item_id = request.args.get("itemId", -1)
-
-    product = db.get_product(item_id)
-    if product:
-        return {"success": True,
-                "provider_id": product.provider_id,
-                "id": product.id,
-                "description": product.description,
-                "price": product.price,
-                "name": product.name,
-                "in_stock": product.in_stock,
-                "img_count": product.img_count,
-                "category": product.category_id}
-    else:
-        return {"success": False, "reason": "noItem"}
-
-
-@app.route('/api/images/main')
-def get_main_icon():
-    product_id = request.args.get("id", -1)
-
-    return images.get_main_image(product_id)
-
-
-@app.route('/api/images/forItem')
-def get_product_image():
-    product_id = request.args.get("id", -1)
-    image_id = request.args.get("imgId", 0)
-    product_id = request.args.get("id", -1)
-
-    return images.get_main_image(product_id)

@@ -13,9 +13,10 @@ async function getCart() {
     return await fetch(`/api/items/cart?accessToken=${window.user.accessToken}&username=${window.user.username}`)
         .catch(r => "{}")
         .then(t => t.json())
-        .then(t => {
+        .then(async t => {
             if (t.success) {
-                t.items.map(async v => v.provider = (await fetch(`/api/providerName?providerId=${v.provider_id}`).then(t => t.json())).name)
+                for (let i of t.items)
+                    i.provider = (await fetch(`/api/providers/name?providerId=${i.provider_id}`).then(t => t.json())).name
                 let summary = 0
                 let count = 0
                 for (let i of t.items) {

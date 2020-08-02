@@ -5,9 +5,9 @@ import {useAwait} from "../Common/Awaiter";
 
 
 async function getItemData(item) {
-    return fetch(`/api/item/data?itemId=${item}`).then(t => t.json())
+    return fetch(`/api/items/data?itemId=${item}`).then(t => t.json())
         .then(async t => {
-            t.provider = (await fetch(`/api/providerName?providerId=${t.provider_id}`).then(t => t.json())).name;
+            t.provider = (await fetch(`/api/providers/name?providerId=${t.provider_id}`).then(t => t.json())).name;
             return t
         })
 }
