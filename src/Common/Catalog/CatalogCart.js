@@ -31,6 +31,12 @@ async function getCart() {
         })
 }
 
+async function orderCart() {
+    await fetch(`/api/cart/order?username=${window.user.username}&accessToken=${window.user.accessToken}`, {
+        method: "POST"
+    })
+}
+
 function wrapCart(data, type) {
     const cart = data.items;
     if ("err" in data) {
