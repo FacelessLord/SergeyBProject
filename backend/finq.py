@@ -44,6 +44,9 @@ class FINQ:
     def peek(self, func=lambda f: f):
         return FINQPeek(self, func)
 
+    def first(self):
+        return next(iter(self))
+
     def to_list(self):
         return list(self)
 
@@ -110,10 +113,10 @@ class FINQReduce(FINQ):
     def __init__(self, source: Iterable, reductor: Callable, first=None):
         super().__init__(source)
         self.reductor = reductor
-        self.first = first
+        self.firstValue = first
 
     def __iter__(self):
-        result = self.first
+        result = self.firstValue
         for item in self.source:
             if not result:
                 result = item
