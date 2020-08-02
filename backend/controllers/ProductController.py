@@ -37,38 +37,3 @@ class ProductController(Controller):
         print(catalogList)
         return {"items": catalogList}
 
-    def add_item_to_cart(self, item_id, username, accessToken, amount):
-        if amount <= 0:
-            return {"success": False, "reason": "wrongAmount"}
-        user = self.db.get_user_by_name(username)
-        if not user:
-            return {"success": False, "reason": "nouser"}
-        if user.accessToken != accessToken:
-            return {"success": False, "reason": "not_authorized"}
-        self.db.add_item_to_cart(customer=user.id, product=item_id, amount=amount)
-        self.db.commit()
-        return {"success": True}
-
-    def get_cart_for_user(self, username, accessToken):
-        user = self.db.get_user_by_name(username)
-        if not user:
-            return {"success": False, "reason": "nouser"}
-        if user.accessToken != accessToken:
-            return {"success": False, "reason": "not_authorized"}
-
-        cart = FINQ(user.cart).map(self.createBatchJson).to_list()
-        print(cart)
-        return {'items': cart, "success": True}
-
-    def createBatchJson(self, batch: ProductBatch):
-        product = batch.product
-        return {
-            "cardId": product.id,
-            "batchId": batch.id,
-            "header": product.name,
-            "description": product.description,
-            "provider_id": product.provider.id,
-            "price": product.price,
-            "summary": product.price * batch.amount,
-            "amount": batch.amount
-        }

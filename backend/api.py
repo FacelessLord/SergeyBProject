@@ -5,6 +5,7 @@ from flask import Flask, request
 from werkzeug.security import generate_password_hash
 
 import backend.controllers.DatabaseController as dbc
+from backend.controllers.CartController import CartController
 from backend.controllers.CategoryController import CategoryController
 from backend.controllers.ImageController import ImageController
 from backend.controllers.MailController import MailController
@@ -39,6 +40,7 @@ db = dbc.DatabaseController(app)
 providers = ProviderController(db)
 categories = CategoryController(db)
 products = ProductController(db)
+carts = CartController(db)
 images = ImageController(db)
 mailer = MailController(app, db)
 
@@ -65,24 +67,6 @@ def get_items_list():
     return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
 
 
-@app.route('/api/items/add', methods=['post'])
-def add_item_to_cart():
-    item_id = request.args.get("itemId", -1, type=int)
-    accessToken = request.args.get('accessToken', "")
-    username = request.args.get('username', "")
-    amount = request.args.get('amount', 0, type=int)
-
-    return products.add_item_to_cart(item_id, username, accessToken, amount)
-
-
-@app.route("/api/items/cart")
-def get_cart_for_user():
-    accessToken = request.args.get('accessToken', "")
-    username = request.args.get('username', "")
-
-    return products.get_cart_for_user(username, accessToken)
-
-
 @app.route('/api/items/data')
 def get_item_data():
     item_id = request.args.get("itemId", -1)
@@ -100,6 +84,40 @@ def get_item_data():
                 "category": product.category_id}
     else:
         return {"success": False, "reason": "noItem"}
+
+
+# cart
+@app.route("/api/cart")
+def get_cart_for_user():
+    accessToken = request.args.get('accessToken', "")
+    username = request.args.get('username', "")
+
+    return carts.get_cart_for_user(username, accessToken)
+
+
+@app.route('/api/cart/removeBatch', methods=["POST"])
+def remove_item_from_cart():
+    accessToken = request.args.get('accessToken', "")
+    username = request.args.get('username', "")
+    batchId = request.args.get('batchId', 0, type=int)
+    return carts.remove_item_from_cart(batchId, username, accessToken)
+
+
+@app.route('/api/cart/order', methods=["POST"])
+def order_cart():
+    accessToken = request.args.get('accessToken', "")
+    username = request.args.get('username', "")
+    return carts.order(username, accessToken)
+
+
+@app.route('/api/cart/add', methods=['post'])
+def add_item_to_cart():
+    item_id = request.args.get("itemId", -1, type=int)
+    accessToken = request.args.get('accessToken', "")
+    username = request.args.get('username', "")
+    amount = request.args.get('amount', 0, type=int)
+
+    return carts.add_item_to_cart(item_id, username, accessToken, amount)
 
 
 # providers
