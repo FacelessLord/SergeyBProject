@@ -46,7 +46,7 @@ function wrapCart(data, type) {
     if (cart.length === 0) {
         return (<div>
             <span>Вы еще ничего не добавили в корзину</span><br/>
-            <Link to={"/catalog"} className={"catalog buttons button source"}>Перейти в каталог</Link>
+            <Link to={"/catalog"} className={"catalog buttons button type0 source"}>Перейти в каталог</Link>
         </div>)
     }
     const cartHtml = cart.map((c, i) => <ItemCartCard batchId={c.batchId} type={type} key={i} cardId={c.cardId}

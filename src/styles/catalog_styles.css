@@ -394,7 +394,7 @@ a.catalog.buttons.button.more {
 .catalog.buttons.button.source {
     position: relative;
     height: 16px;
-    left: calc(50% - 80px);
+    align-self: center;
     top: 10px;
     line-height: 16px;
 }
