@@ -123,25 +123,11 @@
 
 }
 
-.catalog.buttons.button.remove.fa.fa-trash-o {
-    border-radius: 4px;
-    padding: 4px;
-    line-height: 12px;
-
-    width: 24px;
-    height: 24px;
-    background: #C4C4C4;
-}
-
 .catalog.item.card.form {
     display: flex;
     justify-content: space-between;
 
     width: 100%;
-}
-
-.catalog.buttons.button.remove.fa.fa-trash-o:hover {
-    background-color: #ABABAB;
 }
 
 /*Items*/
@@ -354,9 +340,7 @@
     display: inline-block;
     position: relative;
     margin-bottom: 4px;
-    left: 16px;
-    font-size: 16px;
-    text-align: center;
+    font-size: 20px;
 }
 
 .catalog.items.item.text.attributes {
@@ -403,42 +387,21 @@ a {
 
 a.catalog.buttons.button.more {
     position: relative;
-    width: 160px;
-    height: 32px;
     left: 400px;
     top: 10px;
-    padding: 8px;
-    line-height: 30px;
-
-    color: black;
-    font-size: 14px;
-    background: #27AE60;
-    border: outset #27AE60 2px;
-    border-radius: 4px;
-
-    text-align: center;
 }
 
 .catalog.buttons.button.source {
     position: relative;
-    width: 160px;
     height: 16px;
     left: calc(50% - 80px);
     top: 10px;
-    padding: 8px;
     line-height: 16px;
-
-    color: black;
-    font-size: 14px;
-    background: #27AE60;
-    border: outset #27AE60 2px;
-    border-radius: 4px;
-
-    text-align: center;
 }
 
-.catalog.buttons.button.more:hover {
-    background-color: #6FCF97;
+
+.catalog.buttons.button.order {
+    position: relative;
 }
 
 .catalog.items.about {
@@ -449,3 +412,15 @@ a.catalog.buttons.button.more {
 
     margin-bottom: 8px;
 }
+
+.catalog.summary.value {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.catalog.summary.form {
+    display: flex;
+    flex-direction: column;
+}
+

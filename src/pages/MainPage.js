@@ -9,7 +9,7 @@ export function MainPage({category}) {
         <div className="site main panel">
             <ResourceDescription/>
             <Catalog type={window.user.view} category={category} filter={{display: false, priceFrom: 0, priceTo: 0, providers: []}}/>
-            <Link to={"/catalog"} className="catalog buttons button more">
+            <Link to={"/catalog"} className="catalog buttons button type0 more">
                 Показать полностью
             </Link>
         </div>

@@ -22,20 +22,20 @@ export function Header({setCategory}) {
     const [userSelected, setUserSelected] = useState(false);
     return (<div className="header wrapper">
         <div className="header buttons container">
-            <Link to="/" className="header buttons button fa fa-home"/>
+            <Link to="/" className="header buttons button type1 fa fa-home"/>
             <div className="header buttons wrapper"
                  onMouseEnter={onSuperCatalogButtonSelect}
                  onMouseLeave={onSuperCatalogButtonDeselect}>
-                <Link to={"/catalog"} onClick={() => setCategory("")} className="header buttons button catalog"
+                <Link to={"/catalog"} onClick={() => setCategory("")} className="header buttons button type1 catalogButton"
                       id="button_catalog">
                     Каталог
                 </Link>
                 <Categories setCategory={setCategory}/>
             </div>
-            <Link to={"/providers"} className="header buttons button providers" id="button_providers">
+            <Link to={"/providers"} className="header buttons button type1 providers" id="button_providers">
                 Поставщикам
             </Link>
-            <Link to={"/cart"} className="header buttons button cart" id="button_cart_main">
+            <Link to={"/cart"} className="header buttons button type1 cart" id="button_cart_main">
                 Корзина
             </Link>
         </div>

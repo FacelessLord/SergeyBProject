@@ -13,6 +13,8 @@ import {ItemPage} from "./pages/ItemPage";
 import {Header} from "./Common/Header/Header";
 import {Footer} from "./Common/Footer/Footer";
 
+import "./styles/button_styles.css"
+
 let _user = null;
 
 function Main() {
