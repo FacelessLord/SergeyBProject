@@ -15,28 +15,30 @@ function wrapData(data, imgId, setImgId, count, setCount, message, setMessage) {
 
     return (<div className={"catalogBig items item card"}>
         <div className={"catalogBig images"}>
-            <button disabled={imgId === 0} className={"catalogBig fa fa-angle-left"} id={"img_left_button"}
+            <button disabled={imgId <= 0} className={"catalogBig buttons button type3 left"}
+                    id={"img_left_button"}
                     onClick={() => {
-                        const newValue = Math.max(0, imgId - 1);
+                        const newValue = imgId - 1;
                         if (newValue !== imgId) {
                             document.getElementById(`item_${imgId}`).classList.add("hidden")
                             document.getElementById(`item_${newValue}`).classList.remove("hidden")
                         }
                         setImgId(newValue)
-                    }}/>
+                    }}>{"<"}</button>
             <img className="catalogBig items item img" id={`item_${0}`}
                  src={`/api/images/forItem?id=${data.id}&imgId=${0}`}
                  alt={"Картинка товара"}/>
             {imgList}
-            <button disabled={imgId >= data.img_count - 1} className={"catalogBig fa fa-angle-right"}
+            <button disabled={imgId >= data.img_count - 1}
+                    className={"catalogBig buttons button type3 right"}
                     id={"img_right_button"} onClick={() => {
-                const newValue = Math.min(data.img_count - 1, imgId + 1);
+                const newValue = imgId + 1;
                 if (newValue !== imgId) {
                     document.getElementById(`item_${imgId}`).classList.add("hidden")
                     document.getElementById(`item_${newValue}`).classList.remove("hidden")
                 }
                 setImgId(newValue)
-            }}/>
+            }}>{">"}</button>
         </div>
         <div className="catalogBig items item text attributes">
             <span className="catalogBig items item text provider">
