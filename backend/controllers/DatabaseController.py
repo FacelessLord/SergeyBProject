@@ -270,11 +270,14 @@ class DatabaseController:
         return provider
 
     def set_batch_order(self, batch: ProductBatch, order: Order):
+        print(order.id)
         batch.order_id = order.id
         batch.ordered = True
 
     def create_order(self, user: User):
         order = Order(customer_id=user.id)
+        self.db.session.add(order)
+        self.commit()
         summary = FINQ(user.cart) \
             .filter(lambda a: not a.ordered) \
             .peek(lambda a: self.set_batch_order(a, order)) \

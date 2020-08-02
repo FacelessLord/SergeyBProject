@@ -154,10 +154,23 @@ def get_main_icon():
 @app.route('/api/images/forItem')
 def get_product_image():
     product_id = request.args.get("id", -1)
-    image_id = request.args.get("imgId", 0)
-    product_id = request.args.get("id", -1)
+    image_id = request.args.get("imgId", 0, type=int)
 
-    return images.get_main_image(product_id)
+    return images.get_image_for_id(product_id, image_id)
+
+
+@app.route('/api/images/load', methods=['PUT'])
+def load_image():
+    username = request.args.get('username')  # ensure user
+    accessToken = request.args.get('accessToken')
+    product_id = request.args.get('productId', -1, type=int)
+    user = db.get_user_by_name(username)
+    if not user:
+        return {"success": False, "reason": "nouser"}
+    if user.accessToken != accessToken:
+        return {"success": False, "reason": "noauth" if accessToken == "" else "reauth"}
+
+    return images.load_image(product_id, request.data)
 
 
 # user
