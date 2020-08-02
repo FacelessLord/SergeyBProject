@@ -10,7 +10,7 @@ export function CatalogCart({type}) {
 }
 
 async function getCart() {
-    return await fetch(`/api/items/cart?accessToken=${window.user.accessToken}&username=${window.user.username}`)
+    return await fetch(`/api/cart?accessToken=${window.user.accessToken}&username=${window.user.username}`)
         .catch(r => "{}")
         .then(t => t.json())
         .then(async t => {

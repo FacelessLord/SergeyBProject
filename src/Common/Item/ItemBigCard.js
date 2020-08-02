@@ -5,7 +5,7 @@ import {Counter} from "../Counter";
 
 function addItemToCart(data, count, setMessage) {
     return () => {
-        fetch(`/api/items/add?itemId=${data.id}&accessToken=${window.user.accessToken}&username=${window.user.username}&amount=${count}`, {method: "POST"})
+        fetch(`/api/cart/add?itemId=${data.id}&accessToken=${window.user.accessToken}&username=${window.user.username}&amount=${count}`, {method: "POST"})
             .then(t => t.json())
             .then(j => {
                 if (j.success) {
