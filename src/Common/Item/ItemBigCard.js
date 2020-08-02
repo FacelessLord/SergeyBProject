@@ -3,6 +3,29 @@ import "../../styles/catalogBig.css"
 import {Counter} from "../Counter";
 
 
+function addItemToCart(data, count, setMessage) {
+    return () => {
+        fetch(`/api/addItem?itemId=${data.id}&accessToken=${window.user.accessToken}&username=${window.user.username}&amount=${count}`, {method: "POST"})
+            .then(t => t.json())
+            .then(j => {
+                if (j.success) {
+                    setMessage("Товар добавлен в корзину")
+                } else
+                    switch (j.reason) {
+                        case "wrongAmount":
+                            setMessage("Количество должно быть больше нуля");
+                            break;
+                        case "nouser":
+                        case "not_authorized":
+                            setMessage("Для заказа товаров необходимо выполнить вход");
+                            break;
+                        default:
+                            break;
+                    }
+            })
+    };
+}
+
 function wrapData(data, imgId, setImgId, count, setCount, message, setMessage) {
 
     const imgList = []
@@ -54,28 +77,12 @@ function wrapData(data, imgId, setImgId, count, setCount, message, setMessage) {
         <div className={"catalogBig buttons column"}>
             <div className={"catalogBig buttons container"}>
                 {message ? <div className={"account message"} id={"account_message"}>{message}</div> : ""}
-                <Counter from={1} to={2000} value={count} setValue={setCount} className={"catalogBig"}/>
-                <button className={"catalogBig buttons button add"} onClick={() => {
-                    fetch(`/api/addItem?itemId=${data.id}&accessToken=${window.user.accessToken}&username=${window.user.username}&amount=${count}`, {method: "POST"})
-                        .then(t => t.json())
-                        .then(j => {
-                            if (j.success) {
-                                setMessage("Товар добавлен в корзину")
-                            } else
-                                switch (j.reason) {
-                                    case "wrongAmount":
-                                        setMessage("Количество должно быть больше нуля");
-                                        break;
-                                    case "nouser":
-                                    case "not_authorized":
-                                        setMessage("Для заказа товаров необходимо выполнить вход");
-                                        break;
-                                    default:
-                                        break;
-                                }
-                        })
-                }}>Добавить в корзину
-                </button>
+                <div className={"catalogBig cartButtons"}>
+                    <Counter from={1} to={2000} value={count} setValue={setCount} className={"catalogBig"}/>
+                    <button className={"catalogBig buttons button type0 add"}
+                            onClick={addItemToCart(data, count, setMessage)}>Добавить в корзину
+                    </button>
+                </div>
             </div>
         </div>
     </div>)
