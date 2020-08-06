@@ -7,16 +7,9 @@ class CartController(Controller):
     def __init__(self, db: dbc):
         super().__init__(db)
 
-    def get_cart_for_user(self, username, accessToken):
-        user = self.db.get_user_by_name(username)
-        if not user:
-            return {"success": False, "reason": "nouser"}
-        if user.accessToken != accessToken:
-            return {"success": False, "reason": "not_authorized"}
-
+    def get_cart_for_user(self, user):
         cart = FINQ(user.cart).filter(lambda b: not b.ordered).map(self.createBatchJson).to_list()
-        print(cart)
-        return {'items': cart, "success": True}
+        return cart
 
     def createBatchJson(self, batch: ProductBatch):
         product = batch.product
@@ -31,36 +24,22 @@ class CartController(Controller):
             "amount": batch.amount
         }
 
-    def add_item_to_cart(self, item_id, username, accessToken, amount):
+    def add_item_to_cart(self, item_id, user, amount):
         if amount <= 0:
-            return {"success": False, "reason": "wrongAmount"}
-        user = self.db.get_user_by_name(username)
-        if not user:
-            return {"success": False, "reason": "nouser"}
-        if user.accessToken != accessToken:
-            return {"success": False, "reason": "not_authorized"}
+            raise Exception("wrongAmount")
         self.db.add_item_to_cart(customer=user.id, product=item_id, amount=amount)
         self.db.commit()
-        return {"success": True}
 
-    def remove_item_from_cart(self, batch_id, username, accessToken):
-        user = self.db.get_user_by_name(username)
-        if not user:
-            return {"success": False, "reason": "nouser"}
-        if user.accessToken != accessToken:
-            return {"success": False, "reason": "not_authorized"}
+    def remove_item_from_cart(self, batch_id, user):
         batch = self.db.get_item_from_cart(batch_id)
         if not batch:
-            return {"success": False, "reason": "nobatch"}
+            raise Exception("nobatch")
+        if batch.customer != user:
+            raise Exception("nopermission")
+
         self.db.remove_batch(batch)
         self.db.commit()
 
-    def order(self, username, accessToken):
-        user = self.db.get_user_by_name(username)
-        if not user:
-            return {"success": False, "reason": "nouser"}
-        if user.accessToken != accessToken:
-            return {"success": False, "reason": "not_authorized"}
+    def order(self, user):
         self.db.create_order(user)
         self.db.commit()
-        return {"success": True}
