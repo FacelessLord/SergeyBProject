@@ -41,4 +41,8 @@ html, body {
 .site.main.panel {
     min-height: calc(100vh - 300px);
     margin-right: 208px;
+
+    display: grid;
+    grid-column: auto;
+    grid-row-gap: 8px
 }

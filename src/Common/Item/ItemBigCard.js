@@ -3,7 +3,7 @@ import "../../styles/catalogBig.css"
 import {Counter} from "../Counter";
 
 
-function addItemToCart(data, count, setMessage) {
+export function addItemToCart(data, count, setMessage) {
     return () => {
         fetch(`/api/cart/add?itemId=${data.id}&accessToken=${window.user.accessToken}&username=${window.user.username}&amount=${count}`, {method: "POST"})
             .then(t => t.json())
@@ -26,6 +26,35 @@ function addItemToCart(data, count, setMessage) {
     };
 }
 
+export function ItemImageShow({imgId, setImgId, data, imgList}) {
+    return (<div className={"catalogBig images"}>
+        <button disabled={imgId <= 0} className={"catalogBig buttons button type3 left"}
+                id={"img_left_button"}
+                onClick={() => {
+                    const newValue = imgId - 1;
+                    if (newValue !== imgId) {
+                        document.getElementById(`item_${imgId}`).classList.add("hidden")
+                        document.getElementById(`item_${newValue}`).classList.remove("hidden")
+                    }
+                    setImgId(newValue)
+                }}>{"<"}</button>
+        <img className="catalogBig items item img" id={`item_${0}`}
+             src={`/api/images/forItem?id=${data.id}&imgId=${0}`}
+             alt={"Картинка товара"}/>
+        {imgList}
+        <button disabled={imgId >= data.img_count - 1}
+                className={"catalogBig buttons button type3 right"}
+                id={"img_right_button"} onClick={() => {
+            const newValue = imgId + 1;
+            if (newValue !== imgId) {
+                document.getElementById(`item_${imgId}`).classList.add("hidden")
+                document.getElementById(`item_${newValue}`).classList.remove("hidden")
+            }
+            setImgId(newValue)
+        }}>{">"}</button>
+    </div>);
+}
+
 function wrapData(data, imgId, setImgId, count, setCount, message, setMessage) {
 
     const imgList = []
@@ -37,32 +66,7 @@ function wrapData(data, imgId, setImgId, count, setCount, message, setMessage) {
 
 
     return (<div className={"catalogBig items item card"}>
-        <div className={"catalogBig images"}>
-            <button disabled={imgId <= 0} className={"catalogBig buttons button type3 left"}
-                    id={"img_left_button"}
-                    onClick={() => {
-                        const newValue = imgId - 1;
-                        if (newValue !== imgId) {
-                            document.getElementById(`item_${imgId}`).classList.add("hidden")
-                            document.getElementById(`item_${newValue}`).classList.remove("hidden")
-                        }
-                        setImgId(newValue)
-                    }}>{"<"}</button>
-            <img className="catalogBig items item img" id={`item_${0}`}
-                 src={`/api/images/forItem?id=${data.id}&imgId=${0}`}
-                 alt={"Картинка товара"}/>
-            {imgList}
-            <button disabled={imgId >= data.img_count - 1}
-                    className={"catalogBig buttons button type3 right"}
-                    id={"img_right_button"} onClick={() => {
-                const newValue = imgId + 1;
-                if (newValue !== imgId) {
-                    document.getElementById(`item_${imgId}`).classList.add("hidden")
-                    document.getElementById(`item_${newValue}`).classList.remove("hidden")
-                }
-                setImgId(newValue)
-            }}>{">"}</button>
-        </div>
+        <ItemImageShow imgId={imgId} setImgId={setImgId} data={data} imgList={imgList}/>
         <div className="catalogBig items item text attributes">
             <span className="catalogBig items item text provider">
               Изготовитель: {data.provider}
