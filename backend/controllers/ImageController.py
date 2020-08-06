@@ -31,7 +31,6 @@ class ImageController(Controller):
         if not os.path.exists(f"images/{product_id}"):
             os.mkdir(f"images/{product_id}")
 
-        print(image[:100])
         with open(f"images/{product_id}/img_{product.img_count}", 'wb') as f:
             f.write(base64.b64decode(image[len("data:image/png;base64,"):]))
 

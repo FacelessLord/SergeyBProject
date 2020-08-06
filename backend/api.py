@@ -5,6 +5,7 @@ from flask import Flask, request
 from werkzeug.security import generate_password_hash
 
 import backend.controllers.DatabaseController as dbc
+from backend.authlib import auth_user
 from backend.controllers.CartController import CartController
 from backend.controllers.CategoryController import CategoryController
 from backend.controllers.ImageController import ImageController
@@ -12,17 +13,18 @@ from backend.controllers.MailController import MailController
 from backend.controllers.ProductController import ProductController
 from backend.controllers.ProviderController import ProviderController
 from backend.finq import FINQ
+from backend.utils import send_image
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/UserData.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+decoder = JSONDecoder()
+
 
 def read_sensible_data():
-    global json
     sensible_data_stream = open('../sensible_data.json', 'rt')
     json = '\n'.join(sensible_data_stream.readlines())
-    decoder = JSONDecoder()
     sensible_data_stream.close()
     return decoder.decode(json)
 
@@ -67,7 +69,7 @@ def get_items_list():
     return products.get_catalog(count, fromIndex, priceTo, priceFrom, providers, category)
 
 
-@app.route('/api/items/data')
+@app.route('/api/items/data', methods=['get'])
 def get_item_data():
     item_id = request.args.get("itemId", -1)
 
@@ -81,7 +83,37 @@ def get_item_data():
                 "name": product.name,
                 "in_stock": product.in_stock,
                 "img_count": product.img_count,
-                "category": product.category_id}
+                "category": product.category.create_category_path()}
+    else:
+        return {"success": False, "reason": "noItem"}
+
+
+@app.route('/api/items/data', methods=['post'])
+def set_item_data():
+    accessToken = request.args.get('accessToken', "")
+    username = request.args.get('username', "")
+    auth_resp, user = auth_user(db, username, accessToken)
+
+    # todo check permissions
+    data = decoder.decode(request.data.decode())
+    print(data)
+    product = db.get_product(data['id'])
+    if product:
+        provider = db.get_provider_by_name(data['provider'])
+        if not provider:
+            provider = db.add_provider(data['provider'])
+        updated_category = db.create_category_from_path(data['category'])
+        db.commit()
+
+        product.img_count = data['img_count']
+        product.name = data['name']
+        product.description = data['description']
+        product.price = data['price']
+        product.in_stock = data['in_stock']
+        product.provider_id = provider.id
+        product.category_id = updated_category.id
+        db.commit()
+        return {"success": True}
     else:
         return {"success": False, "reason": "noItem"}
 
@@ -92,7 +124,9 @@ def get_cart_for_user():
     accessToken = request.args.get('accessToken', "")
     username = request.args.get('username', "")
 
-    return carts.get_cart_for_user(username, accessToken)
+    return auth_user(db, username, accessToken)\
+        .then(carts.get_cart_for_user)\
+        .as_dict()
 
 
 @app.route('/api/cart/removeBatch', methods=["POST"])
@@ -100,14 +134,17 @@ def remove_item_from_cart():
     accessToken = request.args.get('accessToken', "")
     username = request.args.get('username', "")
     batchId = request.args.get('batchId', 0, type=int)
-    return carts.remove_item_from_cart(batchId, username, accessToken)
+
+    return auth_user(db, username, accessToken)\
+        .then(lambda u: carts.remove_item_from_cart(batchId, u))\
+        .as_dict()
 
 
 @app.route('/api/cart/order', methods=["POST"])
 def order_cart():
     accessToken = request.args.get('accessToken', "")
     username = request.args.get('username', "")
-    return carts.order(username, accessToken)
+    return auth_user(db, username, accessToken).then(carts.order).as_dict()
 
 
 @app.route('/api/cart/add', methods=['post'])
@@ -117,7 +154,7 @@ def add_item_to_cart():
     username = request.args.get('username', "")
     amount = request.args.get('amount', 0, type=int)
 
-    return carts.add_item_to_cart(item_id, username, accessToken, amount)
+    return auth_user(db, username, accessToken).then(lambda u: carts.add_item_to_cart(item_id, u, amount)).as_dict()
 
 
 # providers
@@ -171,6 +208,11 @@ def load_image():
         return {"success": False, "reason": "noauth" if accessToken == "" else "reauth"}
 
     return images.load_image(product_id, request.data)
+
+
+@app.route('/api/images/empty', methods=['GET'])
+def empty_image():
+    return send_image(f"images/default.png")
 
 
 # user

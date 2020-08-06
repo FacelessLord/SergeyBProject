@@ -35,5 +35,5 @@ class ProductController(Controller):
                  })
         catalogList = catalog.to_list()
         print(catalogList)
-        return {"items": catalogList}
+        return {"value": catalogList}
 

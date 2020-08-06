@@ -86,6 +86,9 @@ class Category:
         nested = \
         parent_id = None
 
+    def create_category_path(selfc) -> str:
+        pass
+
 
 class UserRegistrar:
     id = \
@@ -224,6 +227,13 @@ class DatabaseController:
             sub_categories = db.relationship("Category", backref="parent", cascade='all,delete-orphan',
                                              remote_side=[id], single_parent=True)
 
+            def create_category_path(selfc) -> str:
+                print(selfc.name)
+                parent = self.get_category(selfc.parent_id)
+                if parent:
+                    return parent.create_category_path() + ":" + selfc.name
+                return selfc.name
+
         class Provider(db.Model):
             __tablename__ = 'providers'
             id = db.Column(db.Integer(), primary_key=True)
@@ -286,6 +296,25 @@ class DatabaseController:
         order.summary = summary
         self.db.session.add(order)
         return order
+
+    def create_category_from_path(self, path):
+        parts = path.split(':')
+        previous = None
+        depth = 1
+        for part in parts:
+            category = self.get_category_by_name(part)
+            if not category:
+                print(previous)
+                print(previous is None)
+                if previous is None:
+                    category = self.add_category(part, len(parts) > depth, -1)
+                else:
+                    category = self.add_category(part, len(parts) > depth, previous.id)
+
+            depth += 1
+            previous = category
+
+        return previous
 
     def add_item_to_cart(self, customer: int, product: int, amount: float):
         cart_item = ProductBatch(customer_id=customer, product_id=product, amount=amount)
