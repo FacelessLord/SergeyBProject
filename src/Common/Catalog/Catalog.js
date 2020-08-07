@@ -48,7 +48,7 @@ async function requestItems(maxCount, filter, category) {
         .then(async t => {
             console.log("req")
             for (let i = 0; i < t.value.length; i++) {
-                t.value[i].provider = (await fetch(`/api/providers/name?providerId=${t.value[i].provider}`).then(t => t.json())).name
+                t.value[i].provider = (await fetch(`/api/providers/name?providerId=${t.value[i].provider}`).then(t => t.json())).value
             }
             return t
         })
