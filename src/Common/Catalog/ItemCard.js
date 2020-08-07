@@ -63,13 +63,13 @@ export function CartPanelItem({batchId, cardId, img, header, provider, price, su
                   Изготовитель: {provider}
                 </span><br/>
                     <span className="catalog items item text price">
-                  Цена: {price}₽
+                  Цена: {price} ₽
                 </span><br/>
                     <span className="catalog items item text amount">
                   Количество: {amount}
                 </span><br/>
                     <span className="catalog items item text summary">
-                  Стоимость: {summary}
+                  Стоимость: {summary} ₽
                 </span><br/>
                 </div>
             </Link>
@@ -95,13 +95,13 @@ export function CartListItem({batchId, cardId, img, header, provider, price, sum
                     Изготовитель: {provider}
                 </span><br/>
                         <span className="catalog items item text price">
-                    Цена: {price}₽
+                    Цена: {price} ₽
                 </span><br/>
                         <span className="catalog items item text amount">
                     Количество: {amount}
                 </span><br/>
                         <span className="catalog items item text summary">
-                    Стоимость: {summary}
+                    Стоимость: {summary} ₽
                 </span><br/>
                     </div>
                 </div>
