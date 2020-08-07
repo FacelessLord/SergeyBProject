@@ -17,10 +17,6 @@ function getSetNameFunction(data, setData, id) {
 }
 
 export function AccountEditForm({userData, setUserData, message}) {
-    useEffect((() => {
-        if (userData.email === "")
-            loadUserData(setUserData)
-    }))
     return (<div className={"account form"}>
         {message ? <div className={"account message"} id={"account_message"}>{message}</div> : ""}
         <div className={"account block"}>
