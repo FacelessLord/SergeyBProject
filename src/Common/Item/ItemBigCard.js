@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import "../../styles/catalogBig.css"
 import {Counter} from "../Counter";
+import {Link} from "react-router-dom";
 
 
 export function addItemToCart(data, count, setMessage) {
@@ -29,7 +30,7 @@ export function addItemToCart(data, count, setMessage) {
     };
 }
 
-export function ItemImageShow({imgId, setImgId, data, imgList}) {
+export function ItemImageShow({imgId, setImgId, data, imgList, edit}) { // todo remove images
     return (<div className={"catalogBig images"}>
         <button disabled={imgId <= 0} className={"catalogBig buttons button type3 left"}
                 id={"img_left_button"}
@@ -86,9 +87,13 @@ function wrapData(data, imgId, setImgId, count, setCount, message, setMessage) {
                 {message ? <div className={"account message"} id={"account_message"}>{message}</div> : ""}
                 <div className={"catalogBig cartButtons"}>
                     <Counter from={1} to={2000} value={count} setValue={setCount} className={"catalogBig"}/>
-                    <button className={"catalogBig buttons button type0 add"}
-                            onClick={addItemToCart(data, count, setMessage)}>Добавить в корзину
-                    </button>
+                    <div  className={"catalogBig cartButtons green"}>
+                        {window.user.permission >0 ? <Link className={"catalogBig buttons button type0 edit"}
+                              to={`/item/edit/${data.id}`}>Редактировать</Link> : ""}
+                        <button className={"catalogBig buttons button type0 add"}
+                                onClick={addItemToCart(data, count, setMessage)}>Добавить в корзину
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import "../../styles/catalogBig.css"
 import {ItemImageShow} from "./ItemBigCard";
 
-function wrapData(data, imgId, setImgId, setData) {
+function wrapData(data, imgId, setImgId, setData, noimage) {
 
     const imgList = []
     for (let i = 1; i < data.img_count; i++) {
@@ -13,7 +13,7 @@ function wrapData(data, imgId, setImgId, setData) {
 
 
     return (<div className={"catalogBig items item card"}>
-        <ItemImageShow imgId={imgId} setImgId={setImgId} data={data} imgList={imgList}/>
+        {!noimage ? <ItemImageShow imgId={imgId} setImgId={setImgId} data={data} imgList={imgList}/> : ""}
         <div className="catalogBig items item text attributes">
             <span className="catalogBig items item text provider">
               Изготовитель: <input type={"name"} value={data.provider}
@@ -31,9 +31,9 @@ function wrapData(data, imgId, setImgId, setData) {
     </div>)
 }
 
-export function ItemEditBigCard({data, setData}) {
+export function ItemEditBigCard({data, setData, noimage}) {
     const [imgId, setImgId] = useState(0)
     if (data.success)
-        return wrapData(data, imgId, setImgId, setData)
+        return wrapData(data, imgId, setImgId, setData, noimage)
     return "Не удалось загрузить товар"
 }

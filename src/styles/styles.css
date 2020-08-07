@@ -34,7 +34,7 @@ html, body {
     position: relative;
     padding-left: 160px;
     padding-right: 208px;
-    width: 100%;
+    width: calc(100vw - 379px);
     min-height: 75vh;
 }
 
