@@ -39,18 +39,18 @@ export function ItemCardList({cardId, img, header, provider, price, inStock}) {
     </Link>)
 }
 
-export function ItemCartCard({batchId, type, cardId, img, header, provider, price, summary, amount}) {
+export function ItemCartCard({batchId, type, cardId, img, header, provider, price, summary, amount, callUpdate}) {
     switch (type) {
         case "list":
             return (<CartListItem batchId={batchId} cardId={cardId} header={header} img={img} amount={amount}
-                                  price={price} provider={provider} summary={summary}/>)
+                                  price={price} provider={provider} summary={summary} callUpdate={callUpdate}/>)
         default:
             return (<CartPanelItem batchId={batchId} cardId={cardId} header={header} img={img} amount={amount}
-                                   price={price} provider={provider} summary={summary}/>)
+                                   price={price} provider={provider} summary={summary} callUpdate={callUpdate}/>)
     }
 }
 
-export function CartPanelItem({batchId, cardId, img, header, provider, price, summary, amount}) {
+export function CartPanelItem({batchId, cardId, img, header, provider, price, summary, amount, callUpdate}) {
     return (<div className="catalog items item card" to={"item/" + cardId} id={cardId}>
         <Link to={"item/" + cardId} id={cardId} style={{padding: '0px', display: "contents"}}>
             <img className="catalog items item img" src={img} alt={"Картинка товара"}/>
@@ -74,14 +74,14 @@ export function CartPanelItem({batchId, cardId, img, header, provider, price, su
                 </div>
             </Link>
             <div className={"catalog buttons form"}>
-                <button onClick={() => removeItem(batchId)}
+                <button onClick={() => removeItem(batchId, callUpdate)}
                         className={"catalog buttons button remove type2 fa fa-trash-o"}/>
             </div>
         </div>
     </div>)
 }
 
-export function CartListItem({batchId, cardId, img, header, provider, price, summary, amount}) {
+export function CartListItem({batchId, cardId, img, header, provider, price, summary, amount, callUpdate}) {
     return (<div className="catalog items item card noHover">
         <Link to={"item/" + cardId} id={cardId} style={{padding: '0px', display: "contents"}}>
             <img className="catalog items item img" src={img} alt={"Product main icon"}/>
@@ -107,16 +107,16 @@ export function CartListItem({batchId, cardId, img, header, provider, price, sum
                 </div>
             </Link>
             <div className={"catalog buttons form"}>
-                <button onClick={() => removeItem(batchId)}
+                <button onClick={() => removeItem(batchId, callUpdate)}
                         className={"catalog buttons button remove type2 fa fa-trash-o"}/>
             </div>
         </div>
     </div>)
 }
 
-async function removeItem(batchId) {
+async function removeItem(batchId, callUpdate) {
     await fetch(`/api/cart/removeBatch?batchId=${batchId}`, {
         method: "POST",
         headers: {accessToken: window.user.accessToken, username: window.user.username}
-    })
+    }).then(callUpdate)
 }

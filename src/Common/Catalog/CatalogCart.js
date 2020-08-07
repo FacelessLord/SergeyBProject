@@ -6,7 +6,11 @@ import {ItemCartCard} from "./ItemCard";
 
 export function CatalogCart({type}) {
     const [cart, setCart] = useState({"items": []})
-    return useAwaitWrap(cart, setCart, getCart, d => d.success !== true, data => wrapCart(data, type), "Не удалось загрузить корзину. Попробуйте позже")
+    const err = "Не удалось загрузить корзину. Попробуйте позже"
+    const callUpdate = () => getCart().then(setCart).catch(r => setCart(err))
+    return useAwaitWrap(cart, setCart, getCart, d => d.success !== true,
+        data => wrapCart(data, type, callUpdate),
+        err)
 }
 
 async function getCart() {
@@ -24,11 +28,12 @@ async function getCart() {
                 let count = 0
                 for (let i of t.value) {
                     summary += i.summary
+                    console.log(summary)
                     count += i.amount;
                 }
                 const summaryStr = `${summary}`;
                 const pointIndex = summaryStr.indexOf('.');
-                t.summary = summaryStr.slice(0, Math.min(pointIndex + 3, summaryStr.length));
+                t.summary = ~pointIndex ? summaryStr.slice(0, Math.min(pointIndex + 3, summaryStr.length)) : summaryStr;
                 t.count = count
             }
             return t
@@ -42,7 +47,7 @@ async function orderCart() {
     })
 }
 
-function wrapCart(data, type) {
+function wrapCart(data, type, callUpdate) {
     const cart = data.value;
     if ("err" in data) {
         return data.err
@@ -56,7 +61,8 @@ function wrapCart(data, type) {
     const cartHtml = cart.map((c, i) => <ItemCartCard batchId={c.batchId} type={type} key={i} cardId={c.cardId}
                                                       img={"/api/images/main?id=" + c.cardId}
                                                       header={c.header} price={c.price} provider={c.provider}
-                                                      summary={c.summary} amount={c.amount}/>)
+                                                      summary={c.summary} amount={c.amount}
+                                                      callUpdate={callUpdate}/>)
     return (<div className={"catalog items pad " + type}>
         {cartHtml}
         <hr/>
@@ -64,15 +70,13 @@ function wrapCart(data, type) {
             <div className={"catalog summary value"}>
                 <div>Товаров:</div>
                 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-                . .
-                . . . . . . . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . . . .
                 <div>{data.count} шт</div>
             </div>
             <div className={"catalog summary value"}>
                 <div>Итого:</div>
                 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-                . .
-                . . . . . . . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . . . .
                 <div>{data.summary} ₽</div>
             </div>
             <button className={"catalog buttons button type0 order"} onClick={orderCart}>Заказать</button>

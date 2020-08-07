@@ -31,9 +31,12 @@ export function useAwaitWrap(value, setter, getter, until = v => !!v, wrap, err,
         deps = []
     useEffect(() => {
         if (until(value))
-            getter().then(setter).catch(r => setter(err))
+            getter().then(setter).catch(r => {
+                console.log(r)
+                setter(err)
+            })
     }, deps)
-    if (!until(value) && value.err !== err)
+    if (!until(value) && value !== err)
         return wrap(value)
     return err
 }
