@@ -16,6 +16,7 @@ import {Footer} from "./Common/Footer/Footer";
 import "./styles/button_styles.css"
 import {LoadImagePage} from "./pages/LoadImagePage";
 import {ItemEditPage} from "./pages/ItemEditPage";
+import {ItemCreatePage} from "./pages/ItemCreatePage";
 
 let _user = null;
 
@@ -45,6 +46,7 @@ function Main() {
             <Route path="/account" component={AccountPage}/>
             <Route path="/image" component={LoadImagePage}/>
             <Route path="/item/edit/:itemId" component={ItemEditPage}/>
+            <Route path="/item/create" component={ItemCreatePage}/>
             <Route path="/item/:itemId" component={ItemPage}/>
             <Route path="/" component={() => MainPage({category})}/>
         </Switch>
