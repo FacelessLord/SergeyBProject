@@ -14,6 +14,7 @@ from backend.controllers.ProductController import ProductController
 from backend.controllers.ProviderController import ProviderController
 from backend.finq import FINQ
 from backend.utils import send_image
+from backend.result import Success, ErrorResult, Fail, ensure
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/UserData.db'
@@ -75,24 +76,28 @@ def get_item_data():
 
     product = db.get_product(item_id)
     if product:
-        return {"success": True,
-                "provider_id": product.provider_id,
-                "id": product.id,
-                "description": product.description,
-                "price": product.price,
-                "name": product.name,
-                "in_stock": product.in_stock,
-                "img_count": product.img_count,
-                "category": product.category.create_category_path()}
+        return Success({"provider_id": product.provider_id,
+                        "id": product.id,
+                        "description": product.description,
+                        "price": product.price,
+                        "name": product.name,
+                        "in_stock": product.in_stock,
+                        "img_count": product.img_count,
+                        "category": product.category.create_category_path()}) \
+            .as_dict()
     else:
-        return {"success": False, "reason": "noItem"}
+        return ErrorResult(Fail("noItem")) \
+            .as_dict()
 
 
 @app.route('/api/items/data', methods=['post'])
 def set_item_data():
-    accessToken = request.args.get('accessToken', "")
-    username = request.args.get('username', "")
-    auth_resp, user = auth_user(db, username, accessToken)
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
+    return auth_user(db, username, accessToken) \
+        .then(read_item_data) \
+        .then(save_item_data) \
+        .as_dict()
 
     # todo check permissions
     data = decoder.decode(request.data.decode())
@@ -113,48 +118,51 @@ def set_item_data():
         product.provider_id = provider.id
         product.category_id = updated_category.id
         db.commit()
-        return {"success": True}
     else:
-        return {"success": False, "reason": "noItem"}
+        raise Fail("noItem")
 
 
 # cart
 @app.route("/api/cart")
 def get_cart_for_user():
-    accessToken = request.args.get('accessToken', "")
-    username = request.args.get('username', "")
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
 
-    return auth_user(db, username, accessToken)\
-        .then(carts.get_cart_for_user)\
+    return auth_user(db, username, accessToken) \
+        .then(carts.get_cart_for_user) \
         .as_dict()
 
 
 @app.route('/api/cart/removeBatch', methods=["POST"])
 def remove_item_from_cart():
-    accessToken = request.args.get('accessToken', "")
-    username = request.args.get('username', "")
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
     batchId = request.args.get('batchId', 0, type=int)
 
-    return auth_user(db, username, accessToken)\
-        .then(lambda u: carts.remove_item_from_cart(batchId, u))\
+    return auth_user(db, username, accessToken) \
+        .then(lambda u: carts.remove_item_from_cart(batchId, u)) \
         .as_dict()
 
 
 @app.route('/api/cart/order', methods=["POST"])
 def order_cart():
-    accessToken = request.args.get('accessToken', "")
-    username = request.args.get('username', "")
-    return auth_user(db, username, accessToken).then(carts.order).as_dict()
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
+    return auth_user(db, username, accessToken) \
+        .then(carts.order) \
+        .as_dict()
 
 
 @app.route('/api/cart/add', methods=['post'])
 def add_item_to_cart():
     item_id = request.args.get("itemId", -1, type=int)
-    accessToken = request.args.get('accessToken', "")
-    username = request.args.get('username', "")
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
     amount = request.args.get('amount', 0, type=int)
 
-    return auth_user(db, username, accessToken).then(lambda u: carts.add_item_to_cart(item_id, u, amount)).as_dict()
+    return auth_user(db, username, accessToken) \
+        .then(lambda u: carts.add_item_to_cart(item_id, u, amount)) \
+        .as_dict()
 
 
 # providers
@@ -171,8 +179,10 @@ def get_provider_name():
     provider = db.get_provider(provider_id)
 
     if provider:
-        return {"success": True, "name": provider.name}
-    return {"success": False, "reason": "noprovider"}
+        return Success(provider.name) \
+            .as_dict()
+    return ErrorResult(Fail("noprovider")) \
+        .as_dict()
 
 
 @app.route('/api/categories')
@@ -198,16 +208,13 @@ def get_product_image():
 
 @app.route('/api/images/load', methods=['PUT'])
 def load_image():
-    username = request.args.get('username')  # ensure user
-    accessToken = request.args.get('accessToken')
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
     product_id = request.args.get('productId', -1, type=int)
-    user = db.get_user_by_name(username)
-    if not user:
-        return {"success": False, "reason": "nouser"}
-    if user.accessToken != accessToken:
-        return {"success": False, "reason": "noauth" if accessToken == "" else "reauth"}
 
-    return images.load_image(product_id, request.data)
+    return auth_user(db, username, accessToken) \
+        .then(lambda u: images.load_image(product_id, request.data)) \
+        .as_dict()
 
 
 @app.route('/api/images/empty', methods=['GET'])
@@ -218,8 +225,8 @@ def empty_image():
 # user
 @app.route('/api/user/data', methods=['post'])
 def set_user_data():
-    username = request.args.get('username')
-    accessToken = request.args.get('accessToken')
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
 
     user = db.get_user_by_name(username)
     if user:
@@ -241,8 +248,8 @@ def set_user_data():
 
 @app.route('/api/user/data', methods=['get'])
 def get_user_data():
-    username = request.args.get('username')
-    accessToken = request.args.get('accessToken')
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
 
     user = db.get_user_by_name(username)
     if user:
@@ -262,19 +269,18 @@ def get_user_data():
 
 @app.route('/api/user/register', methods=['post'])
 def register():
-    username = request.args.get('username')
-    name = FINQ(request.args.get('name', type=str).split(',')).map(str.strip).to_list()
-    email = request.args.get('email')
-    password = request.args.get('password')
+    username = request.headers.get('username', "")
+    name = FINQ(request.headers.get('name', type=str).split(',')).map(str.strip).to_list()
+    email = request.headers.get('email')
+    password = request.headers.get('password')
+    users = FINQ(db.users())
+    registrars = FINQ(db.registrars())
 
-    if any(filter(lambda u: u.username == username, db.users())):
-        return {"success": False, "reason": "username"}
-    if any(filter(lambda u: u.username == username, db.registrars())):
-        return {"success": False, "reason": "username"}
-    if any(filter(lambda u: u.email == email, db.users())):
-        return {"success": False, "reason": "email"}
-    if any(filter(lambda u: u.email == email, db.registrars())):
-        return {"success": False, "reason": "email"}
+    if users.any(lambda u: u.username == username) or registrars.any(lambda u: u.username == username):
+        return ErrorResult(Fail("username")).as_dict()
+    if users.any(lambda u: u.email == email) or registrars.any(lambda u: u.email == email):
+        return ErrorResult(Fail("email")).as_dict()
+
     registrar = db.add_user_registrar(name, username, email, generate_password_hash(password))
     db.commit()
     link = registrar.create_confirmation_link()
@@ -285,7 +291,7 @@ def register():
 
 @app.route('/api/user/confirmRegister')
 def confirm_register():
-    username = request.args.get('username')
+    username = request.headers.get('username', "")
     token = request.args.get('token')
 
     registrar = db.get_user_registrar(username=username)
@@ -299,16 +305,18 @@ def confirm_register():
 @app.route('/api/user/login', methods=['post', 'get'])
 def login():
     accessToken = ""
+    permission = 0
     message = ''
     if request.method == "POST":
-        username = request.args.get('username')
-        password = request.args.get('password')
+        username = request.headers.get('username')
+        password = request.headers.get('password')
 
         user = db.get_user_by_name(username)
         registrar = db.get_user_registrar(username=username)
         # db.remove_registrar(registrar)
         if user:
             accessToken = user.load(password)
+            permission = user.permission_level
             if accessToken:
                 message = "Correct username and password"
             else:
@@ -318,22 +326,21 @@ def login():
             message = "You need to confirm your registration."
         else:
             message = "Wrong username or password"
-    print(accessToken)
-    return {"message": message, "accessToken": accessToken}
+    return {"message": message, "accessToken": accessToken, "permission": permission}
 
 
 @app.route('/api/user/check_auth')
 def check_auth():
-    username = request.args.get('username')
-    accessToken = request.args.get('accessToken', type=str)
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
     user = db.get_user_by_name(username)
     return {"result": user is not None and user.accessToken == accessToken}
 
 
 @app.route('/api/user/logout', methods=['post'])
 def logout():
-    accessToken = request.headers['accessToken']
-    username = request.headers['username']
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
     user = db.get_user_by_name(username)
     if user:
         return {"supported": True, "unloaded": user.unload(accessToken)}
