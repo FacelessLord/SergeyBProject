@@ -17,7 +17,7 @@ class Result:
         if not self.success:
             try:
                 return Success(func(self.err))
-            except Exception as e:
+            except Fail as e:
                 return ErrorResult(str(e))
         else:
             return self
@@ -42,4 +42,23 @@ class Success(Result):
 
 class ErrorResult(Result):
     def __init__(self, err, reason=''):
-        super().__init__(None, err, reason=reason)
+        if reason == '':
+            super().__init__(None, err, reason=str(err))
+        else:
+            super().__init__(None, err, reason=reason)
+
+
+class Fail(Exception):
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg
+
+
+def ensure(value, on_exc):
+    return Result(on_exc, value)
+
+
+def message(value: str):
+    return {"message": value}
