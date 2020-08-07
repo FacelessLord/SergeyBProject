@@ -389,6 +389,7 @@ a.catalog.buttons.button.more {
     position: relative;
     left: 400px;
     top: 10px;
+    height: 16px;
 }
 
 .catalog.buttons.button.source {

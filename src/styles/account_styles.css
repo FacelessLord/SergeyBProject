@@ -5,6 +5,8 @@
 
 .account.form {
     margin-top: 8px;
+    max-width: 800px;
+    min-width: 600px;
 }
 
 .account.message {
@@ -46,6 +48,8 @@ input.account.field {
     display: flex;
     flex-direction: column;
     margin-bottom: 16px;
+    max-width: 800px;
+    min-width: 300px;
 }
 
 .account.buttons.button {
