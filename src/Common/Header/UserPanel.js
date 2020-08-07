@@ -6,10 +6,10 @@ import {logoutUser} from "../IdProvider";
 export function GuestPanelButtons({hidden = true}) {
     return (<div id={"user_panel"} className="header user panel guest" style={{display: hidden ? "none" : "block"}}>
         <div className="header user panel rect">
-            <Link to={"/login"} className="header buttons button user login" id="button_login">
+            <Link to={"/login"} className="header buttons button type3 user login" id="button_login">
                 Войти
             </Link>
-            <Link to={"/register"} className="header buttons button user register" id="button_register">
+            <Link to={"/register"} className="header buttons button type3 user register" id="button_register">
                 Регистрация
             </Link>
         </div>
@@ -28,11 +28,15 @@ export function UserPanelButtons({hidden}) {
                   id="button_cart">
                 Корзина
             </Link>
-            <button className="header user buttons button user skip" style={{visibility: "hidden"}}>
-                <div className="header user text">skip</div>
-            </button>
+            <Link to={"/item/create"} className="header buttons button type3 user skip" style={{visibility: window.user.permission > 0 ? "visible" : "hidden" }}
+                  id="button_create">
+                Добавить товар
+            </Link>
             <Link className="header buttons button type3 user logout" id="button_logout" to={document.location}
-                  onClick={logoutUser}>
+                  onClick={() => {
+                      logoutUser()
+                      document.location = "/"
+                  }}>
                 Выйти
             </Link>
         </div>

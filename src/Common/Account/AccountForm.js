@@ -3,7 +3,10 @@ import "../../styles/account_styles.css"
 import {Awaiter} from "../Awaiter";
 
 async function getUserData() {
-    return fetch(`/api/user/data?username=${window.user.username}&accessToken=${window.user.accessToken}`)
+    return await fetch(`/api/user/data`,
+        {
+            headers: {accessToken: window.user.accessToken, username: window.user.username}
+        })
         .then(t => t.json())
         .catch(_ => {
         })

@@ -18,18 +18,18 @@ export function ImageLoader({submit = submitImageToServer, productId, data, setD
 export async function submitImageToServer(image, productId, data, setData, setMessage) {
     let reader = new FileReader();
     reader.onloadend = function () {
-        fetch(`/api/images/load?username=${window.user.username}&accessToken=${window.user.accessToken}&productId=${productId}`,
+        fetch(`/api/images/load?productId=${productId}`,
             {
                 method: "PUT",
                 body: reader.result,
+                headers: {accessToken: window.user.accessToken, username: window.user.username}
             })
-            .then(setData({...data, img_count: data.img_count + 1}))
+            .then(t => setTimeout(() => setData({...data, img_count: data.img_count + 1}), 10))
     }
     console.log(image)
-    if(!image)
-    {
+    if (!image) {
         setMessage("Вы не выбрали картинку");
-        return ;
+        return;
     }
     reader.readAsDataURL(image);
 

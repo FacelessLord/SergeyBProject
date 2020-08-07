@@ -10,13 +10,16 @@ export function CatalogCart({type}) {
 }
 
 async function getCart() {
-    return await fetch(`/api/cart?accessToken=${window.user.accessToken}&username=${window.user.username}`)
+    return await fetch(`/api/cart`,
+        {
+            headers: {accessToken: window.user.accessToken, username: window.user.username}
+        })
         .catch(r => "{}")
         .then(t => t.json())
         .then(async t => {
             if (t.success) {
                 for (let i of t.value)
-                    i.provider = (await fetch(`/api/providers/name?providerId=${i.provider_id}`).then(t => t.json())).name
+                    i.provider = (await fetch(`/api/providers/name?providerId=${i.provider_id}`).then(t => t.json())).value
                 let summary = 0
                 let count = 0
                 for (let i of t.value) {
@@ -33,8 +36,9 @@ async function getCart() {
 }
 
 async function orderCart() {
-    await fetch(`/api/cart/order?username=${window.user.username}&accessToken=${window.user.accessToken}`, {
-        method: "POST"
+    await fetch(`/api/cart/order`, {
+        method: "POST",
+        headers: {accessToken: window.user.accessToken, username: window.user.username}
     })
 }
 

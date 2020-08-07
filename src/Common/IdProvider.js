@@ -10,7 +10,10 @@ export function setUserView(view) {
 }
 
 export function checkAuth() {
-    return fetch(`/api/user/check_auth?username=${window.user.username}&accessToken=${window.user.accessToken}`)
+    return fetch(`/api/user/check_auth`,
+        {
+            headers: {accessToken: window.user.accessToken, username: window.user.username}
+        })
         .then(t => t.json())
         .then(j => {
             window.updateUser({loggedIn: j.result});
@@ -21,12 +24,13 @@ export function checkAuth() {
 }
 
 export function logoutUser() {
-    window.updateUser({accessToken: "", loggedIn: false});
+    window.updateUser({accessToken: "", loggedIn: false, permission: 0});
 }
 
 export function loginUser(username, password) {
-    return fetch(`/api/user/login?username=${username}&password=${password}`, {
-        method: "POST"
+    return fetch(`/api/user/login`, {
+        method: "POST",
+        headers: {username: username, password: password}
     }).then(t => t.json())
 }
 
@@ -40,8 +44,9 @@ export async function registerUser(username, name, email, password) {
     if (password.length < 6) {
         return {success: false, reason: "shortpassword"}
     }
-    return fetch(`/api/user/register?username=${username}&password=${password}&name=${name}&email=${email}`, {
-        method: "POST"
+    return fetch(`/api/user/register`, {
+        method: "POST",
+        headers: {username: username, password: password, name:name, email:email}
     }).then(t => t.json())
 }
 
@@ -50,12 +55,14 @@ export function loadUser() {
     const accessToken = cookies.get("accessToken");
     const loggedIn = cookies.get("loggedIn") === "true";
     const username = cookies.get("username");
+    const permission = cookies.get("permission");
     const view = cookies.get("catalogView") ?? "list";
     return {
         loggedIn: loggedIn,
         username: username,
         accessToken: accessToken,
-        view: view
+        view: view,
+        permission: permission
     };
 }
 
@@ -64,5 +71,6 @@ export function saveUser() {
     cookies.set("accessToken", window.user.accessToken, {path: "/"});
     cookies.set("username", window.user.username, {path: "/"});
     cookies.set("loggedIn", window.user.loggedIn, {path: "/"});
+    cookies.set("permission", window.user.permission, {path: "/"});
     cookies.set("catalogView", window.user.view, {path: "/"});
 }

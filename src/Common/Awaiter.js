@@ -17,12 +17,12 @@ export function Awaiter({value, setValue, getter, err, base = "pending", deps = 
     return value
 }
 
-export function useAwait(value, setter, getter, until = v => !!v, err, deps = null) {
+export function useAwait(value, setter, getter, awhile = v => !!v, err, deps = null) {
     if (!deps)
         deps = []
     useEffect(() => {
-        if (until(value))
-            getter().then(setter).catch(r => setter({err: err}))
+        if (awhile(value))
+            getter().then(setter).catch(r => setter(err))
     }, deps)
 }
 
@@ -31,7 +31,7 @@ export function useAwaitWrap(value, setter, getter, until = v => !!v, wrap, err,
         deps = []
     useEffect(() => {
         if (until(value))
-            getter().then(setter).catch(r => setter({err: err}))
+            getter().then(setter).catch(r => setter(err))
     }, deps)
     if (!until(value) && value.err !== err)
         return wrap(value)

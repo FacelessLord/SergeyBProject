@@ -115,7 +115,8 @@ export function CartListItem({batchId, cardId, img, header, provider, price, sum
 }
 
 async function removeItem(batchId) {
-    await fetch(`/api/cart/removeBatch?username=${window.user.username}&accessToken=${window.user.accessToken}&batchId=${batchId}`, {
-        method: "POST"
+    await fetch(`/api/cart/removeBatch?batchId=${batchId}`, {
+        method: "POST",
+        headers: {accessToken: window.user.accessToken, username: window.user.username}
     })
 }

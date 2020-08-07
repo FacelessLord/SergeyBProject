@@ -7,7 +7,10 @@ import {useAwait} from "../Common/Awaiter";
 export async function getItemData(item) {
     return fetch(`/api/items/data?itemId=${item}`).then(t => t.json())
         .then(async t => {
-            t.provider = (await fetch(`/api/providers/name?providerId=${t.provider_id}`).then(t => t.json())).name;
+            const value = t.value
+            t.value = undefined
+            t = {...t, ...value}
+            t.provider = (await fetch(`/api/providers/name?providerId=${t.provider_id}`).then(t => t.json())).value;
             return t
         })
 }

@@ -1,26 +1,11 @@
 import React, {useEffect} from "react";
 
-async function getUserData() {
-    return fetch(`/api/user/data?username=${window.user.username}&accessToken=${window.user.accessToken}`)
-        .then(t => t.json())
-        .catch(_ => {
-        })
-}
 
 function CharacteristicField({field, setField, id, text}) {
     return [<label key={0} htmlFor={"account_" + id}>{text}</label>,
         <input type={"text"} value={field} onChange={t => setField(t.target.value)} key={1}
                className={"account field " + id}
                id={"account_" + id}/>]
-}
-
-async function loadUserData(setUserData) {
-    const data = await getUserData()
-    for (let i = 0; i < 3; i++) {
-        if (data.name[i] == null)
-            data.name[i] = ""
-    }
-    setUserData(data)
 }
 
 function getSetNameFunction(data, setData, id) {
