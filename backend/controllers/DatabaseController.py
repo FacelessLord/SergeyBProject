@@ -89,6 +89,9 @@ class Category:
     def create_category_path(selfc) -> str:
         pass
 
+    def create_category_idpath(selfc) -> str:
+        pass
+
 
 class UserRegistrar:
     id = \
@@ -234,6 +237,13 @@ class DatabaseController:
                     return parent.create_category_path() + ":" + selfc.name
                 return selfc.name
 
+            def create_category_idpath(selfc) -> str:
+                print(selfc.name)
+                parent = self.get_category(selfc.parent_id)
+                if parent:
+                    return parent.create_category_idpath() + ":" + str(selfc.id)
+                return str(selfc.id)
+
         class Provider(db.Model):
             __tablename__ = 'providers'
             id = db.Column(db.Integer(), primary_key=True)
@@ -309,6 +319,7 @@ class DatabaseController:
                 if previous is None:
                     category = self.add_category(part, len(parts) > depth, -1)
                 else:
+                    previous.nested = True
                     category = self.add_category(part, len(parts) > depth, previous.id)
 
             depth += 1
