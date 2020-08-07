@@ -11,7 +11,7 @@ async function performLogin(setMessage) {
         } else
             setMessage("");
         if (t.accessToken !== "") {
-            window.updateUser({username: username, accessToken: t.accessToken, loggedIn: t.accessToken !== ""});
+            window.updateUser({username: username, accessToken: t.accessToken, permission: t.permission, loggedIn: t.accessToken !== ""});
             document.location = "/";
         }
     })
