@@ -30,12 +30,10 @@ function Main() {
         window.setUser(_user + 1);
     };
     const [category, setCategory] = useState("");
-    // useEffect(() => {
-    //     const handle = setTimeout(checkAuth, 10000);
-    //     return () => clearTimeout(handle);
-    // });
+    const [categoryMonitor, setCategotyMonitor] = useState(false);
+    window.updateCategories = () => setCategotyMonitor(!categoryMonitor)
     return (<div id="page">
-        <Header category={category} setCategory={setCategory}/>
+        <Header category={category} setCategory={setCategory} categoryMonitor={categoryMonitor}/>
         <Switch>
             <Route exact path="/catalog" component={() => CatalogPage({category})}/>
             <Route path="/cart" component={CartPage}/>

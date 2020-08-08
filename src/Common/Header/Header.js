@@ -18,7 +18,7 @@ function onSuperCatalogButtonDeselect() {
     }
 }
 
-export function Header({setCategory}) {
+export function Header({setCategory, categoryMonitor}) {
     const [userSelected, setUserSelected] = useState(false);
     return (<div className="header wrapper">
         <div className="header buttons container">
@@ -30,7 +30,7 @@ export function Header({setCategory}) {
                       id="button_catalog">
                     Каталог
                 </Link>
-                <Categories setCategory={setCategory}/>
+                <Categories setCategory={setCategory} categoryMonitor={categoryMonitor}/>
             </div>
             <Link to={"/providers"} className="header buttons button type1 providers" id="button_providers">
                 Поставщикам

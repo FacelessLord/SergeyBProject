@@ -32,7 +32,10 @@ export function ItemEditPage(props) {
             <ImageLoader data={data} setData={setData} productId={itemId}/>
             <ItemEditDescription data={data} setData={setData}/>
             {message ? <div className={"edit account message"} id={"account_message"}>{message}</div> : ""}
-            <button className={"edit buttons button type0"} onClick={() => sendData(data, setMessage)}>Сохранить
+            <button className={"edit buttons button type0"} onClick={() => {
+                sendData(data, setMessage)
+                window.updateCategories()
+            }}>Сохранить
             </button>
             <Link to={`/item/${itemId}`} id={"link_return"}> </Link>
         </div>
@@ -40,7 +43,7 @@ export function ItemEditPage(props) {
 }
 
 async function sendData(data, setMessage) {
-    await fetch(`/api/items/data`,
+    return await fetch(`/api/items/data`,
         {
             method: "post",
             body: JSON.stringify(data),

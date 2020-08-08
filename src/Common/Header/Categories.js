@@ -34,11 +34,15 @@ async function getCategories() {
         .then(t => t.json())
 }
 
-export function Categories({setCategory}) {
+export function Categories({setCategory, categoryMonitor}) {
     const [categories, setCategories] = useState([0]);
 
+    useEffect(() => {
+        setCategories([0])
+    }, [categoryMonitor])
+
     return (<div className="categories" id="catalog_buttons">
-        {useAwaitWrap(categories, setCategories, getCategories, c => c[0] === 0,() =>  createList(categories, setCategory), [])}
+        {useAwaitWrap(categories, setCategories, getCategories, c => c[0] === 0, () => createList(categories, setCategory), [], [categories])}
     </div>);
 
 }
