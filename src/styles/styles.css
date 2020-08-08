@@ -46,3 +46,11 @@ html, body {
     grid-column: auto;
     grid-row-gap: 8px
 }
+
+.site.main.panel.part {
+    min-height: calc(100vh - 300px);
+    margin-right: 208px;
+
+    display: flex;
+    flex-direction: column;
+}
