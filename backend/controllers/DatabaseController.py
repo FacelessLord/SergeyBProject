@@ -218,7 +218,7 @@ class DatabaseController:
             provider_id = db.Column(db.Integer(), db.ForeignKey('providers.id'))
             in_stock = db.Column(db.Boolean())
             category_id = db.Column(db.Integer(), db.ForeignKey('categories.id'))
-            img_count = db.Column(db.Integer())
+            img_count = db.Column(db.Integer(), default=0)
 
         class Category(db.Model):
             __tablename__ = "categories"
@@ -279,8 +279,9 @@ class DatabaseController:
         return user_registrar
 
     def add_product(self, price: float, name: str, provider: int,
-                    stocked: bool):
-        product = Product(price=price, name=name, provider_id=provider, in_stock=stocked)
+                    stocked: bool, category: int, description: str):
+        product = Product(price=price, name=name, provider_id=provider, in_stock=stocked, description=description,
+                          category_id=category)
         self.db.session.add(product)
         return product
 
