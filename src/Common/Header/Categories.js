@@ -1,5 +1,6 @@
 import {Category, NestedCategory} from "./Category";
 import React, {useEffect, useState} from "react";
+import {useAwaitWrap} from "../Awaiter";
 
 function createList(json, setCategory) {
     const l = [];
@@ -27,26 +28,17 @@ function createList(json, setCategory) {
 //   subcategories: [{nested:false,id:id,name:name,...}]
 // }
 
+async function getCategories() {
+    return await fetch("/api/categories")
+        .catch(r => "{}")
+        .then(t => t.json())
+}
 
 export function Categories({setCategory}) {
-    const [categories, setCategories] = useState([]);
-
-    useEffect(() => {
-        async function getCategories() {
-            const cats = await fetch("/api/categories")
-                .catch(r => "{}")
-                .then(t => t.json())
-                .then(j => createList(j, setCategory))
-                .catch(r => []);
-            setCategories(cats)
-        }
-
-        if (categories.length === 0)
-            getCategories()
-    });
+    const [categories, setCategories] = useState([0]);
 
     return (<div className="categories" id="catalog_buttons">
-        {categories}
+        {useAwaitWrap(categories, setCategories, getCategories, c => c[0] === 0,() =>  createList(categories, setCategory), [])}
     </div>);
 
 }
