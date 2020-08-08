@@ -28,7 +28,6 @@ async function getCart() {
                 let count = 0
                 for (let i of t.value) {
                     summary += i.summary
-                    console.log(summary)
                     count += i.amount;
                 }
                 const summaryStr = `${summary}`;

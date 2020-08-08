@@ -24,7 +24,6 @@ function formKeyPressed(t) {
 
 export function LoginForm() {
     const [message, setMessage] = useState("");
-    console.log(message);
     if (window.user.loggedIn)
         return (<div className={"login message success"}>Вы уже выполнили вход</div>);
     const l = [];

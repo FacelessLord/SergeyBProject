@@ -231,14 +231,12 @@ class DatabaseController:
                                              remote_side=[id], single_parent=True)
 
             def create_category_path(selfc) -> str:
-                print(selfc.name)
                 parent = self.get_category(selfc.parent_id)
                 if parent:
                     return parent.create_category_path() + ":" + selfc.name
                 return selfc.name
 
             def create_category_idpath(selfc) -> str:
-                print(selfc.name)
                 parent = self.get_category(selfc.parent_id)
                 if parent:
                     return parent.create_category_idpath() + ":" + str(selfc.id)
@@ -291,7 +289,6 @@ class DatabaseController:
         return provider
 
     def set_batch_order(self, batch: ProductBatch, order: Order):
-        print(order.id)
         batch.order_id = order.id
         batch.ordered = True
 
@@ -315,8 +312,6 @@ class DatabaseController:
         for part in parts:
             category = self.get_category_by_name(part)
             if not category:
-                print(previous)
-                print(previous is None)
                 if previous is None:
                     category = self.add_category(part, len(parts) > depth, -1)
                 else:

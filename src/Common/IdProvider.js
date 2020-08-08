@@ -17,7 +17,6 @@ export function checkAuth() {
         .then(t => t.json())
         .then(j => {
             window.updateUser({loggedIn: j.result});
-            console.log(j.result);
             return window.user
         })
         .then(saveUser)

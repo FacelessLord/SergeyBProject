@@ -3,7 +3,6 @@ import "../styles/edit_styles.css"
 import {Img} from "./Img";
 
 export function ImageListLoader({data, setData}) {
-    console.log(data)
     return (<div className={"edit item image container"} id={"image_loader"}>
         <label htmlFor={"image_loader"}>Картинки</label>
         <div className={"edit images list"}>
@@ -44,7 +43,6 @@ export async function submitImageToServer(image, productId, data, setData, setMe
             })
             .then(t => setTimeout(() => setData({...data, img_count: data.img_count + 1}), 10))
     }
-    console.log(image)
     if (!image) {
         setMessage("Вы не выбрали картинку");
         return;

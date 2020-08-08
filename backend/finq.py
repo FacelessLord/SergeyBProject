@@ -81,7 +81,6 @@ class FINQFlatMap(FINQ):
         self.mapper = mapper
 
     def __iter__(self):
-        print(list(self.source))
         for item in self.source:
             for sub_item in map(self.mapper, item):
                 yield sub_item

@@ -133,12 +133,10 @@ def read_item_data(user):
 
 def save_item_data(data: dict):
     product = db.get_product(data['id'])
-    print(product is None)
     if product:
         provider = db.get_provider_by_name(data['provider'])
         if not provider:
             provider = db.add_provider(data['provider'])
-        print(data['category'])
         updated_category = db.create_category_from_path(data['category'])
         db.commit()
 
@@ -201,7 +199,6 @@ def add_item_to_cart():
 @app.route('/api/providers')
 def get_provider_list():
     category = request.args.get("category", "*", type=str)
-    print(category)
     return providers.get_provider_list(category)
 
 

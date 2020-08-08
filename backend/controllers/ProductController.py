@@ -34,6 +34,5 @@ class ProductController(Controller):
                      "isStock": p.in_stock
                  })
         catalogList = catalog.to_list()
-        print(catalogList)
         return {"value": catalogList}
 

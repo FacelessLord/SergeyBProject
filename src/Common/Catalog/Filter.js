@@ -69,8 +69,7 @@ function addProvider(setState, state, id, checked) {
 }
 
 function wrapData(data, state, setState) {
-    return (<div className={"catalog filter selector provider form"}
-                 onSelect={e => console.log("selected " + e.target.value)}>
+    return (<div className={"catalog filter selector provider form"}>
         {data.map(o => (<div className={"catalog filter selector provider value"} key={o.id}>
             <input type="checkbox" name={o.id}
                    onChange={e => addProvider(setState, state, o.id, e.target.checked)}/>{o.name}

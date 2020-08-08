@@ -44,7 +44,6 @@ function formKeyPressed(t) {
 
 export function RegisterForm() {
     const [message, setMessage] = useState("");
-    console.log(message);
     if (window.user.loggedIn)
         return (<div className={"register message success"}>Вы уже выполнили вход</div>);
     const l = [];
