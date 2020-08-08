@@ -410,6 +410,8 @@ a.catalog.buttons.button.more {
     background: #E0E0E0;
     padding: 8px;
     width: 900px;
+    height: fit-content;
+    height: -moz-fit-content;
 
     margin-bottom: 8px;
 }

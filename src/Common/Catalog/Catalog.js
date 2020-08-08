@@ -62,7 +62,7 @@ export function CatalogPanels({maxCount = 9, filter, category}) {
     }, [filter, category]);
 
     return useAwaitWrap(items, setItems, () => requestItems(maxCount, filter, category),
-            i => i === "pending", createItemsPanels, "Невозможно загрузить каталог", [filter, category])
+            i => i === "pending", createItemsPanels, "Невозможно загрузить каталог", [items])
 }
 
 
@@ -72,6 +72,7 @@ export function CatalogList({maxCount = 9, filter, category}) {
     useEffect(() => {
         setItems("pending");
     }, [filter, category]);
+
     return useAwaitWrap(items, setItems, async () => await requestItems(maxCount, filter, category),
-            i => i === "pending", createItemsList, "Невозможно загрузить каталог", [filter, category])
+            i => i === "pending", createItemsList, "Невозможно загрузить каталог", [items])
 }
