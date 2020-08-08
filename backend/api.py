@@ -13,8 +13,8 @@ from backend.controllers.MailController import MailController
 from backend.controllers.ProductController import ProductController
 from backend.controllers.ProviderController import ProviderController
 from backend.finq import FINQ
+from backend.result import Success, ErrorResult, Fail
 from backend.utils import send_image
-from backend.result import Success, ErrorResult, Fail, ensure
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/UserData.db'
@@ -90,23 +90,55 @@ def get_item_data():
             .as_dict()
 
 
-@app.route('/api/items/data', methods=['post'])
-def set_item_data():
+@app.route('/api/items/create', methods=['put'])
+def create_item():
     accessToken = request.headers.get('accessToken', "")
     username = request.headers.get('username', "")
     return auth_user(db, username, accessToken) \
         .then(read_item_data) \
+        .then(create_item_object) \
+        .then(lambda p: None) \
+        .as_dict()
+
+
+def create_item_object(data):
+    provider = db.get_provider_by_name(data['provider'])
+    if not provider:
+        provider = db.add_provider(data['provider'])
+    category = db.create_category_from_path(data['category'])
+    db.commit()
+    item = db.add_product(data['price'], data['name'], provider.id, data['in_stock'], category.id, data['description'])
+    db.commit()
+
+    images_list = data['images_loaded']
+    for image in images_list:
+        images.load_image(item.id, image)
+    return item
+
+
+@app.route('/api/items/data', methods=['post'])
+def set_item_data():
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
+    return auth_user(db, username, accessToken, 1) \
+        .then(read_item_data) \
         .then(save_item_data) \
         .as_dict()
 
-    # todo check permissions
+
+def read_item_data(user):
     data = decoder.decode(request.data.decode())
-    print(data)
+    return data
+
+
+def save_item_data(data: dict):
     product = db.get_product(data['id'])
+    print(product is None)
     if product:
         provider = db.get_provider_by_name(data['provider'])
         if not provider:
             provider = db.add_provider(data['provider'])
+        print(data['category'])
         updated_category = db.create_category_from_path(data['category'])
         db.commit()
 
@@ -212,7 +244,7 @@ def load_image():
     username = request.headers.get('username', "")
     product_id = request.args.get('productId', -1, type=int)
 
-    return auth_user(db, username, accessToken) \
+    return auth_user(db, username, accessToken, 1) \
         .then(lambda u: images.load_image(product_id, request.data)) \
         .as_dict()
 
