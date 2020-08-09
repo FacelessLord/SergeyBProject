@@ -109,6 +109,7 @@ class Order:
     id = \
         batches = \
         customer_id = \
+        created_on = \
         summary = None
 
 
@@ -253,6 +254,7 @@ class DatabaseController:
             id = db.Column(db.Integer(), primary_key=True)
             batches = db.relationship("ProductBatch", backref="order", cascade='all,delete-orphan')
             customer_id = db.Column(db.Integer(), db.ForeignKey('users.id'))
+            created_on = db.Column(db.DateTime(), default=datetime.utcnow())
             summary = db.Column(db.Float())
 
         db.create_all()
@@ -404,6 +406,9 @@ class DatabaseController:
 
         if len(providers) > 0:
             return providers[0]
+
+    def get_order(self, orderId):
+        return self.db.session.query(Order).get(orderId)
 
     def providers(self) -> List[Provider]:
         return self.db.session.query(Provider)

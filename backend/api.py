@@ -162,6 +162,28 @@ def save_item_data(data: dict):
         raise Fail("noItem")
 
 
+# order
+@app.route("/api/orders", methods=['get'])
+def get_order_for_user():
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
+
+    return auth_user(db, username, accessToken) \
+        .then(carts.get_orders) \
+        .as_dict()
+
+
+@app.route("/api/order", methods=['get'])
+def get_orders_for_user():
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
+    orderId = request.args.get('orderId', "")
+
+    return auth_user(db, username, accessToken) \
+        .then(lambda u: carts.get_order(u, orderId)) \
+        .as_dict()
+
+
 # cart
 @app.route("/api/cart", methods=['get'])
 def get_cart_for_user():

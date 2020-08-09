@@ -8,6 +8,22 @@ class CartController(Controller):
     def __init__(self, db: dbc):
         super().__init__(db)
 
+    def get_order(self, user, orderId):
+        order = self.db.get_order(orderId)
+        count = 0
+        for batch in order.batches:
+            count += batch.amount
+        if order.customer != user:
+            raise Fail("nopermission")
+
+        batches = FINQ(order.batches).map(self.createBatchJson).to_list()
+        return {
+            "summary": order.summary,
+            "count": count,
+            "date_created": str(order.created_on.strftime("%H:%M %d/%m/%Y")),
+            "batches": batches
+        }
+
     def get_cart_for_user(self, user):
         cart = FINQ(user.cart).filter(lambda b: not b.ordered).map(self.createBatchJson).to_list()
         return cart
@@ -23,6 +39,23 @@ class CartController(Controller):
             "price": product.price,
             "summary": product.price * batch.amount,
             "amount": batch.amount
+        }
+
+    def get_orders(self, user):
+        orders = FINQ(user.orders)
+        return orders.map(self.createOrderJson).to_list()
+
+    def createOrderJson(self, order: Order):
+        id = order.batches[0].product.id
+        count = 0
+        for batch in order.batches:
+            count += batch.amount
+        return {
+            "orderId": order.id,
+            "firstItemId": id,
+            "summary": order.summary,
+            "count": count,
+            "date_created": str(order.created_on.strftime("%H:%M %d/%m/%Y")),
         }
 
     def add_item_to_cart(self, item_id, user, amount):
