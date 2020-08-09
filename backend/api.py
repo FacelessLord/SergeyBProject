@@ -48,13 +48,13 @@ images = ImageController(db)
 mailer = MailController(app, db)
 
 
-@app.route('/time')
+@app.route('/time', methods=['get'])
 def get_current_time():
     return {'time': time.time()}
 
 
 # items
-@app.route('/api/items')
+@app.route('/api/items', methods=['get'])
 def get_items_list():
     args = request.args
     count = args.get("count", -1, type=int)
@@ -90,14 +90,24 @@ def get_item_data():
             .as_dict()
 
 
-@app.route('/api/items/create', methods=['put'])
+@app.route('/api/items', methods=['put'])
 def create_item():
     accessToken = request.headers.get('accessToken', "")
     username = request.headers.get('username', "")
-    return auth_user(db, username, accessToken) \
+    return auth_user(db, username, accessToken, 1) \
         .then(read_item_data) \
         .then(create_item_object) \
         .then(lambda p: None) \
+        .as_dict()
+
+
+@app.route('/api/items', methods=['delete'])
+def delete_item():
+    accessToken = request.headers.get('accessToken', "")
+    username = request.headers.get('username', "")
+    item_id = request.args.get('itemId', 0, type=int)
+    return auth_user(db, username, accessToken, 1) \
+        .then(lambda u: products.remove_product(item_id)) \
         .as_dict()
 
 
@@ -153,7 +163,7 @@ def save_item_data(data: dict):
 
 
 # cart
-@app.route("/api/cart")
+@app.route("/api/cart", methods=['get'])
 def get_cart_for_user():
     accessToken = request.headers.get('accessToken', "")
     username = request.headers.get('username', "")
@@ -169,7 +179,7 @@ def remove_item_from_cart():
     username = request.headers.get('username', "")
     batchId = request.args.get('batchId', 0, type=int)
 
-    return auth_user(db, username, accessToken) \
+    return auth_user(db, username, accessToken, 0) \
         .then(lambda u: carts.remove_item_from_cart(batchId, u)) \
         .as_dict()
 
@@ -196,13 +206,13 @@ def add_item_to_cart():
 
 
 # providers
-@app.route('/api/providers')
+@app.route('/api/providers', methods=['get'])
 def get_provider_list():
     category = request.args.get("category", "*", type=str)
     return providers.get_provider_list(category)
 
 
-@app.route('/api/providers/name')
+@app.route('/api/providers/name', methods=['get'])
 def get_provider_name():
     provider_id = request.args.get("providerId", "-1", type=str)
     provider = db.get_provider(provider_id)
@@ -214,20 +224,20 @@ def get_provider_name():
         .as_dict()
 
 
-@app.route('/api/categories')
+@app.route('/api/categories', methods=['get'])
 def get_category_list():
     return categories.get_category_list()
 
 
 # images
-@app.route('/api/images/main')
+@app.route('/api/images/main', methods=['get'])
 def get_main_icon():
     product_id = request.args.get("id", -1)
 
     return images.get_main_image(product_id)
 
 
-@app.route('/api/images/forItem')
+@app.route('/api/images/forItem', methods=['get'])
 def get_product_image():
     product_id = request.args.get("id", -1)
     image_id = request.args.get("imgId", 0, type=int)
@@ -318,7 +328,7 @@ def register():
     return {"success": True}
 
 
-@app.route('/api/user/confirmRegister')
+@app.route('/api/user/confirmRegister', methods=['get'])
 def confirm_register():
     username = request.headers.get('username', "")
     token = request.args.get('token')
@@ -331,7 +341,7 @@ def confirm_register():
     return {"success": False}
 
 
-@app.route('/api/user/login', methods=['post', 'get'])
+@app.route('/api/user/login', methods=['post'])
 def login():
     accessToken = ""
     permission = 0
@@ -358,7 +368,7 @@ def login():
     return {"message": message, "accessToken": accessToken, "permission": permission}
 
 
-@app.route('/api/user/check_auth')
+@app.route('/api/user/check_auth', methods=[])  # todo
 def check_auth():
     accessToken = request.headers.get('accessToken', "")
     username = request.headers.get('username', "")

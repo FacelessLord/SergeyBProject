@@ -4,6 +4,7 @@ from typing import List
 from backend.controllers.Controller import Controller
 from backend.controllers.DatabaseController import DatabaseController as dbc, ProductBatch
 from backend.finq import FINQ
+from backend.result import Fail
 
 
 class ProductController(Controller):
@@ -35,4 +36,12 @@ class ProductController(Controller):
                  })
         catalogList = catalog.to_list()
         return {"value": catalogList}
+
+    def remove_product(self, item_id):
+        product = self.db.get_product(item_id)
+        if not product:
+            raise Fail("noproduct")
+
+        self.db.remove_product(product)
+        self.db.commit()
 

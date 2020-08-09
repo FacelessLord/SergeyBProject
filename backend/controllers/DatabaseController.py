@@ -411,5 +411,9 @@ class DatabaseController:
     def remove_batch(self, batch) -> List[Provider]:
         return self.db.session.delete(batch)
 
+    def remove_product(self, product):
+        return self.db.session.delete(product)
+
     def commit(self):
         self.db.session.commit()
+
