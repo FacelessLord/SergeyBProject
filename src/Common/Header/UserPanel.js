@@ -28,9 +28,13 @@ export function UserPanelButtons({hidden}) {
                   id="button_cart">
                 Корзина
             </Link>
-            <Link to={"/item/create"} className="header buttons button type3 user skip" style={{visibility: window.user.permission > 0 ? "visible" : "hidden" }}
+            <Link to={"/item/create"} className="header buttons button type3 user skip"
+                  style={{display: window.user.permission > 0 ? "block" : "none"}}
                   id="button_create">
                 Добавить товар
+            </Link>
+            <Link to={"/orders"} className="header buttons button type3 user skip" id="button_create">
+                Заказы
             </Link>
             <Link className="header buttons button type3 user logout" id="button_logout" to={document.location}
                   onClick={() => {
