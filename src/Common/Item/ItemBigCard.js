@@ -87,9 +87,9 @@ function wrapData(data, imgId, setImgId, count, setCount, message, setMessage) {
                 {message ? <div className={"account message"} id={"account_message"}>{message}</div> : ""}
                 <div className={"catalogBig cartButtons"}>
                     <Counter from={1} to={2000} value={count} setValue={setCount} className={"catalogBig"}/>
-                    <div  className={"catalogBig cartButtons green"}>
-                        {window.user.permission >0 ? <Link className={"catalogBig buttons button type0 edit"}
-                              to={`/item/edit/${data.id}`}>Редактировать</Link> : ""}
+                    <div className={"catalogBig cartButtons green"}>
+                        {window.user.permission > 0 ? <Link className={"catalogBig buttons button type0 edit"}
+                                                            to={`/item/edit/${data.id}`}>Редактировать</Link> : ""}
                         <button className={"catalogBig buttons button type0 add"}
                                 onClick={addItemToCart(data, count, setMessage)}>Добавить в корзину
                         </button>

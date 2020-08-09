@@ -1,6 +1,7 @@
 from backend.controllers.Controller import Controller
 from backend.controllers.DatabaseController import DatabaseController as dbc, ProductBatch, User
 from backend.finq import FINQ
+from backend.result import Fail
 
 
 class CartController(Controller):
@@ -26,16 +27,16 @@ class CartController(Controller):
 
     def add_item_to_cart(self, item_id, user, amount):
         if amount <= 0:
-            raise Exception("wrongAmount")
+            raise Fail("wrongAmount")
         self.db.add_item_to_cart(customer=user.id, product=item_id, amount=amount)
         self.db.commit()
 
     def remove_item_from_cart(self, batch_id, user):
         batch = self.db.get_item_from_cart(batch_id)
         if not batch:
-            raise Exception("nobatch")
+            raise Fail("nobatch")
         if batch.customer != user:
-            raise Exception("nopermission")
+            raise Fail("nopermission")
 
         self.db.remove_batch(batch)
         self.db.commit()

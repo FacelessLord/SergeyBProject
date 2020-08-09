@@ -57,6 +57,10 @@
     max-width: 60vw;
 
 }
+.catalogBig.items.description.edit {
+    max-width: 60vw;
+    padding: 4px;
+}
 
 .catalogBig.items.item.card {
     display: flex;
@@ -70,6 +74,7 @@
     background: #C4C4C4;
     border-radius: 12px;
     margin: 8px 0;
+    margin-right: 16px;
 }
 
 /*.catalogBig.items.item.card:hover {*/
@@ -113,6 +118,25 @@
     margin-bottom: 8px;
     user-select: none;
 
+}
+.catalogBig.items.item.text.remove {
+    padding-top: 8px;
+    font-size: 14px;
+    line-height: 10px;
+    color: #000000;
+    margin-bottom: 8px;
+    user-select: none;
+
+    font-size: 24px;
+}
+.catalog.buttons.button.remove.type2.fa.fa-trash-o.end {
+    position: relative;
+    bottom: 0;
+    right: 0;
+    width: 44px;
+    height: 44px;
+    line-height: 24px;
+    font-size: 32px;
 }
 
 .catalogBig.items.item.text.main {

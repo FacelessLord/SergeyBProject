@@ -5,6 +5,7 @@ import {ItemEditDescription} from "../Common/Item/ItemEditDescription";
 import {ItemEditBigCard} from "../Common/Item/ItemEditBigCard";
 import {ImageLoader} from "../Common/ImageLoader";
 import {Link} from "react-router-dom";
+import {func} from "prop-types";
 
 export function ItemEditPage(props) {
     const itemId = props.match.params.itemId
@@ -28,7 +29,12 @@ export function ItemEditPage(props) {
         <input id={"category"} type={"text"} value={data.category}
                onChange={e => setData({...data, category: e.target.value})}/>
         <div className="site main panel">
-            <ItemEditBigCard data={data} setData={setData}/>
+            <div style={{display: "flex"}}>
+                <ItemEditBigCard data={data} setData={setData}/>
+                <span className="catalogBig items item text remove">
+                    <button onClick={() => removeItem(itemId)} className={"catalog buttons button remove type2 fa fa-trash-o end"}/>  Удалить товар
+                </span>
+            </div>
             <ImageLoader data={data} setData={setData} productId={itemId}/>
             <ItemEditDescription data={data} setData={setData}/>
             {message ? <div className={"edit account message"} id={"account_message"}>{message}</div> : ""}
@@ -40,6 +46,21 @@ export function ItemEditPage(props) {
             <Link to={`/item/${itemId}`} id={"link_return"}> </Link>
         </div>
     </div>)
+}
+
+async function removeItem(itemId){
+    return await fetch(`/api/items?itemId=${itemId}`,
+        {
+            method: "delete",
+            headers: {accessToken: window.user.accessToken, username: window.user.username}
+        })
+        .then(t => t.json())
+        .then(j => {
+            if(j.success)
+            {
+                document.location="/catalog"
+            }
+        })
 }
 
 async function sendData(data, setMessage) {
