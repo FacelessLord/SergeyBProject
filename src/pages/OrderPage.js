@@ -6,14 +6,16 @@ export function OrderPage(props) {
     const orderId = props.match.params.orderId
     console.log(props.match.params)
     console.log(orderId)
-    const [order, setOrder] = useState({value: []})
+    const [order, setOrder] = useState({value: {order: {batches: []}}})
     const err = "Не удалось загрузить заказ. Попробуйте позже"
     useAwait(order, setOrder, () => getOrder(orderId), d => d.success !== true, err)
+    console.log(order)
     return (
         <div id="content_wrapper">
             <div className="site main panel part">
-                <h1>Заказ от {order.value.date_created}</h1>
-                <OrderItems order={order}/>
+                <h1 style={{marginBottom: "-16px"}}>Заказ от {order.value.order.date_created}</h1>
+                {order.value.type === "super" ? <h3>Заказчик: {order.value.order.customer_name}</h3> : ""}
+                <OrderItems order={order.value.order}/>
             </div>
         </div>
     )
