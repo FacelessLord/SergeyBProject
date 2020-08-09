@@ -2,7 +2,7 @@ import React from "react";
 import {Link} from "react-router-dom";
 
 export function ItemCard({cardId, img, header, provider, price, inStock}) {
-    return (<Link className="catalog items item card" to={"item/" + cardId} id={cardId}>
+    return (<Link className="catalog items item card" to={"/item/" + cardId} id={cardId}>
         <img className="catalog items item img" src={img} alt={"Картинка товара"}/>
         <span className="catalog items item text main">{header}</span>
         <div className="catalog items item text attributes">
@@ -10,7 +10,7 @@ export function ItemCard({cardId, img, header, provider, price, inStock}) {
               Изготовитель: {provider}
             </span><br/>
             <span className="catalog items item text price">
-              Цена: {price}₽
+              Цена: {price} ₽
             </span><br/>
             <span className="catalog items item text stock">
               В наличии: {inStock}
@@ -20,7 +20,7 @@ export function ItemCard({cardId, img, header, provider, price, inStock}) {
 }
 
 export function ItemCardList({cardId, img, header, provider, price, inStock}) {
-    return (<Link className="catalog items item card" to={"item/" + cardId} id={cardId}>
+    return (<Link className="catalog items item card" to={"/item/" + cardId} id={cardId}>
         <img className="catalog items item img" src={img} alt={"Product main icon"}/>
         <div className="catalog items item info">
             <span className="catalog items item text main">{header}</span>
@@ -29,7 +29,7 @@ export function ItemCardList({cardId, img, header, provider, price, inStock}) {
                 Изготовитель: {provider}
               </span><br/>
                 <span className="catalog items item text price">
-                Цена: {price}₽
+                Цена: {price} ₽
               </span><br/>
                 <span className="catalog items item text stock">
                 В наличии: {inStock}
@@ -78,20 +78,20 @@ export function ItemCartCard({batchId, type, cardId, img, header, provider, pric
     switch (type) {
         case "list":
             return (<CartListItem batchId={batchId} cardId={cardId} header={header} img={img} amount={amount}
-                                  price={price} provider={provider} summary={summary} callUpdate={callUpdate}/>)
+                                  price={price} provider={provider} summary={summary} callUpdate={callUpdate} disableRemove={disableRemove}/>)
         default:
             return (<CartPanelItem batchId={batchId} cardId={cardId} header={header} img={img} amount={amount}
-                                   price={price} provider={provider} summary={summary} callUpdate={callUpdate}/>)
+                                   price={price} provider={provider} summary={summary} callUpdate={callUpdate} disableRemove={disableRemove}/>)
     }
 }
 
-export function CartPanelItem({batchId, cardId, img, header, provider, price, summary, amount, callUpdate}) {
-    return (<div className="catalog items item card" to={"item/" + cardId} id={cardId}>
+export function CartPanelItem({batchId, cardId, img, header, provider, price, summary, amount, callUpdate, disableRemove}) {
+    return (<div className="catalog items item card" to={"/item/" + cardId} id={cardId}>
         <Link to={"item/" + cardId} id={cardId} style={{padding: '0px', display: "contents"}}>
             <img className="catalog items item img" src={img} alt={"Картинка товара"}/>
         </Link>
         <div className={"catalog item card form"}>
-            <Link to={"item/" + cardId} id={cardId} style={{padding: '0px', display: "flex", flexDirection: "column"}}>
+            <Link to={"/item/" + cardId} id={cardId} style={{padding: '0px', display: "flex", flexDirection: "column"}}>
                 <span className="catalog items item text main">{header}</span>
                 <div className="catalog items item text attributes">
                 <span className="catalog items item text provider">
@@ -116,13 +116,13 @@ export function CartPanelItem({batchId, cardId, img, header, provider, price, su
     </div>)
 }
 
-export function CartListItem({batchId, cardId, img, header, provider, price, summary, amount, callUpdate}) {
+export function CartListItem({batchId, cardId, img, header, provider, price, summary, amount, callUpdate, disableRemove}) {
     return (<div className="catalog items item card noHover">
-        <Link to={"item/" + cardId} id={cardId} style={{padding: '0px', display: "contents"}}>
+        <Link to={"/item/" + cardId} id={cardId} style={{padding: '0px', display: "contents"}}>
             <img className="catalog items item img" src={img} alt={"Product main icon"}/>
         </Link>
         <div className={"catalog item card form"}>
-            <Link to={"item/" + cardId} id={cardId} style={{padding: '0px', display: "contents"}}>
+            <Link to={"/item/" + cardId} id={cardId} style={{padding: '0px', display: "contents"}}>
                 <div className="catalog items item info">
                     <span className="catalog items item text main">{header}</span>
                     <div className="catalog items item text attributes">
