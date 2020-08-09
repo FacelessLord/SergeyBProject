@@ -17,6 +17,8 @@ import "./styles/button_styles.css"
 import {LoadImagePage} from "./pages/LoadImagePage";
 import {ItemEditPage} from "./pages/ItemEditPage";
 import {ItemCreatePage} from "./pages/ItemCreatePage";
+import {OrdersPage} from "./pages/OrdersPage";
+import {OrderPage} from "./pages/OrderPage";
 
 let _user = null;
 
@@ -46,6 +48,8 @@ function Main() {
             <Route path="/item/edit/:itemId" component={ItemEditPage}/>
             <Route path="/item/create" component={ItemCreatePage}/>
             <Route path="/item/:itemId" component={ItemPage}/>
+            <Route path="/orders" component={OrdersPage}/>
+            <Route path="/order/:orderId" component={OrderPage}/>
             <Route path="/" component={() => MainPage({category})}/>
         </Switch>
         <Footer/>
