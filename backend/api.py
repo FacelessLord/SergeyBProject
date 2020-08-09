@@ -181,7 +181,8 @@ def get_orders_for_user():
     orderId = request.args.get('orderId', "")
 
     return auth_user(db, username, accessToken) \
-        .then(lambda u: carts.get_order(u, orderId)) \
+        .then(lambda u: {"order": carts.get_order(u, orderId),
+                         "type": "normal" if u.permission_level == 0 else "super"}) \
         .as_dict()
 
 

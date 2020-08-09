@@ -22,6 +22,14 @@ class Result:
         else:
             return self
 
+    def peek(self, func):
+        if self.success:
+            try:
+                func(self.value)
+            except:
+                pass
+        return self
+
     def as_dict(self):
         dictionary = {
             "success": self.success,

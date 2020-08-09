@@ -17,12 +17,15 @@ class CartController(Controller):
             raise Fail("nopermission")
 
         batches = FINQ(order.batches).map(lambda b: self.createBatchJson(b, user.permission_level > 0)).to_list()
-        return {
+        dict = {
             "summary": order.summary,
             "count": count,
             "date_created": str(order.created_on.strftime("%H:%M %d/%m/%Y")),
             "batches": batches
         }
+        if user.permission_level > 0:
+            dict['customer_name'] = order.customer.username
+        return dict
 
     def get_cart_for_user(self, user):
         cart = FINQ(user.cart).filter(lambda b: not b.ordered).map(self.createBatchJson).to_list()
