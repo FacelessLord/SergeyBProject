@@ -41,18 +41,18 @@ export function ItemCardList({cardId, img, header, provider, price, inStock}) {
 
 function ending(count) {
     const mod = count % 100
-    if ((mod > 10 && mod < 20) || (mod % 10 > 4)) {
+    if ((mod >= 10 && mod < 20) || (mod % 10 > 4)) {
         return 'ов'
     }
     if (mod % 10 === 1) {
         return ''
     }
-    if(mod % 10 > 1 && mod % 10 < 5){
+    if (mod % 10 > 1 && mod % 10 < 5) {
         return 'а'
     }
 }
 
-export function ItemOrderCard({order}) {
+export function ItemOrderCard({order, type}) {
     // "orderId":
     // "firstItemId":
     // "summary":
@@ -69,19 +69,28 @@ export function ItemOrderCard({order}) {
                 <span className="catalog items item text summary">
                 Стоимость: {order.summary} ₽
               </span><br/>
+                {type === "super" ? moreOrderData(order) : ""}
             </div>
         </div>
     </Link>)
+}
+
+function moreOrderData(order) {
+    return [<span key={0} className="catalog items item text customer">
+                Заказчик: {order.customer_name}
+              </span>, <br key={1}/>]
 }
 
 export function ItemCartCard({batchId, type, cardId, img, header, provider, price, summary, amount, callUpdate, disableRemove}) {
     switch (type) {
         case "list":
             return (<CartListItem batchId={batchId} cardId={cardId} header={header} img={img} amount={amount}
-                                  price={price} provider={provider} summary={summary} callUpdate={callUpdate} disableRemove={disableRemove}/>)
+                                  price={price} provider={provider} summary={summary} callUpdate={callUpdate}
+                                  disableRemove={disableRemove}/>)
         default:
             return (<CartPanelItem batchId={batchId} cardId={cardId} header={header} img={img} amount={amount}
-                                   price={price} provider={provider} summary={summary} callUpdate={callUpdate} disableRemove={disableRemove}/>)
+                                   price={price} provider={provider} summary={summary} callUpdate={callUpdate}
+                                   disableRemove={disableRemove}/>)
     }
 }
 
@@ -111,7 +120,7 @@ export function CartPanelItem({batchId, cardId, img, header, provider, price, su
             {!disableRemove ? <div className={"catalog buttons form"}>
                 <button onClick={() => removeItem(batchId, callUpdate)}
                         className={"catalog buttons button remove type2 fa fa-trash-o"}/>
-            </div>: ""}
+            </div> : ""}
         </div>
     </div>)
 }
@@ -144,7 +153,7 @@ export function CartListItem({batchId, cardId, img, header, provider, price, sum
             {!disableRemove ? <div className={"catalog buttons form"}>
                 <button onClick={() => removeItem(batchId, callUpdate)}
                         className={"catalog buttons button remove type2 fa fa-trash-o"}/>
-            </div>: ""}
+            </div> : ""}
         </div>
     </div>)
 }
