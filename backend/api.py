@@ -318,8 +318,8 @@ def get_user_data():
             return {"success": True,
                     "email": user.email,
                     "name": [user.name, user.surname, user.last_name],
-                    "created": str(user.created_on),
-                    "lastUpdate": str(user.updated_on)}
+                    "created": str(user.created_on.strftime("%H:%M %d/%m/%Y")),
+                    "lastUpdate": str(user.updated_on.strftime("%H:%M %d/%m/%Y"))}
         else:
             return {"success": False,
                     "reason": "accessToken"}

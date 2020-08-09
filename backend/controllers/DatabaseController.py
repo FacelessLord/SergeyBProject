@@ -421,4 +421,3 @@ class DatabaseController:
 
     def commit(self):
         self.db.session.commit()
-

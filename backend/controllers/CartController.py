@@ -1,5 +1,5 @@
 from backend.controllers.Controller import Controller
-from backend.controllers.DatabaseController import DatabaseController as dbc, ProductBatch, User
+from backend.controllers.DatabaseController import DatabaseController as dbc, ProductBatch, Order
 from backend.finq import FINQ
 from backend.result import Fail
 
