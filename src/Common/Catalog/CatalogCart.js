@@ -44,6 +44,12 @@ async function orderCart() {
         method: "POST",
         headers: {accessToken: window.user.accessToken, username: window.user.username}
     })
+        .then(t => t.json())
+        .then(j => {
+            if (j.success) {
+                document.location = "/order/"+j.value
+            }
+        })
 }
 
 function wrapCart(data, type, callUpdate) {

@@ -75,5 +75,6 @@ class CartController(Controller):
         self.db.commit()
 
     def order(self, user):
-        self.db.create_order(user)
+        order = self.db.create_order(user)
         self.db.commit()
+        return order.id
