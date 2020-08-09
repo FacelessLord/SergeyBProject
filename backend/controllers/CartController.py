@@ -13,10 +13,10 @@ class CartController(Controller):
         count = 0
         for batch in order.batches:
             count += batch.amount
-        if order.customer != user:
+        if order.customer != user and user.permission_level == 0:
             raise Fail("nopermission")
 
-        batches = FINQ(order.batches).map(self.createBatchJson).to_list()
+        batches = FINQ(order.batches).map(lambda b: self.createBatchJson(b, user.permission_level > 0)).to_list()
         return {
             "summary": order.summary,
             "count": count,
@@ -28,9 +28,9 @@ class CartController(Controller):
         cart = FINQ(user.cart).filter(lambda b: not b.ordered).map(self.createBatchJson).to_list()
         return cart
 
-    def createBatchJson(self, batch: ProductBatch):
+    def createBatchJson(self, batch: ProductBatch, include_name=False):
         product = batch.product
-        return {
+        dict = {
             "cardId": product.id,
             "batchId": batch.id,
             "header": product.name,
@@ -40,23 +40,30 @@ class CartController(Controller):
             "summary": product.price * batch.amount,
             "amount": batch.amount
         }
+        if include_name:
+            dict['customer_name'] = batch.customer.username
+        return dict
 
     def get_orders(self, user):
-        orders = FINQ(user.orders)
-        return orders.map(self.createOrderJson).to_list()
+        orders = FINQ(self.db.orders()) if user.permission_level > 0 else FINQ(user.orders)
+        return orders.map(lambda o: self.createOrderJson(o, user.permission_level > 0)).to_list()
 
-    def createOrderJson(self, order: Order):
+    def createOrderJson(self, order: Order, include_name=False):
         id = order.batches[0].product.id
         count = 0
         for batch in order.batches:
             count += batch.amount
-        return {
+
+        dict = {
             "orderId": order.id,
             "firstItemId": id,
             "summary": order.summary,
             "count": count,
             "date_created": str(order.created_on.strftime("%H:%M %d/%m/%Y")),
         }
+        if include_name:
+            dict['customer_name'] = batch.customer.username
+        return dict
 
     def add_item_to_cart(self, item_id, user, amount):
         if amount <= 0:

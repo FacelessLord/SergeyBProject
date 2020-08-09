@@ -169,7 +169,8 @@ def get_order_for_user():
     username = request.headers.get('username', "")
 
     return auth_user(db, username, accessToken) \
-        .then(carts.get_orders) \
+        .then(lambda u: {"items": carts.get_orders(u),
+                         "type": "normal" if u.permission_level == 0 else "super"}) \
         .as_dict()
 
 

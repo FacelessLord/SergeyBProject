@@ -355,7 +355,7 @@ class DatabaseController:
             .get(batch_id)
 
     def batches(self) -> List[ProductBatch]:
-        return self.db.session.query(ProductBatch)
+        return self.db.session.query(ProductBatch).all()
 
     def load_user(self, user_id) -> User:
         return self.db.session.query(User).get(user_id)
@@ -383,7 +383,7 @@ class DatabaseController:
             return users[0]
 
     def users(self) -> List[User]:
-        return self.db.session.query(User)
+        return self.db.session.query(User).all()
 
     def registrars(self) -> List[UserRegistrar]:
         return self.db.session.query(UserRegistrar)
@@ -393,7 +393,7 @@ class DatabaseController:
             .get(product_id)
 
     def products(self) -> List[Product]:
-        return self.db.session.query(Product)
+        return self.db.session.query(Product).all()
 
     def get_provider(self, provider_id: int) -> Provider:
         return self.db.session.query(Provider) \
@@ -411,7 +411,7 @@ class DatabaseController:
         return self.db.session.query(Order).get(orderId)
 
     def providers(self) -> List[Provider]:
-        return self.db.session.query(Provider)
+        return self.db.session.query(Provider).all()
 
     def remove_batch(self, batch) -> List[Provider]:
         return self.db.session.delete(batch)
@@ -421,3 +421,6 @@ class DatabaseController:
 
     def commit(self):
         self.db.session.commit()
+
+    def orders(self):
+        return self.db.session.query(Order).all()
