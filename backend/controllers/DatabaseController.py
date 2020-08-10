@@ -393,7 +393,7 @@ class DatabaseController:
             .get(product_id)
 
     def products(self) -> List[Product]:
-        return self.db.session.query(Product).all()
+        return self.db.session.query(Product)
 
     def get_provider(self, provider_id: int) -> Provider:
         return self.db.session.query(Provider) \
