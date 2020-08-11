@@ -348,7 +348,7 @@ class DatabaseController:
             .get(id)
 
     def categories(self) -> List[Category]:
-        return self.db.session.query(Category).all()
+        return self.db.session.query(Category)
 
     def get_item_from_cart(self, batch_id: int) -> ProductBatch:
         return self.db.session.query(ProductBatch) \
@@ -411,7 +411,7 @@ class DatabaseController:
         return self.db.session.query(Order).get(orderId)
 
     def providers(self) -> List[Provider]:
-        return self.db.session.query(Provider).all()
+        return self.db.session.query(Provider)
 
     def remove_batch(self, batch) -> List[Provider]:
         return self.db.session.delete(batch)
