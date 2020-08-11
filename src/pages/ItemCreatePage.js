@@ -70,7 +70,7 @@ async function sendData(data, setMessage) {
             i--;
         }
     }
-    return await fetch(`/api/items/create`,
+    return await fetch(`/api/items`,
         {
             method: "put",
             body: JSON.stringify(data),
