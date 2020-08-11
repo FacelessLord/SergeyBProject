@@ -354,7 +354,7 @@ def register():
 
 @app.route('/api/user/confirmRegister', methods=['get'])
 def confirm_register():
-    username = request.headers.get('username', "")
+    username = request.args.get('username', "")
     token = request.args.get('token')
 
     registrar = db.get_user_registrar(username=username)

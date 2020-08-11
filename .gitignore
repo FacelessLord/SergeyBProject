@@ -26,3 +26,5 @@ yarn-error.log*
 backend/venv/
 .idea/
 backend/__pycache__/
+backend/controllers/__pychache__/
+*/__pychache__/
