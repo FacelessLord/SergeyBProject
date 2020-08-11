@@ -1,0 +1,2 @@
+npm run-script start-api &
+npm start & 
