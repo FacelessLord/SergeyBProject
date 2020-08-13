@@ -10,7 +10,7 @@ export function ItemCard({cardId, img, header, provider, price, inStock}) {
               Изготовитель: {provider}
             </span><br/>
             <span className="catalog items item text price">
-              Цена: {price} ₽
+              Цена: {price} р
             </span><br/>
             <span className="catalog items item text stock">
               В наличии: {inStock}
@@ -29,7 +29,7 @@ export function ItemCardList({cardId, img, header, provider, price, inStock}) {
                 Изготовитель: {provider}
               </span><br/>
                 <span className="catalog items item text price">
-                Цена: {price} ₽
+                Цена: {price} р
               </span><br/>
                 <span className="catalog items item text stock">
                 В наличии: {inStock}
@@ -67,7 +67,7 @@ export function ItemOrderCard({order, type}) {
                 {order.count} товар{ending(order.count)}
               </span><br/>
                 <span className="catalog items item text summary">
-                Стоимость: {order.summary} ₽
+                Стоимость: {order.summary} р
               </span><br/>
                 {type === "super" ? moreOrderData(order) : ""}
             </div>
@@ -107,13 +107,13 @@ export function CartPanelItem({batchId, cardId, img, header, provider, price, su
                   Изготовитель: {provider}
                 </span><br/>
                     <span className="catalog items item text price">
-                  Цена: {price} ₽
+                  Цена: {price} р
                 </span><br/>
                     <span className="catalog items item text amount">
                   Количество: {amount}
                 </span><br/>
                     <span className="catalog items item text summary">
-                  Стоимость: {summary} ₽
+                  Стоимость: {summary} р
                 </span><br/>
                 </div>
             </Link>
@@ -139,13 +139,13 @@ export function CartListItem({batchId, cardId, img, header, provider, price, sum
                     Изготовитель: {provider}
                 </span><br/>
                         <span className="catalog items item text price">
-                    Цена: {price} ₽
+                    Цена: {price} р
                 </span><br/>
                         <span className="catalog items item text amount">
                     Количество: {amount}
                 </span><br/>
                         <span className="catalog items item text summary">
-                    Стоимость: {summary} ₽
+                    Стоимость: {summary} р
                 </span><br/>
                     </div>
                 </div>

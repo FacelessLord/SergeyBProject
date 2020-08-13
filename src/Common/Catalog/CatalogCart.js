@@ -82,7 +82,7 @@ function wrapCart(data, type, callUpdate) {
                 <div>Итого:</div>
                 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
                 . . . . . . . . . . . . . . . . . .
-                <div>{data.summary} ₽</div>
+                <div>{data.summary} р</div>
             </div>
             <button className={"catalog buttons button type0 order"} onClick={orderCart}>Заказать</button>
         </div>

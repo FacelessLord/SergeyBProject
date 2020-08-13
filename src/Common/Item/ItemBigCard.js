@@ -76,7 +76,7 @@ function wrapData(data, imgId, setImgId, count, setCount, message, setMessage) {
               Изготовитель: {data.provider}
             </span><br/>
             <span className="catalogBig items item text price">
-              Цена: {data.price ? (data.price + " ₽") : ""}
+              Цена: {data.price ? (data.price + " р") : ""}
             </span><br/>
             <span className="catalogBig items item text stock">
               В наличии: {data.in_stock ? "Да" : "Нет"}

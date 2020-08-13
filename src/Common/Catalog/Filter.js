@@ -39,12 +39,12 @@ function PriceLimits({state, setState}) {
                        priceFrom: extractNumberString(e.target.value),
                        priceTo: (state.priceTo === 0 || state.priceTo === "") ? state.priceTo : Math.max(extractNumberString(e.target.value), state.priceTo)
                    })}/>
-            ₽ - до<input type={"text"} value={state.priceTo} className={"catalog filter selector price value"}
+            р - до<input type={"text"} value={state.priceTo} className={"catalog filter selector price value"}
                          onChange={e => setState({
                              ...state,
                              priceTo: extractNumberString(e.target.value),
                              priceFrom: (e.target.value === "0" || e.target.value === "") ? state.priceFrom : Math.min(extractNumberString(e.target.value), state.priceFrom)
-                         })}/>₽
+                         })}/>р
         </div>
     </div>)
 }

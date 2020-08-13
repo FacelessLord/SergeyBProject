@@ -40,7 +40,7 @@ function wrapOrder(data) {
                 <div>Итого:</div>
                 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
                 . . . . . . . . . . . . . . . . . .
-                <div>{data.summary} ₽</div>
+                <div>{data.summary} р</div>
             </div>
         </div>
     </div>)
