@@ -1,7 +1,6 @@
 import time
-from json import JSONDecoder
-
 from flask import Flask, request
+from json import JSONDecoder
 from werkzeug.security import generate_password_hash
 
 import backend.controllers.DatabaseController as dbc
