@@ -19,7 +19,7 @@ class ProductController(Controller):
         if count == 0:
             count = math.inf
         catalog = products \
-            .filter(lambda p: (category in p.category.create_category_idpath()  or category in ["", "*"])
+            .filter(lambda p: (category in p.category.create_category_idpath() or category in ["", "*"])
                               and (priceFrom <= p.price <= priceTo)
                               and (str(p.provider_id) in providers or len(providers) == 0)) \
             .skip(fromIndex) \
@@ -41,7 +41,12 @@ class ProductController(Controller):
         product = self.db.get_product(item_id)
         if not product:
             raise Fail("noproduct")
+        FINQ(product.batches) \
+            .map(lambda b: b.order) \
+            .filter(lambda o: FINQ(o.batches)
+                    .filter(lambda b: b.product_id != item_id)
+                    .none()) \
+            .for_each(self.db.remove)
 
-        self.db.remove_product(product)
+        self.db.remove(product)
         self.db.commit()
-

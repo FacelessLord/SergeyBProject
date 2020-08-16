@@ -49,7 +49,10 @@ class CartController(Controller):
 
     def get_orders(self, user):
         orders = FINQ(self.db.orders()) if user.permission_level > 0 else FINQ(user.orders)
-        return orders.map(lambda o: self.createOrderJson(o, user.permission_level > 0)).to_list()
+        return orders \
+            .filter(lambda o: len(o.batches) > 0) \
+            .map(lambda o: self.createOrderJson(o, user.permission_level > 0)) \
+            .to_list()
 
     def createOrderJson(self, order: Order, include_name=False):
         id = order.batches[0].product.id

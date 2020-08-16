@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
-from typing import List
-
 from flask_sqlalchemy import SQLAlchemy
+from typing import List
 from werkzeug.security import generate_password_hash, check_password_hash
 
 import backend.guid as guid
@@ -413,10 +412,7 @@ class DatabaseController:
     def providers(self) -> List[Provider]:
         return self.db.session.query(Provider)
 
-    def remove_batch(self, batch) -> List[Provider]:
-        return self.db.session.delete(batch)
-
-    def remove_product(self, product):
+    def remove(self, product):
         return self.db.session.delete(product)
 
     def commit(self):
