@@ -1,5 +1,5 @@
-from typing import Iterable, Callable
 import itertools
+from typing import Iterable, Callable
 
 
 class FINQ:
@@ -40,6 +40,12 @@ class FINQ:
             if func(i):
                 return True
         return False
+
+    def none(self, func=lambda f: True):
+        for i in self:
+            if func(i):
+                return False
+        return True
 
     def peek(self, func=lambda f: f):
         return FINQPeek(self, func)
