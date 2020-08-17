@@ -227,7 +227,7 @@ class DatabaseController:
             products = db.relationship(Product, backref="category", cascade='all,delete-orphan')
             nested = db.Column(db.Boolean())
             parent_id = db.Column(db.Integer(), db.ForeignKey('categories.id'), default=-1)
-            sub_categories = db.relationship("Category", backref="parent", cascade='all,delete-orphan',
+            sub_categories = db.relationship("Category", backref="parent",
                                              remote_side=[id], single_parent=True)
 
             def create_category_path(selfc) -> str:

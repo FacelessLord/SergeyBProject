@@ -41,6 +41,7 @@ class ProductController(Controller):
         product = self.db.get_product(item_id)
         if not product:
             raise Fail("noproduct")
+
         FINQ(product.batches) \
             .map(lambda b: b.order) \
             .filter(lambda o: FINQ(o.batches)
@@ -48,5 +49,12 @@ class ProductController(Controller):
                     .none()) \
             .for_each(self.db.remove)
 
+        if FINQ(product.category.products) \
+                .filter(lambda b: b.id != item_id) \
+                .none() and product.category.sub_categories:
+            if product.category.parent_id != -1 and \
+                    product.category.parent.sub_categories == 1:
+                self.db.remove(product.category.parent)
+            self.db.remove(product.category)
         self.db.remove(product)
         self.db.commit()
