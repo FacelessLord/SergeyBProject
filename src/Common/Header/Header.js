@@ -26,14 +26,15 @@ export function Header({setCategory, categoryMonitor}) {
             <div className="header buttons wrapper"
                  onMouseEnter={onSuperCatalogButtonSelect}
                  onMouseLeave={onSuperCatalogButtonDeselect}>
-                <Link to={"/catalog"} onClick={() => setCategory("")} className="header buttons button type1 catalogButton"
+                <Link to={"/catalog"} onClick={() => setCategory("")}
+                      className="header buttons button type1 catalogButton"
                       id="button_catalog">
                     Каталог
                 </Link>
                 <Categories setCategory={setCategory} categoryMonitor={categoryMonitor}/>
             </div>
-            <Link to={"/providers"} className="header buttons button type1 providers" id="button_providers">
-                Поставщикам
+            <Link to={"/about"} className="header buttons button type1 about" id="button_about">
+                О нас
             </Link>
             <Link to={"/cart"} className="header buttons button type1 cart" id="button_cart_main">
                 Корзина

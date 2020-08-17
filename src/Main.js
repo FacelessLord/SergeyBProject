@@ -20,6 +20,7 @@ import {ItemCreatePage} from "./pages/ItemCreatePage";
 import {OrdersPage} from "./pages/OrdersPage";
 import {OrderPage} from "./pages/OrderPage";
 import {NotFoundPage} from "./pages/NotFoundPage";
+import {AboutPage} from "./pages/AboutPage";
 
 let _user = null;
 
@@ -51,6 +52,7 @@ function Main() {
             <Route path="/item/:itemId" component={ItemPage}/>
             <Route path="/orders" component={OrdersPage}/>
             <Route path="/order/:orderId" component={OrderPage}/>
+            <Route path="/" component={AboutPage}/>
             <Route exact path="/" component={() => MainPage({category})}/>
             <Route path="/" component={NotFoundPage}/>
         </Switch>
