@@ -56,10 +56,7 @@ pylibjpeg==1.1.1
 pylibjpeg-openjpeg==1.0.1
 pyOpenSSL==19.1.0
 pyparsing==2.4.7
-PyQt5==5.15.0
-PyQt5-sip==12.8.0
 python-dotenv==0.14.0
-python-libtorrent==1.2.7
 pyxdg==0.26
 rencode==1.0.6
 requests==2.24.0
@@ -79,4 +76,3 @@ update==0.0.1
 urllib3==1.25.10
 webencodings==0.5.1
 Werkzeug==1.0.1
-zope.interface==5.1.0
