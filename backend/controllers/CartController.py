@@ -24,7 +24,9 @@ class CartController(Controller):
             "batches": batches
         }
         if user.permission_level > 0:
-            dict['customer_name'] = order.customer.username
+            dict['customer_username'] = order.customer.username
+            dict['customer_name'] = order.customer.name
+            dict['customer_phone'] = order.customer.phone_number
         return dict
 
     def get_cart_for_user(self, user):
@@ -68,7 +70,9 @@ class CartController(Controller):
             "date_created": str(order.created_on.strftime("%H:%M %d/%m/%Y")),
         }
         if include_name:
-            dict['customer_name'] = batch.customer.username
+            dict['customer_username'] = order.customer.username
+            dict['customer_name'] = order.customer.name
+            dict['customer_phone'] = order.customer.phone_number
         return dict
 
     def add_item_to_cart(self, item_id, user, amount):

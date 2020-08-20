@@ -78,8 +78,11 @@ export function ItemOrderCard({order, type}) {
 
 function moreOrderData(order) {
     return [<span key={0} className="catalog items item text customer">
-                Заказчик: {order.customer_name}
-              </span>, <br key={1}/>]
+                Заказчик: {order.customer_username}
+              </span>, <br key={1}/>,
+        <span key={2} className="catalog items item text phone">
+                Телефон: {order.customer_phone}
+              </span>, <br key={3}/>]
 }
 
 export function ItemCartCard({batchId, type, cardId, img, header, provider, price, summary, amount, callUpdate, disableRemove}) {

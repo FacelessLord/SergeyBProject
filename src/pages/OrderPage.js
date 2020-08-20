@@ -15,7 +15,9 @@ export function OrderPage(props) {
         <div id="content_wrapper">
             <div className="site main panel part">
                 <h1 style={{marginBottom: "-16px"}}>Заказ от {order.value.order.date_created}</h1>
-                {order.value.type === "super" ? <h3>Заказчик: {order.value.order.customer_name}</h3> : ""}
+                {order.value.type === "super" ? <h4>Заказчик: {order.value.order.customer_username}<br/>
+                    Имя клиента: {order.value.order.customer_name}<br/>
+                    Телефон: {order.value.order.customer_phone}</h4> : ""}
                 <OrderItems order={order.value.order}/>
             </div>
         </div>
