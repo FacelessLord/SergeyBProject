@@ -1,13 +1,13 @@
 import React, {useState} from "react";
 import "../../styles/account_styles.css"
 import {Awaiter} from "../Awaiter";
+import {fetchWithAuth} from "../Utils";
 
 async function getUserData() {
-    return await fetch(`/api/user/data`,
+    return await fetchWithAuth(`/api/user/data`,
         {
             headers: {accessToken: window.user.accessToken, username: window.user.username}
         })
-        .then(t => t.json())
         .catch(_ => {
         })
 }

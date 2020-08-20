@@ -2,14 +2,14 @@ import React, {useState} from "react";
 import {AccountFinishEditButton} from "../Common/Account/EditAccountButton";
 import {AccountEditForm} from "../Common/Account/AccountEditForm";
 import {useAwait} from "../Common/Awaiter";
+import {fetchWithAuth} from "../Common/Utils";
 
 
 async function getUserData() {
-    return fetch(`/api/user/data`,
+    return fetchWithAuth(`/api/user/data`,
         {
             headers: {username: window.user.username, accessToken: window.user.accessToken}
         })
-        .then(t => t.json())
         .catch(_ => {
         })
 }

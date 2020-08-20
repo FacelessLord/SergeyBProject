@@ -43,6 +43,10 @@ export function UserPanelButtons({hidden}) {
                   }}>
                 Выйти
             </Link>
+            <Link to={"/login"} className="header buttons button type3 user relogin" id="button_relogin"
+                  style={{display: "none"}}>
+                Войти
+            </Link>
         </div>
         <div className="header user panel pointer"/>
     </div>)

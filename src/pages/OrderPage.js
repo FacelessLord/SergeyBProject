@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {OrderItems} from "../Common/Catalog/OrderItems";
 import {useAwait} from "../Common/Awaiter";
+import {fetchWithAuth} from "../Common/Utils";
 
 export function OrderPage(props) {
     const orderId = props.match.params.orderId
@@ -22,10 +23,10 @@ export function OrderPage(props) {
 }
 
 async function getOrder(id) {
-    return await fetch(`/api/order?orderId=${id}`,
+    return await fetchWithAuth(`/api/order?orderId=${id}`,
         {
             headers: {accessToken: window.user.accessToken, username: window.user.username}
         })
-        .catch(r => "{}")
-        .then(t => t.json())
+        .catch(r => {
+        })
 }

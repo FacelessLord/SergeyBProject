@@ -302,7 +302,7 @@ def set_user_data():
             return {"success": True}
         else:
             return {"success": False,
-                    "reason": "accessToken"}
+                    "reason": "reauth"}
     else:
         return {"success": False,
                 "reason": "noUser"}
@@ -323,7 +323,7 @@ def get_user_data():
                     "lastUpdate": str(user.updated_on.strftime("%H:%M %d/%m/%Y"))}
         else:
             return {"success": False,
-                    "reason": "accessToken"}
+                    "reason": "reauth"}
     else:
         return {"success": False,
                 "reason": "noUser"}
@@ -373,11 +373,14 @@ def login():
         username = request.headers.get('username')
         password = request.headers.get('password')
 
+        print(username)
+        print(password)
         user = db.get_user_by_name(username)
         registrar = db.get_user_registrar(username=username)
         # db.remove_registrar(registrar)
         if user:
             accessToken = user.load(password)
+            print(accessToken)
             permission = user.permission_level
             if accessToken:
                 message = "Correct username and password"

@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {useAwaitWrap} from "../Awaiter";
 import {Link} from "react-router-dom";
 import {ItemCartCard} from "./ItemCard";
+import {fetchWithAuth} from "../Utils";
 
 
 export function CatalogCart({type}) {
@@ -14,12 +15,12 @@ export function CatalogCart({type}) {
 }
 
 async function getCart() {
-    return await fetch(`/api/cart`,
+    return await fetchWithAuth(`/api/cart`,
         {
             headers: {accessToken: window.user.accessToken, username: window.user.username}
         })
-        .catch(r => "{}")
-        .then(t => t.json())
+        .catch(r => {
+        })
         .then(async t => {
             if (t.success) {
                 for (let i of t.value)
@@ -40,14 +41,13 @@ async function getCart() {
 }
 
 async function orderCart() {
-    await fetch(`/api/cart/order`, {
+    await fetchWithAuth(`/api/cart/order`, {
         method: "POST",
         headers: {accessToken: window.user.accessToken, username: window.user.username}
     })
-        .then(t => t.json())
         .then(j => {
             if (j.success) {
-                document.location = "/order/"+j.value
+                document.location = "/order/" + j.value
             }
         })
 }

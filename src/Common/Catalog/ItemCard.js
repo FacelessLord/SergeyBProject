@@ -1,5 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
+import {fetchWithAuth} from "../Utils";
 
 export function ItemCard({cardId, img, header, provider, price, inStock}) {
     return (<Link className="catalog items item card" to={"/item/" + cardId} id={cardId}>
@@ -159,7 +160,7 @@ export function CartListItem({batchId, cardId, img, header, provider, price, sum
 }
 
 async function removeItem(batchId, callUpdate) {
-    await fetch(`/api/cart/removeBatch?batchId=${batchId}`, {
+    await fetchWithAuth(`/api/cart/removeBatch?batchId=${batchId}`, {
         method: "POST",
         headers: {accessToken: window.user.accessToken, username: window.user.username}
     }).then(callUpdate)

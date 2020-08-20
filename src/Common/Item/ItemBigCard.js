@@ -2,15 +2,15 @@ import React, {useState} from "react";
 import "../../styles/catalogBig.css"
 import {Counter} from "../Counter";
 import {Link} from "react-router-dom";
+import {fetchWithAuth} from "../Utils";
 
 
 export function addItemToCart(data, count, setMessage) {
     return () => {
-        fetch(`/api/cart/add?itemId=${data.id}&amount=${count}`, {
+        fetchWithAuth(`/api/cart/add?itemId=${data.id}&amount=${count}`, {
             method: "POST",
             headers: {accessToken: window.user.accessToken, username: window.user.username}
         })
-            .then(t => t.json())
             .then(j => {
                 if (j.success) {
                     setMessage("Товар добавлен в корзину")

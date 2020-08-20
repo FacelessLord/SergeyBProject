@@ -1,17 +1,18 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import "../../styles/account_styles.css"
+import {fetchWithAuth} from "../Utils";
 
 export function EditAccountButton() {
     return (<Link className={"account buttons button edit"} to={"/account/edit"}>Редактировать</Link>)
 }
 
 async function saveUserData(userData) {
-    return await fetch(`/api/user/data`, {
+    return await fetchWithAuth(`/api/user/data`, {
         method: "POST",
         body: JSON.stringify(userData),
         headers: {accessToken: window.user.accessToken, username: window.user.username}
-    }).then(t => t.json())
+    })
 }
 
 export function AccountFinishEditButton({userData, setMessage}) {

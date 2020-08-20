@@ -1,4 +1,5 @@
 import Cookies from 'universal-cookie';
+import {fetchWithAuth} from "./Utils";
 
 const views = ["list", "panels"];
 
@@ -10,11 +11,10 @@ export function setUserView(view) {
 }
 
 export function checkAuth() {
-    return fetch(`/api/user/check_auth`,
+    return fetchWithAuth(`/api/user/check_auth`,
         {
             headers: {accessToken: window.user.accessToken, username: window.user.username}
         })
-        .then(t => t.json())
         .then(j => {
             window.updateUser({loggedIn: j.result});
             return window.user
@@ -27,10 +27,10 @@ export function logoutUser() {
 }
 
 export function loginUser(username, password) {
-    return fetch(`/api/user/login`, {
+    return fetchWithAuth(`/api/user/login`, {
         method: "POST",
         headers: {username: username, password: password}
-    }).then(t => t.json())
+    })
 }
 
 export async function registerUser(username, name, email, password) {
@@ -43,10 +43,10 @@ export async function registerUser(username, name, email, password) {
     if (password.length < 6) {
         return {success: false, reason: "shortpassword"}
     }
-    return fetch(`/api/user/register`, {
+    return fetchWithAuth(`/api/user/register`, {
         method: "POST",
-        headers: {username: username, password: password, name:name, email:email}
-    }).then(t => t.json())
+        headers: {username: username, password: password, name: name, email: email}
+    })
 }
 
 export function loadUser() {
