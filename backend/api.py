@@ -18,6 +18,7 @@ from backend.utils import send_image
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/UserData.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SITE_ADDRESS'] = ""
 
 decoder = JSONDecoder()
 
@@ -348,8 +349,8 @@ def register():
     db.commit()
     link = registrar.create_confirmation_link()
     html = f"""<h2>Sergey's Store</h2><p>Логин: {username}</p>
-<p>Имя: {name}</p><p>Телефонный номер: {phone}</p>
-<p>Для подтверждения регистрации пройдите по ссылке:</p><br><a>{link}</a>"""
+<p>Имя: {' '.join([name[1], name[0], name[2]])}</p><p>Телефонный номер: {phone}</p>
+<p>Для подтверждения регистрации пройдите по ссылке:</p><br><a>{app.config['SITE_ADDRESS'] + link}</a>"""
     mailer.send_html_message("Registration confirmation", [email], html)
     return {"success": True}
 
@@ -360,6 +361,8 @@ def confirm_register():
     token = request.headers.get('token')
 
     registrar = db.get_user_registrar(username=username)
+    if not registrar:
+        return {"success": False, 'reason': "already"}
     if registrar.code == token:
         db.add_user_from_registrar(registrar)
         db.remove(registrar)

@@ -23,7 +23,7 @@ export function checkAuth() {
 }
 
 export function confirmRegister(username, token) {
-    return fetchWithAuth(`/api/confirmRegister`,
+    return fetchWithAuth(`/api/user/confirmRegister`,
         {
             method: "post",
             headers: {token: token, username: username}

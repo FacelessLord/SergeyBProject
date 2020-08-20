@@ -6,16 +6,21 @@ import {confirmRegister} from "../Common/IdProvider";
 export function ConfirmRegisterPage(props) {
     const username = props.match.params.username
     const token = props.match.params.token
-    const [value, setValue] = useState({})
     const [message, setMessage] = useState("")
-    useAwait(value, setValue, () => confirmRegister(username, token).then(v => v.json()).then(v => {
+    useAwait(message, setMessage, () => confirmRegister(username, token).then(v => {
+        console.log(v)
         if (v.success)
-            setMessage("Ваша регистрация завершена, для входа воспользуйтесь панелью справа")
-        else
-            setMessage(v.reason)
-        return v;
-    }), v => !!v, "Не удалось завершить регистрацию")
-    return (<div>
-        {message ? <div className={"register message success"}>message</div> : ""}
+            return "Ваша регистрация завершена, для входа воспользуйтесь панелью справа"
+
+        if (v.reason === "already")
+            return "Данный аккаунт уже подтверждён"
+
+        return v.reason;
+    }).catch(console.log), v => !v, "Не удалось завершить регистрацию")
+    console.log(message)
+    return (<div id="content_wrapper">
+        <div className="site main panel part">
+            {message ? <div className={"register message success"}>{message}</div> : "Загрузка..."}
+        </div>
     </div>)
 }
