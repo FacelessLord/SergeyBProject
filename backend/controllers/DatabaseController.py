@@ -95,6 +95,7 @@ class Category:
 class UserRegistrar:
     id = \
         username = \
+        phone_number = \
         email = \
         updated_on = \
         code = \
@@ -144,6 +145,7 @@ class DatabaseController:
             surname = db.Column(db.String(40))
             last_name = db.Column(db.String(40))
             username = db.Column(db.String(50), nullable=False, unique=True)
+            phone_number = db.Column(db.String(11), unique=True)
             email = db.Column(db.String(100), nullable=False, unique=True)
             password_hash = db.Column(db.String(100), nullable=False)
             created_on = db.Column(db.DateTime(), default=datetime.utcnow)
@@ -197,6 +199,7 @@ class DatabaseController:
             __tablename__ = 'registrars'
             id = db.Column(db.Integer(), primary_key=True)
             username = db.Column(db.String(40), nullable=False, unique=True)
+            phone_number = db.Column(db.String(11), unique=True)
             name = db.Column(db.String(40))
             surname = db.Column(db.String(40))
             last_name = db.Column(db.String(40))
@@ -206,7 +209,7 @@ class DatabaseController:
             password_hash = db.Column(db.String(100), nullable=False)
 
             def create_confirmation_link(self):
-                return f'/api/confirmRegister?username={self.username}&token={self.code}'
+                return f'/confirmRegister/{self.username}/{self.code}'
 
         class Product(db.Model):
             __tablename__ = 'products'
@@ -270,10 +273,10 @@ class DatabaseController:
         self.db.session.add(user)
         return user
 
-    def add_user_registrar(self, name: List[str], username: str, email: str,
+    def add_user_registrar(self, name: List[str], username: str, email: str, phone: str,
                            password_hash: str):
         user_registrar = UserRegistrar(name=name[0], surname=name[1], last_name=name[2], username=username, email=email,
-                                       password_hash=password_hash)
+                                       phone_number=phone, password_hash=password_hash)
         self.db.session.add(user_registrar)
         return user_registrar
 

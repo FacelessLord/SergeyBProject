@@ -6,11 +6,12 @@ import {registerUser} from "./IdProvider"
 async function performRegister(setMessage) {
     const username = document.getElementById("register_username").value;
     const email = document.getElementById("register_email").value;
+    const phone = document.getElementById("register_phone").value;
     const name = document.getElementById("register_name").value;
     const surname = document.getElementById("register_surname").value;
     const last_name = document.getElementById("register_last_name").value;
     const password = document.getElementById("register_password").value;
-    await registerUser(username, [name, surname, last_name], email, password).then(t => {
+    await registerUser(username, [name, surname, last_name], email, phone, password).then(t => {
         if (t.success) {
             document.location = "/register/success";
         } else {
@@ -20,6 +21,9 @@ async function performRegister(setMessage) {
                     break;
                 case "email":
                     setMessage("Данный почтовый адрес уже занят");
+                    break;
+                case "nophone":
+                    setMessage("Введите телефонный номер");
                     break;
                 case "username":
                     setMessage("Данный логин уже занят");
@@ -52,17 +56,21 @@ export function RegisterForm() {
     l.push(<div key={1} className="register form" id={"register_form"} onKeyPress={formKeyPressed}>
         <div className={"register form block"}>
             <div className={"register block"}>
-                <label htmlFor={"register_email"}>Email</label>
+                <label htmlFor={"register_email"}>Email*</label>
                 <input id={"register_email"} type={"email"}/>
+            </div>
+            <div className={"register block"}>
+                <label htmlFor={"register_phone"}>Телефон*</label>
+                <input id={"register_phone"} type={"tel"}/>
             </div>
         </div>
         <div className={"register form block"}>
             <div className={"register block"}>
-                <label htmlFor={"register_username"}>Логин</label>
+                <label htmlFor={"register_username"}>Логин*</label>
                 <input id={"register_username"} type={"username"}/>
             </div>
             <div className={"register block"}>
-                <label htmlFor={"register_password"}>Пароль</label>
+                <label htmlFor={"register_password"}>Пароль*</label>
                 <input id={"register_password"} type={"password"}/>
             </div>
         </div>

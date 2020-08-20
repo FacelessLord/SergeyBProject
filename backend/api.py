@@ -334,6 +334,7 @@ def register():
     username = request.headers.get('username', "")
     name = FINQ(request.headers.get('name', type=str).split(',')).map(str.strip).to_list()
     email = request.headers.get('email')
+    phone = request.headers.get('phone')
     password = request.headers.get('password')
     users = FINQ(db.users())
     registrars = FINQ(db.registrars())
@@ -343,22 +344,25 @@ def register():
     if users.any(lambda u: u.email == email) or registrars.any(lambda u: u.email == email):
         return ErrorResult(Fail("email")).as_dict()
 
-    registrar = db.add_user_registrar(name, username, email, generate_password_hash(password))
+    registrar = db.add_user_registrar(name, username, email, phone, generate_password_hash(password))
     db.commit()
     link = registrar.create_confirmation_link()
-    html = f"""<p>Для подтверждения регистрации пройдите по ссылке:</p><br><a>{link}</a>"""
+    html = f"""<h2>Sergey's Store</h2><p>Логин: {username}</p>
+<p>Имя: {name}</p><p>Телефонный номер: {phone}</p>
+<p>Для подтверждения регистрации пройдите по ссылке:</p><br><a>{link}</a>"""
     mailer.send_html_message("Registration confirmation", [email], html)
     return {"success": True}
 
 
-@app.route('/api/user/confirmRegister', methods=['get'])
+@app.route('/api/user/confirmRegister', methods=['post'])
 def confirm_register():
-    username = request.args.get('username', "")
-    token = request.args.get('token')
+    username = request.headers.get('username', "")
+    token = request.headers.get('token')
 
     registrar = db.get_user_registrar(username=username)
     if registrar.code == token:
         db.add_user_from_registrar(registrar)
+        db.remove(registrar)
         db.commit()
         return {"success": True}
     return {"success": False}

@@ -22,6 +22,14 @@ export function checkAuth() {
         .then(saveUser)
 }
 
+export function confirmRegister(username, token) {
+    return fetchWithAuth(`/api/confirmRegister`,
+        {
+            method: "post",
+            headers: {token: token, username: username}
+        })
+}
+
 export function logoutUser() {
     window.updateUser({accessToken: "", loggedIn: false, permission: 0});
 }
@@ -33,9 +41,12 @@ export function loginUser(username, password) {
     })
 }
 
-export async function registerUser(username, name, email, password) {
+export async function registerUser(username, name, email, phone, password) {
     if (email === "") {
         return {success: false, reason: "noemail"}
+    }
+    if (phone === "") {
+        return {success: false, reason: "nophone"}
     }
     if (username === "") {
         return {success: false, reason: "nousername"}
@@ -45,7 +56,7 @@ export async function registerUser(username, name, email, password) {
     }
     return fetchWithAuth(`/api/user/register`, {
         method: "POST",
-        headers: {username: username, password: password, name: name, email: email}
+        headers: {username: username, password: password, name: name, email: email, phone: phone}
     })
 }
 
