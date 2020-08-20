@@ -39,7 +39,6 @@ export function UserPanelButtons({hidden}) {
             <Link className="header buttons button type3 user logout" id="button_logout" to={document.location}
                   onClick={() => {
                       logoutUser()
-                      document.location = "/"
                   }}>
                 Выйти
             </Link>
