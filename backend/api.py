@@ -1,6 +1,7 @@
 import time
-from flask import Flask, request
 from json import JSONDecoder
+
+from flask import Flask, request
 from werkzeug.security import generate_password_hash
 
 import backend.controllers.DatabaseController as dbc
@@ -18,7 +19,6 @@ from backend.utils import send_image
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/UserData.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SITE_ADDRESS'] = ""
 
 decoder = JSONDecoder()
 
@@ -45,7 +45,7 @@ categories = CategoryController(db)
 products = ProductController(db)
 carts = CartController(db)
 images = ImageController(db)
-mailer = MailController(app, db)
+mailer = MailController(app, db, carts)
 
 
 @app.route('/time', methods=['get'])
@@ -214,6 +214,8 @@ def order_cart():
     username = request.headers.get('username', "")
     return auth_user(db, username, accessToken) \
         .then(carts.order) \
+        .peek(lambda a: mailer.notify_ordered(a[0])) \
+        .then(lambda a: a[1]) \
         .as_dict()
 
 
@@ -238,7 +240,7 @@ def get_provider_list():
 
 @app.route('/api/providers/name', methods=['get'])
 def get_provider_name():
-    provider_id = request.args.get("providerId", "-1", type=str)
+    provider_id = request.args.get("providerId", -1, type=int)
     provider = db.get_provider(provider_id)
 
     if provider:

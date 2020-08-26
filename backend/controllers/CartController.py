@@ -88,10 +88,27 @@ class CartController(Controller):
         if batch.customer != user:
             raise Fail("nopermission")
 
-        self.db.remove_batch(batch)
+        self.db.remove(batch)
         self.db.commit()
 
     def order(self, user):
         order = self.db.create_order(user)
         self.db.commit()
-        return order.id
+        return order, order.id
+
+    def create_order_list(self, order):
+        return FINQ(order.batches) \
+                   .enumerate(1) \
+                   .map(lambda
+                            p: f"{p[0]}. {p[1].product.name} x {int(p[1].amount)} - {removeTrailingZeros(p[1].product.price)} руб/ед. товара") \
+                   .join("\n") + '\n\nИтого: ' + str(removeTrailingZeros(order.summary)) + ' руб'
+
+
+def removeTrailingZeros(value: float):
+    str_value = str(value)
+    if str_value.find('.') and str_value[-1] == '0':
+        while str_value[-1] == '0':
+            str_value = str_value[:-1]
+        str_value = str_value[:-1]
+
+    return str_value

@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
-from flask_sqlalchemy import SQLAlchemy
 from typing import List
+
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
 import backend.guid as guid
@@ -14,6 +15,7 @@ class User:
         surname = \
         last_name = \
         username = \
+        phone_number = \
         email = \
         password_hash = \
         created_on = \
@@ -109,6 +111,7 @@ class Order:
     id = \
         batches = \
         customer_id = \
+        customer = \
         created_on = \
         summary = None
 

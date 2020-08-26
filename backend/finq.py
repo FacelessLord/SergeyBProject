@@ -1,4 +1,3 @@
-import itertools
 from typing import Iterable, Callable
 
 
@@ -23,13 +22,19 @@ class FINQ:
         return FINQ(sorted(self, key=func))
 
     def skip(self, count: int):
-        return FINQ(o for i,o in enumerate(self, 0) if i >= count)
+        return FINQ(o for i, o in enumerate(self, 0) if i >= count)
 
     def take(self, count: int):
-        return FINQ(o for i,o in enumerate(self, 0) if i < count)
+        return FINQ(o for i, o in enumerate(self, 0) if i < count)
 
     def pairs(self):
         return FINQPairs(self)
+
+    def enumerate(self, start=0):
+        return FINQ(enumerate(self, start))
+
+    def join(self, delimiter: str):
+        return delimiter.join(self)
 
     def for_each(self, func=lambda f: f):
         for item in self:
