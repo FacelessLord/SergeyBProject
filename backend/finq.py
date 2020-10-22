@@ -1,7 +1,8 @@
 from typing import Iterable, Callable
 
-
 class FINQ:
+    """Note this class is subject to copyright
+       Authored by FacelessLord"""
     def __init__(self, source: Iterable):
         self.source = source
 
